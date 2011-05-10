@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Mogre;
 using MOIS;
+using phase1;
 
 namespace Mogre.Tutorials
 {
@@ -24,6 +25,9 @@ namespace Mogre.Tutorials
 		protected static Root mRoot;
 		protected static RenderWindow mRenderWindow;
 
+		private static GameObject m_Object;
+
+		private static double m_time;
 
 		public static void Main()
 		{
@@ -96,29 +100,35 @@ namespace Mogre.Tutorials
 
 		protected static void CreateScene()
 		{
-
+			
 			m_SceneManager = mRoot.CreateSceneManager(SceneType.ST_GENERIC);
 
 			m_Camera = m_SceneManager.CreateCamera("myCamera1");
-			m_Camera.SetPosition(50, 100, 200);
-			m_Camera.LookAt(Vector3.ZERO);
+			m_Camera.SetPosition(0, 2500, 0);
 			m_Camera.NearClipDistance = 5;
+			m_Camera.FarClipDistance = 2500;
+			//m_Camera.LookAt(Vector3.ZERO);
+			
+
 
 			Viewport viewport = mRenderWindow.AddViewport(m_Camera);
 			viewport.BackgroundColour = ColourValue.Black;
 			m_Camera.AspectRatio = viewport.ActualWidth / viewport.ActualHeight;
 
-			m_SceneManager.AmbientLight = new ColourValue(1, 1, 1);
+			m_Object = new GameObject(m_SceneManager);
 
-			mNinjaEntity = m_SceneManager.CreateEntity("Ninja", "ninja.mesh");
+			//m_SceneManager.AmbientLight = new ColourValue(1, 1, 1);
 
-			mNinjaNode = m_SceneManager.RootSceneNode.CreateChildSceneNode("NinjaNode");
-			mNinjaNode.AttachObject(mNinjaEntity);
-			mNinjaNode.Position += Vector3.ZERO;
+			//mNinjaEntity = m_SceneManager.CreateEntity("Ninja", "ninja.mesh");
+
+			//mNinjaNode = m_SceneManager.RootSceneNode.CreateChildSceneNode("NinjaNode");
+			//mNinjaNode.AttachObject(mNinjaEntity);
+			//mNinjaNode.Position += Vector3.ZERO;
 
 			Entity ent2 = m_SceneManager.CreateEntity("Head2", "ogrehead.mesh");
 			SceneNode node2 = m_SceneManager.RootSceneNode.CreateChildSceneNode("HeadNode2", new Vector3(100, 0, 0));
 			node2.AttachObject(ent2);
+			m_Camera.LookAt(node2.Position);
 
 
 			mLight = m_SceneManager.CreateLight("pointLight");
@@ -159,8 +169,11 @@ namespace Mogre.Tutorials
 
 		private static bool ProcessUnbufferedInput(FrameEvent evt)
 		{
+			m_Object.draw(m_time);
 			mNinjaKeyboard.Capture();
 			mNinjaMouse.Capture();
+
+			m_time += 0.01;
 
 			Vector3 ninjaMove = Vector3.ZERO;
 
@@ -176,7 +189,7 @@ namespace Mogre.Tutorials
 			if (mNinjaKeyboard.IsKeyDown(MOIS.KeyCode.KC_L))
 				ninjaMove.x += 1;
 
-			mNinjaNode.Translate(ninjaMove, Node.TransformSpace.TS_LOCAL);
+			//mNinjaNode.Translate(ninjaMove, Node.TransformSpace.TS_LOCAL);
 
 			if (mNinjaKeyboard.IsKeyDown(MOIS.KeyCode.KC_SPACE))
 				mLight.Visible = !mLight.Visible;

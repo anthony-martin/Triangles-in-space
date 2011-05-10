@@ -1,7 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Mogre;
+using Math = System.Math;
+
 namespace phase1
 {
     class GameObject
@@ -9,21 +11,40 @@ namespace phase1
         private double acceleration = 1;
         private LinkedList<Motion> movement;
 
-        public GameObject()
-        {
-            CircularMotion line = new CircularMotion(0.0, 2.0, 0.0,1.0,2.0);
+		private static SceneManager m_SceneManager;
+
+		protected static Entity m_NinjaEntity;
+		protected static SceneNode m_NinjaNode;
+
+		public GameObject(SceneManager sceneManager)
+		{
+			m_SceneManager = sceneManager;
+            CircularMotion line = new CircularMotion(0.0, 2.0, 0.0, 1.0 ,2.0);
             Motion startMotion = new Motion(0.0,-5.0,line);
             LinkedListNode<Motion> firstNode = new LinkedListNode<Motion>(startMotion);
             movement = new LinkedList<Motion>();
             movement.AddFirst(firstNode);
+
+			m_SceneManager.AmbientLight = new ColourValue(1, 1, 1);
+
+			m_NinjaEntity = m_SceneManager.CreateEntity("Ninja", "ninja.mesh");
+
+			m_NinjaNode = m_SceneManager.RootSceneNode.CreateChildSceneNode("NinjaNode");
+			m_NinjaNode.AttachObject(m_NinjaEntity);
+			m_NinjaNode.Position += Vector3.ZERO;
+
+			//addWaypoint(-10.0, 15.0);
         }
 
-        public void draw()
+        public void draw(double time)
         {
             double xPosition = 0.0;
             double yPosition = 0.0;
 
-            addWaypoint(-10.0, 15.0);
+			movement.First.Value.getCurrentPosition(time, out xPosition, out yPosition);
+
+			m_NinjaNode.SetPosition(xPosition, 0.0, yPosition);
+            //addWaypoint(-10.0, 15.0);
 
         }
 
@@ -41,7 +62,7 @@ namespace phase1
             Position initialPos;
             // get the current position
             double xPosition, yPosition;
-            movement.First.Value.getCurrentPosition(0.0, out xPosition, out yPosition);
+            movement.Last.Value.getCurrentPosition(0.0, out xPosition, out yPosition);
             initialPos = new Position(xPosition, yPosition);
 
             // get the current velocity
@@ -90,9 +111,7 @@ namespace phase1
 
             movement.AddLast(nextTurn);
 
-            //initialPos =  new Position((circleOne.xPos+(turnEnd*)),)
-
-            //// end test code
+            
 
             return 1;
         }
