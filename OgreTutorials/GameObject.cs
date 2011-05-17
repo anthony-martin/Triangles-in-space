@@ -8,8 +8,9 @@ namespace phase1
 {
     class GameObject
     {
-        private double acceleration = 1;
-        private LinkedList<Motion> movement;
+        private double m_Acceleration = 2;
+        private LinkedList<Motion> m_Movement;
+	private double m_LastTime;
 
 		private static SceneManager m_SceneManager;
 
@@ -19,11 +20,11 @@ namespace phase1
 		public GameObject(SceneManager sceneManager)
 		{
 			m_SceneManager = sceneManager;
-            CircularMotion line = new CircularMotion(0.0, 2.0, 0.0, 1.0 ,2.0);
+            CircularMotion line = new CircularMotion(0.0, 2.0, 0.0, 1.0 ,20.0);
             Motion startMotion = new Motion(0.0,-5.0,line);
             LinkedListNode<Motion> firstNode = new LinkedListNode<Motion>(startMotion);
-            movement = new LinkedList<Motion>();
-            movement.AddFirst(firstNode);
+            m_Movement = new LinkedList<Motion>();
+            m_Movement.AddFirst(firstNode);
 
 			m_SceneManager.AmbientLight = new ColourValue(1, 1, 1);
 
@@ -33,22 +34,23 @@ namespace phase1
 			m_NinjaNode.AttachObject(m_NinjaEntity);
 			m_NinjaNode.Position += Vector3.ZERO;
 
-			//addWaypoint(-10.0, 15.0);
+			addWaypoint(-10.0, 15.0);
         }
 
         public void draw(double time)
         {
+	    m_LastTime = time;
             double xPosition = 0.0;
             double yPosition = 0.0;
 
-			movement.First.Value.getCurrentPosition(time, out xPosition, out yPosition);
+			m_Movement.First.Value.getCurrentPosition(time, out xPosition, out yPosition);
 
 			m_NinjaNode.SetPosition(xPosition, 0.0, yPosition);
             //addWaypoint(-10.0, 15.0);
 
         }
 
-        public int addWaypoint(Position destination)
+        public int addWaypoint(Vector2 destination)
         {
             int tempSuccess = addWaypoint(destination.xPos, destination.yPos);
             return tempSuccess;
@@ -57,34 +59,34 @@ namespace phase1
 
         public int addWaypoint(double xPos, double yPos)
         {
-            
-            Position destination = new Position(xPos, yPos);
-            Position initialPos;
+            double lastTime = m_LastTime;
+            Vector2 destination = new Vector2(xPos, yPos);
+            Vector2 initialPos;
             // get the current position
             double xPosition, yPosition;
-            movement.Last.Value.getCurrentPosition(0.0, out xPosition, out yPosition);
-            initialPos = new Position(xPosition, yPosition);
+            m_Movement.Last.Value.getCurrentPosition(lastTime, out xPosition, out yPosition);
+            initialPos = new Vector2(xPosition, yPosition);
 
             // get the current velocity
-            Position vesselVelocity;
-            movement.First.Value.getCurrentVelocity(0.0, out vesselVelocity);
+            Vector2 vesselVelocity;
+            m_Movement.First.Value.getCurrentVelocity(lastTime, out vesselVelocity);
 
             double velocityAngle;
 
             // calculate the angle of the current velocity
             velocityAngle = GameMath.getTanAngle(vesselVelocity.xPos, vesselVelocity.yPos);
 
-            Position circleOne, circleTwo;
+            Vector2 circleOne, circleTwo;
 
             double vesselSpeed = GameMath.calcMagnitude(vesselVelocity);
             // calculate the radius if the turning circle based on the acceleration and current speed
-            double radius = GameMath.calcRadius(vesselSpeed, acceleration);
+            double radius = GameMath.calcRadius(vesselSpeed, m_Acceleration);
 
             // calcualte both of the turning circles
-            circleOne = new Position((radius * Math.Cos(velocityAngle + (Math.PI / 2)))
+            circleOne = new Vector2((radius * Math.Cos(velocityAngle + (Math.PI / 2)))
                                    , (radius * Math.Sin(velocityAngle + (Math.PI / 2))));
 
-            circleTwo = new Position((radius * Math.Cos(velocityAngle - (Math.PI / 2)))
+            circleTwo = new Vector2((radius * Math.Cos(velocityAngle - (Math.PI / 2)))
                                    , (radius * Math.Sin(velocityAngle - (Math.PI / 2))));
             //test code
 
@@ -99,28 +101,37 @@ namespace phase1
             circleTwo.yPos = yPosition - circleOne.yPos;
             int turnDirection = getTurnDirection(vesselVelocity, circleTwo);
 
-            double turnEnd, turnStart;
-            turnEnd = determineTurnEnd(radius, initialPos, destination, circleOne, turnDirection,out turnStart);
+            double turnStart;
+			Vector2 turnEnd = determineTurnEnd(radius, initialPos, destination, circleOne, turnDirection, out turnStart);
+
+        	double turnEndRadians = GameMath.getTanAngle(turnEnd);
 
             double turnTime = 0.0;
             double turnRate = determineTurnRate(turnDirection, radius, vesselSpeed
-                                                , turnStart, turnEnd, out turnTime);
+												, turnStart, turnEndRadians, out turnTime);
 
+
+            turnTime = (turnStart - turnEndRadians)/turnRate;
+			if(turnTime < 0)
+			{
+				turnTime = turnTime *(-1);
+			}
+			turnTime += lastTime; 
             CircularMotion turn = new CircularMotion(0.0, radius, turnStart, turnRate, vesselSpeed);
-            Motion nextTurn = new Motion(initialPos, turnEnd, turn);
+			Motion nextTurn = new Motion(initialPos, turnTime, turn);
 
-            movement.AddLast(nextTurn);
+            m_Movement.AddLast(nextTurn);
 
-            
+            //double distaceFromturn = 
 
             return 1;
         }
 
-        private Position selectTurningCircle(double radius, Position destination, Position circleOne, Position circleTwo)
+        private Vector2 selectTurningCircle(double radius, Vector2 destination, Vector2 circleOne, Vector2 circleTwo)
         {
             double distanceOne, distanceTwo;
 
-            Position selectedCircle;
+            Vector2 selectedCircle;
 
             distanceOne = GameMath.getDistance(destination, circleOne);
 
@@ -129,28 +140,28 @@ namespace phase1
             // that where the destination is not inside the turning circle
             if ((distanceOne <= distanceTwo) && (distanceOne >= radius))
             {
-                selectedCircle = new Position(circleOne.xPos,circleOne.yPos);
+                selectedCircle = new Vector2(circleOne.xPos,circleOne.yPos);
             }
             else
             {
-                selectedCircle = new Position(circleTwo.xPos, circleTwo.yPos);
+                selectedCircle = new Vector2(circleTwo.xPos, circleTwo.yPos);
             }
 
             return selectedCircle;
         }
 
-        private double determineTurnEnd(double radius, Position inStartPosition, 
-            Position inDestination, Position turningCircle, int turnDirection, out double initialAngle)
+		private Vector2 determineTurnEnd(double radius, Vector2 inStartVector2, 
+            Vector2 inDestination, Vector2 turningCircle, int turnDirection, out double initialAngle)
         {
-            Position destination = new Position(inDestination);
-            Position startPosition = new Position(inStartPosition);
+            Vector2 destination = new Vector2(inDestination);
+            Vector2 startVector2 = new Vector2(inStartVector2);
 
             // zero the positions around the turning circle
             destination.subtractOffset(turningCircle.xPos,turningCircle.yPos);
-            startPosition.subtractOffset(turningCircle.xPos, turningCircle.yPos);
+            startVector2.subtractOffset(turningCircle.xPos, turningCircle.yPos);
 
 
-            initialAngle = GameMath.getTanAngle(startPosition);
+            initialAngle = GameMath.getTanAngle(startVector2);
 
             // determine the distance between the centre of the turning circle
             // and the destination point
@@ -167,14 +178,8 @@ namespace phase1
             double pointOneAngle = GameMath.reduceAngle( tanAngle + cosAngle);
             double pointTwoAngle = GameMath.reduceAngle( tanAngle - cosAngle);
 
-            double selectedPoint = 0.0;
+			double selectedPoint;
 
-            // determine the two points on the circle that match the determined angle
-            Position endPointOne = new Position((radius*Math.Cos(pointOneAngle)),
-                                    (radius*Math.Sin(pointOneAngle)));
-
-            Position endPointTwo = new Position((radius * Math.Cos(pointTwoAngle)),
-                                    (radius * Math.Sin(pointTwoAngle)));
             // change before completion
             if (turnDirection == 1)
             {
@@ -185,7 +190,8 @@ namespace phase1
                 selectedPoint = selectEndPointCounter(pointOneAngle, pointTwoAngle, initialAngle);
             }
 
-            return selectedPoint;
+			return new Vector2((radius * Math.Cos(selectedPoint)),
+									(radius * Math.Sin(selectedPoint)));
             //return pointOneAngle; 
             //return tanAngle;
         }
@@ -282,7 +288,7 @@ namespace phase1
 
 
 
-        private int getTurnDirection(Position velocity,Position turnOffset)
+        private int getTurnDirection(Vector2 velocity,Vector2 turnOffset)
         {
             int velocityFacing = GameMath.getFacingNumber(velocity);
             int turnFacing = GameMath.getFacingNumber(turnOffset);

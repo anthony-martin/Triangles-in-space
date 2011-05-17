@@ -70,12 +70,12 @@ namespace phase1
             yComponent = (speed * Math.Sin(startAngle + (turnRate * timeElapsed) + vectorOffset)) * speed;
         }
 
-        public Position getVelocity(double time)
+        public Vector2 getVelocity(double time)
         {
             double vectorOffset;
             double timeElapsed = 0;
             double xComponent, yComponent;
-            Position tempPos;
+            Vector2 tempPos;
             // the vector is 90degrees from the angle of acceleration
             // the angle to the current position
             if (turnRate >= 0)
@@ -94,7 +94,7 @@ namespace phase1
 
             yComponent = (speed * Math.Sin(startAngle + (turnRate * timeElapsed) + vectorOffset));
             
-            tempPos = new Position(xComponent, yComponent);
+            tempPos = new Vector2(xComponent, yComponent);
 
             return tempPos;
         }
@@ -114,11 +114,11 @@ namespace phase1
 
         }
 
-        public Position getMovement(double time)
+        public Vector2 getMovement(double time)
         {
             double timeElapsed = 0;
             double xComponent, yComponent;
-            Position tempPos;
+            Vector2 tempPos;
             // set the elapsed time to get an accurate resutlt
             timeElapsed = time - startTime;
 
@@ -127,7 +127,7 @@ namespace phase1
             // calculate the yPosition at input time
             yComponent = (radius * Math.Sin(startAngle + (turnRate * time))) * speed;
 
-            tempPos = new Position(xComponent, yComponent);
+            tempPos = new Vector2(xComponent, yComponent);
 
             return tempPos;
 

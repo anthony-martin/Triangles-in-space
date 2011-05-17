@@ -9,9 +9,9 @@ namespace phase1
     {
         // gets the current velocity from the object
         void getVelocity(double time, out double xComponent, out double yComponent);
-        Position getVelocity(double time);
+        Vector2 getVelocity(double time);
         // gets the current relative position of the object determined by start time.
         void getMovement(double time, out double xComponent, out double yComponent);
-        Position getMovement(double time);
+        Vector2 getMovement(double time);
     }
 }

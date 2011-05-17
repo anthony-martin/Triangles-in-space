@@ -104,10 +104,10 @@ namespace Mogre.Tutorials
 			m_SceneManager = mRoot.CreateSceneManager(SceneType.ST_GENERIC);
 
 			m_Camera = m_SceneManager.CreateCamera("myCamera1");
-			m_Camera.SetPosition(0, 2500, 0);
+			m_Camera.SetPosition(-100, 350, 0);
 			m_Camera.NearClipDistance = 5;
-			m_Camera.FarClipDistance = 2500;
-			//m_Camera.LookAt(Vector3.ZERO);
+			m_Camera.FarClipDistance = 2501;
+			m_Camera.LookAt(Vector3.ZERO);
 			
 
 
@@ -123,12 +123,12 @@ namespace Mogre.Tutorials
 
 			//mNinjaNode = m_SceneManager.RootSceneNode.CreateChildSceneNode("NinjaNode");
 			//mNinjaNode.AttachObject(mNinjaEntity);
-			//mNinjaNode.Position += Vector3.ZERO;
+			//mNinjaNode.Vector2 += Vector3.ZERO;
 
 			Entity ent2 = m_SceneManager.CreateEntity("Head2", "ogrehead.mesh");
-			SceneNode node2 = m_SceneManager.RootSceneNode.CreateChildSceneNode("HeadNode2", new Vector3(100, 0, 0));
+			SceneNode node2 = m_SceneManager.RootSceneNode.CreateChildSceneNode("HeadNode2");
 			node2.AttachObject(ent2);
-			m_Camera.LookAt(node2.Position);
+			//m_Camera.LookAt(node2.Position);
 
 
 			mLight = m_SceneManager.CreateLight("pointLight");

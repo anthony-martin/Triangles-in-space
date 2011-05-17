@@ -34,7 +34,7 @@ namespace phase1
 
         }
 
-        public static double calcMagnitude(Position vector)
+        public static double calcMagnitude(Vector2 vector)
         {
             return calcMagnitude(vector.xPos,vector.yPos);
         }
@@ -48,7 +48,7 @@ namespace phase1
             return speed;
         }
 
-        public static int getFacingNumber(Position vector)
+        public static int getFacingNumber(Vector2 vector)
         {
             return getFacingNumber(vector.xPos, vector.yPos);
         }
@@ -107,7 +107,7 @@ namespace phase1
         }
 
 
-        public static double getTanAngle(Position vector)
+        public static double getTanAngle(Vector2 vector)
         {
             return getTanAngle(vector.xPos,vector.yPos);
         }
@@ -208,7 +208,7 @@ namespace phase1
         }
 
         // calculates the distance between point one and two
-        public static double getDistance(Position pointOne, Position pointTwo)
+        public static double getDistance(Vector2 pointOne, Vector2 pointTwo)
         {
             double distance, xDiff, yDiff;
 

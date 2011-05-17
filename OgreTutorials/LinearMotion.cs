@@ -7,7 +7,7 @@ namespace phase1
 {
     class LinearMotion : Velocity
     {
-        private Position velocity;
+        private Vector2 velocity;
 
         // used to determine the time on this velocty 
         // makes the overall numbers easier to handle
@@ -17,14 +17,14 @@ namespace phase1
         public LinearMotion()
         {
             // initialise the values
-            velocity = new Position();
+            velocity = new Vector2();
             startTime = 0;
         }
 
         // primary constructor
         public LinearMotion(double start, double xComponent, double yComponent)
         {
-            velocity = new Position(xComponent, yComponent);
+            velocity = new Vector2(xComponent, yComponent);
 
             // start times below 0 make no sense so disallow them
             if (start >= 0)
@@ -47,12 +47,12 @@ namespace phase1
             yComponent = velocity.yPos;
         }
 
-        public Position getVelocity(double time)
+        public Vector2 getVelocity(double time)
         {
             // time isnt used here its just to make this consistent 
             // with circular motion where it is required
             // return the current velocity
-            Position outVeloc = new Position(velocity);
+            Vector2 outVeloc = new Vector2(velocity);
 
             return outVeloc;
         }
@@ -77,9 +77,9 @@ namespace phase1
             }
         }
 
-        public Position getMovement(double time)
+        public Vector2 getMovement(double time)
         {
-            Position tempPos;
+            Vector2 tempPos;
             // if the time is before the start time something is wrong
             if (time >= startTime)
             {
@@ -87,12 +87,12 @@ namespace phase1
                 // get the amount of time that has passed
                 elapsedTime = time - startTime;
                 // return the velocity x the time
-                tempPos = new Position( velocity.xPos * elapsedTime, velocity.yPos * elapsedTime);
+                tempPos = new Vector2( velocity.xPos * elapsedTime, velocity.yPos * elapsedTime);
             }
             else
             {
                 //movement hasnt started yet return 0
-                tempPos = new Position();
+                tempPos = new Vector2();
             }
 
             return tempPos;

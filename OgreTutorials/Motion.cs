@@ -7,7 +7,7 @@ namespace phase1
 {
     class Motion
     {
-        private Position displacement; // represents the initial position
+        private Vector2 displacement; // represents the initial position
 
         private Velocity velocity;// represents any motion in the object
 
@@ -16,14 +16,14 @@ namespace phase1
         // default constructor
         public Motion()
         {
-            displacement = new Position();
+            displacement = new Vector2();
         }
 
         // complete constructor expected for general use
         public Motion(double xPos, double yPos, double endTime, Velocity movement)
         {
             // set the inital positions
-            displacement = new Position(xPos, yPos);
+            displacement = new Vector2(xPos, yPos);
             // make sure the time is valid
             // catch the return just to be proper
             bool success = setValidTill( endTime);
@@ -34,7 +34,7 @@ namespace phase1
         }
 
         // complete constructor using a postion object
-        public Motion(Position initial, double endTime, Velocity movement)
+        public Motion(Vector2 initial, double endTime, Velocity movement)
         {
             // set the inital positions
             displacement = initial;
@@ -52,13 +52,13 @@ namespace phase1
         public Motion(double xPos, double yPos, Velocity movement)
         {
             // set the inital positions
-            displacement = new Position(xPos, yPos);
+            displacement = new Vector2(xPos, yPos);
 
             // set the input velocity as the movement
             velocity = movement;
         }
         // secondary constructor using a postion object
-        public Motion(Position initial, Velocity movement)
+        public Motion(Vector2 initial, Velocity movement)
         {
             // set the inital position
             displacement = initial;
@@ -71,7 +71,7 @@ namespace phase1
         {
             bool success = false;
             // if the time is before the end time for this motion
-            if (validTill < time)
+            if (time == -1 || validTill < time)
             {
                 // get the movement from the velocity
                 velocity.getMovement(time, out xComponent, out yComponent);
@@ -96,7 +96,7 @@ namespace phase1
 
 
         // get current position using a position object
-        public bool getCurrentPosition(double time, out Position currentPos)
+        public bool getCurrentPosition(double time, out Vector2 currentPos)
         {
             bool success = false;
             // if the time is before the end time for this motion
@@ -113,7 +113,7 @@ namespace phase1
             else
             {
                 // make sure they have been initialised to something
-                currentPos = new Position();
+                currentPos = new Vector2();
                 // invalid time 
                 success = false;
             }
@@ -145,8 +145,8 @@ namespace phase1
             return success;
         }
 
-        // get current velocity using a Position object
-        public bool getCurrentVelocity(double time, out Position currentVelocity)
+        // get current velocity using a Vector2 object
+        public bool getCurrentVelocity(double time, out Vector2 currentVelocity)
         {
             bool success = false;
             // if the time is before the end time for this motion
@@ -161,7 +161,7 @@ namespace phase1
             else
             {
                 // make sure they have been initialised to something
-                currentVelocity = new Position();
+                currentVelocity = new Vector2();
                 // invalid time 
                 success = false;
             }

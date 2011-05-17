@@ -5,29 +5,29 @@ using System.Text;
 
 namespace phase1
 {
-    class Position
+    public class Vector2
     {
         private double xPosition;
         private double yPosition;
 
         // default constructor
-        public Position()
+        public Vector2()
         {
             xPosition = 0.0;
             yPosition = 0.0;
         }
 
         // normal constructor use most
-        public Position(double xVal, double yVal)
+        public Vector2(double xVal, double yVal)
         {
             xPosition = xVal;
             yPosition = yVal;
         }
 
-        public Position(Position inPosition)
+        public Vector2(Vector2 inVector2)
         {
-            xPosition = inPosition.xPos;
-            yPosition = inPosition.yPos;
+            xPosition = inVector2.xPos;
+            yPosition = inVector2.yPos;
         }
 
         // handles x 
@@ -58,7 +58,7 @@ namespace phase1
         }
 
         // adds an offset to the current position using a positionObject
-        public void addOffset(Position offset)
+        public void addOffset(Vector2 offset)
         {
             addOffset(offset.xPos, offset.yPos);
         }
@@ -75,7 +75,7 @@ namespace phase1
             yPosition = yPosition - yOffset;
         }
 
-        public Position getSelf()
+        public Vector2 getSelf()
         {
             return this;
         }
