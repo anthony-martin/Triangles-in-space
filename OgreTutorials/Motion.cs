@@ -71,7 +71,7 @@ namespace phase1
         {
             bool success = false;
             // if the time is before the end time for this motion
-            if (time == -1 || validTill < time)
+			if (validTill == -1 || validTill > time)
             {
                 // get the movement from the velocity
                 velocity.getMovement(time, out xComponent, out yComponent);

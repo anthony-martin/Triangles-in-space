@@ -108,9 +108,9 @@ namespace phase1
             timeElapsed = time - startTime;
 
             // calcualte the xPosition at input time 
-            xComponent = (radius * Math.Cos(startAngle + (turnRate * time)))* speed;
+            xComponent = (radius * Math.Cos(startAngle + (turnRate * time)));//* speed;
             // calculate the yPosition at input time
-            yComponent = (radius * Math.Sin(startAngle + (turnRate * time))) * speed; ;
+        	yComponent = (radius*Math.Sin(startAngle + (turnRate*time)));// * speed; ;
 
         }
 
@@ -123,9 +123,9 @@ namespace phase1
             timeElapsed = time - startTime;
 
             // calcualte the xPosition at input time 
-            xComponent = (radius * Math.Cos(startAngle + (turnRate * time))) * speed;
+        	xComponent = (radius*Math.Cos(startAngle + (turnRate*time)));//* speed;
             // calculate the yPosition at input time
-            yComponent = (radius * Math.Sin(startAngle + (turnRate * time))) * speed;
+        	yComponent = (radius*Math.Sin(startAngle + (turnRate*time)));// * speed;
 
             tempPos = new Vector2(xComponent, yComponent);
 

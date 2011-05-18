@@ -104,7 +104,7 @@ namespace Mogre.Tutorials
 			m_SceneManager = mRoot.CreateSceneManager(SceneType.ST_GENERIC);
 
 			m_Camera = m_SceneManager.CreateCamera("myCamera1");
-			m_Camera.SetPosition(-100, 350, 0);
+			m_Camera.SetPosition(-100, 2350, 0);
 			m_Camera.NearClipDistance = 5;
 			m_Camera.FarClipDistance = 2501;
 			m_Camera.LookAt(Vector3.ZERO);
@@ -173,7 +173,7 @@ namespace Mogre.Tutorials
 			mNinjaKeyboard.Capture();
 			mNinjaMouse.Capture();
 
-			m_time += 0.01;
+			m_time += 0.1;
 
 			Vector3 ninjaMove = Vector3.ZERO;
 

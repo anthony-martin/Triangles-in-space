@@ -43,7 +43,24 @@ namespace phase1
             double xPosition = 0.0;
             double yPosition = 0.0;
 
-			m_Movement.First.Value.getCurrentPosition(time, out xPosition, out yPosition);
+        	bool valid;
+
+			if (m_Movement.Count == 0)
+			{
+				m_NinjaNode.SetPosition(xPosition, 0.0, yPosition);
+				return;
+			}
+
+        	do
+        	{
+        		valid = m_Movement.First.Value.getCurrentPosition(time, out xPosition, out yPosition);
+
+				if (!valid)
+				{
+					m_Movement.RemoveFirst();
+				}
+
+			} while (!valid && m_Movement.Count > 0);
 
 			m_NinjaNode.SetPosition(xPosition, 0.0, yPosition);
             //addWaypoint(-10.0, 15.0);
@@ -118,11 +135,22 @@ namespace phase1
 			}
 			turnTime += lastTime; 
             CircularMotion turn = new CircularMotion(0.0, radius, turnStart, turnRate, vesselSpeed);
-			Motion nextTurn = new Motion(initialPos, turnTime, turn);
+			Motion nextTurn = new Motion(circleTwo, turnTime, turn);
 
+			m_Movement.Clear();
             m_Movement.AddLast(nextTurn);
 
-            //double distaceFromturn = 
+        	double distaceFromTurn = GameMath.getDistance(turnEnd, destination);
+
+        	double straightTime = distaceFromTurn/GameMath.calcMagnitude(vesselVelocity);
+
+        	double linearXComponent = (destination.xPos - turnEnd.xPos)/straightTime;
+        	double linearYComponent = (destination.yPos - turnEnd.yPos)/straightTime;
+
+
+			LinearMotion runToPoint = new LinearMotion(turnTime, linearXComponent, linearYComponent);
+			Motion nexRun = new Motion(turnEnd, -1, runToPoint);
+			m_Movement.AddLast(nexRun);
 
             return 1;
         }
