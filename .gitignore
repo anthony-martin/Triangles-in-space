@@ -28,5 +28,6 @@ obj/
 _ReSharper*/
 [Tt]est[Rr]esult*
 OgreTutorials/Media/
+TrianglesInSpace/TrianglesInSpace/Media/
 *.cs~
 *.pdb

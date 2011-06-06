@@ -4,12 +4,18 @@ using System.Linq;
 using System.Windows.Forms;
 using Mogre;
 using MOIS;
-using phase1;
+using Vector3 = Mogre.Vector3;
 
-namespace Mogre.Tutorials
+namespace TrianglesInSpace
 {
-	public class TutorialMain 
+	public class TrianglesInSpace
 	{
+		/// <summary>
+		/// Non unit tested graphics engine setup stuff
+		/// May need to migrate into a class later to encapsulate the setup
+		/// </summary>
+
+
 		private static Camera m_Camera;
 		private static SceneManager m_SceneManager;
 
@@ -25,10 +31,11 @@ namespace Mogre.Tutorials
 		protected static Root mRoot;
 		protected static RenderWindow mRenderWindow;
 
-		private static GameObject m_Object;
+		//private static GameObject m_Object;
 
 		private static double m_time;
 
+		[STAThread]
 		public static void Main()
 		{
 			try
@@ -100,7 +107,7 @@ namespace Mogre.Tutorials
 
 		protected static void CreateScene()
 		{
-			
+
 			m_SceneManager = mRoot.CreateSceneManager(SceneType.ST_GENERIC);
 
 			m_Camera = m_SceneManager.CreateCamera("myCamera1");
@@ -108,14 +115,14 @@ namespace Mogre.Tutorials
 			m_Camera.NearClipDistance = 5;
 			m_Camera.FarClipDistance = 2501;
 			m_Camera.LookAt(Vector3.ZERO);
-			
+
 
 
 			Viewport viewport = mRenderWindow.AddViewport(m_Camera);
 			viewport.BackgroundColour = ColourValue.Black;
 			m_Camera.AspectRatio = viewport.ActualWidth / viewport.ActualHeight;
 
-			m_Object = new GameObject(m_SceneManager);
+			//m_Object = new GameObject(m_SceneManager);
 
 			//m_SceneManager.AmbientLight = new ColourValue(1, 1, 1);
 
@@ -169,7 +176,7 @@ namespace Mogre.Tutorials
 
 		private static bool ProcessUnbufferedInput(FrameEvent evt)
 		{
-			m_Object.draw(m_time);
+			//m_Object.draw(m_time);
 			mNinjaKeyboard.Capture();
 			mNinjaMouse.Capture();
 

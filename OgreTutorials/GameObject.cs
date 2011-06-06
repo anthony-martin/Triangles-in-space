@@ -34,7 +34,7 @@ namespace phase1
 			m_NinjaNode.AttachObject(m_NinjaEntity);
 			m_NinjaNode.Position += Vector3.ZERO;
 
-			addWaypoint(-10.0, 15.0);
+			addWaypoint(-100.0, 150.0);
         }
 
         public void draw(double time)
@@ -205,10 +205,12 @@ namespace phase1
             // get the angle for both possible points on the circle
             double pointOneAngle = GameMath.reduceAngle( tanAngle + cosAngle);
             double pointTwoAngle = GameMath.reduceAngle( tanAngle - cosAngle);
+			
+			//todo : determine positions for a turning circle here 
 
 			double selectedPoint;
 
-            // change before completion
+            // todo:  change before completion this needs to determine if the circle has the same turn direction
             if (turnDirection == 1)
             {
                 selectedPoint = selectEndPointClockwise(pointOneAngle,pointTwoAngle,initialAngle);
