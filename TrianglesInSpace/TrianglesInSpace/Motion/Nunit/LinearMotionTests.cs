@@ -9,21 +9,37 @@ namespace TrianglesInSpace.Motion.Nunit
 {
 	class LinearMotionTests : TestSpecification
 	{
-		
+
+		private LinearMotion CreateMotionAtZero()
+		{
+			Vector2 vector = new Vector2(1, 1);
+			return  new LinearMotion(0, vector);
+		}
+
 		[Test]
 		public void Create_LinearMotion()
 		{
-			var vector = new Vector2(1,1);
-			var motion = new LinearMotion(vector);
+			CreateMotionAtZero();
 		}
 
 		[Test]
 		public void Test_Get_Velocity()
 		{
-			var vector = new Vector2(1, 1);
-			var motion = new LinearMotion(vector);
+			Vector2 vector = new Vector2(1, 1);
+			ulong startTime = 0;
+			LinearMotion motion = new LinearMotion(startTime, vector);
 
 			Assert.AreEqual(vector , motion.GetVelocity());
+		}
+
+		[Test]
+		public void Test_Get_Movement()
+		{
+			LinearMotion motion = CreateMotionAtZero();
+
+			Vector2 distanceMoved = motion.GetMotion(1000);
+
+			Assert.AreEqual(new Vector2(1, 1), distanceMoved);
 		}
 	}
 }
