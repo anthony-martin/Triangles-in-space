@@ -12,19 +12,27 @@ namespace TrianglesInSpace.Motion
 		/// <summary>
 		/// Time based constant velocity linear motion
 		/// </summary>
-		/// <param name="startTime">The begining time of this motion must be positive</param>
-		/// <param name="velocity">The velocity </param>
+		/// <param name="startTime">The begining time of this motion</param>
+		/// <param name="velocity">The velocity per second or 1000 time units</param>
 		public LinearMotion(ulong startTime, Vector2 velocity)
 		{
 			// the starting time for this set of motion
 			m_StartTime = startTime;
-
+			// the velocity per second or 1000 time units
 			m_Velocity = velocity;
 		}
 
 		public Vector2 GetVelocity()
 		{
 			return m_Velocity;
+		}
+
+		public ulong StartTime
+		{
+			get
+			{
+				return m_StartTime;
+			}
 		}
 
 		public Vector2 GetMotion(ulong currentTime)

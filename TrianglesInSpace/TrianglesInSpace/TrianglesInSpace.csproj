@@ -64,7 +64,9 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Motion\CircularMotion.cs" />
     <Compile Include="Motion\LinearMotion.cs" />
+    <Compile Include="Motion\Nunit\CircularMotionTests.cs" />
     <Compile Include="Motion\Nunit\LinearMotionTests.cs" />
     <Compile Include="TestSpecification.cs" />
     <Compile Include="TrianglesInSpace.cs" />
