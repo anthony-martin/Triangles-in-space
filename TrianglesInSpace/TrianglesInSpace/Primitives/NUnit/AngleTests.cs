@@ -120,5 +120,79 @@ namespace TrianglesInSpace.Primitives.NUnit
 
 			Assert.AreEqual(8, facing);
 		}
+
+		[Test]
+		public static void Test_First_Quadrant_TanAngle()
+		{
+			Vector2 vector2 = new Vector2(1, 1);
+
+			double angle = Angle.TanAngle(vector2);
+
+			Assert.AreEqual(Math.PI/4, angle);
+		}
+
+		[Test]
+		public static void Test_Second_Quadrant_TanAngle()
+		{
+			Vector2 vector2 = new Vector2(-1, 1);
+
+			double angle = Angle.TanAngle(vector2);
+
+			Assert.AreEqual(3 * Math.PI / 4, angle);
+		}
+		[Test]
+		public static void Test_Third_Quadrant_TanAngle()
+		{
+			Vector2 vector2 = new Vector2(-1, -1);
+
+			double angle = Angle.TanAngle(vector2);
+
+			Assert.AreEqual(-3 * Math.PI / 4, angle);
+		}
+		[Test]
+		public static void Test_Fourth_Quadrant_TanAngle()
+		{
+			Vector2 vector2 = new Vector2(1, -1);
+
+			double angle = Angle.TanAngle(vector2);
+
+			Assert.AreEqual(-Math.PI / 4, angle);
+		}
+		[Test]
+		public static void Test_Fifth_Quadrant_TanAngle()
+		{
+			Vector2 vector2 = new Vector2(1, 0);
+
+			double angle = Angle.TanAngle(vector2);
+
+			Assert.AreEqual(0.0, angle);
+		}
+		[Test]
+		public static void Test_Sixth_Quadrant_TanAngle()
+		{
+			Vector2 vector2 = new Vector2(0, 1);
+
+			double angle = Angle.TanAngle(vector2);
+
+			Assert.AreEqual(Math.PI/2, angle);
+		}
+		[Test]
+		public static void Test_Seventh_Quadrant_TanAngle()
+		{
+			Vector2 vector2 = new Vector2(-1, 0);
+
+			double angle = Angle.TanAngle(vector2);
+
+			Assert.AreEqual(Math.PI, angle);
+		}
+		[Test]
+		public static void Test_Eighth_Quadrant_TanAngle()
+		{
+			Vector2 vector2 = new Vector2(0, -1);
+
+			double angle = Angle.TanAngle(vector2);
+
+			Assert.AreEqual(-Math.PI/2, angle);
+		}
 	}
 }
