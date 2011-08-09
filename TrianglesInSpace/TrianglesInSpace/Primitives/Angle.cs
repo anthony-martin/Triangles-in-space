@@ -9,7 +9,7 @@ namespace TrianglesInSpace.Primitives
 
 		public Angle(double angle)
 		{
-			m_Radians = ReduceAngle(angle);
+			m_Radians = angle;
 		}
 
 		public Angle(Vector2 vector)
@@ -182,5 +182,38 @@ namespace TrianglesInSpace.Primitives
 
 			return angle;
 		}
+
+		#region mathOverloads
+		public static bool operator ==(Angle leftSide , Angle rightSide)
+		{
+			return leftSide.m_Radians == rightSide.m_Radians;
+		}
+
+		public static bool operator !=(Angle leftSide , Angle rightSide)
+		{
+			return !(leftSide == rightSide);
+		}
+
+		public static bool operator >(Angle leftSide, Angle rightSide)
+		{
+			return leftSide.m_Radians > rightSide.m_Radians;
+		}
+
+		public static bool operator <(Angle leftSide, Angle rightSide)
+		{
+			return leftSide.m_Radians < rightSide.m_Radians;
+		}
+
+		public static bool operator >=(Angle leftSide, Angle rightSide)
+		{
+			return leftSide.m_Radians >= rightSide.m_Radians;
+		}
+
+		public static bool operator <=(Angle leftSide, Angle rightSide)
+		{
+			return leftSide.m_Radians <= rightSide.m_Radians;
+		}
+
+		#endregion 
 	}
 }
