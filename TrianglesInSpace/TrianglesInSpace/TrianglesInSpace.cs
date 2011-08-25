@@ -4,6 +4,9 @@ using System.Linq;
 using System.Windows.Forms;
 using Mogre;
 using MOIS;
+using TrianglesInSpace.Motion;
+using Angle = TrianglesInSpace.Primitives.Angle;
+using Math = System.Math;
 using Vector3 = Mogre.Vector3;
 
 namespace TrianglesInSpace
@@ -33,7 +36,9 @@ namespace TrianglesInSpace
 
 		//private static GameObject m_Object;
 
-		private static double m_time;
+		private static CircularMotion m_Circle;
+
+		private static ulong m_time;
 
 		[STAThread]
 		public static void Main()
@@ -123,13 +128,15 @@ namespace TrianglesInSpace
 			m_Camera.AspectRatio = viewport.ActualWidth / viewport.ActualHeight;
 
 			//m_Object = new GameObject(m_SceneManager);
+			m_Circle = new CircularMotion(0, 50, new Angle(0), new Angle(Math.PI/2),2);
 
-			//m_SceneManager.AmbientLight = new ColourValue(1, 1, 1);
 
-			//mNinjaEntity = m_SceneManager.CreateEntity("Ninja", "ninja.mesh");
+			m_SceneManager.AmbientLight = new ColourValue(1, 1, 1);
 
-			//mNinjaNode = m_SceneManager.RootSceneNode.CreateChildSceneNode("NinjaNode");
-			//mNinjaNode.AttachObject(mNinjaEntity);
+			mNinjaEntity = m_SceneManager.CreateEntity("Ninja", "ninja.mesh");
+
+			mNinjaNode = m_SceneManager.RootSceneNode.CreateChildSceneNode("NinjaNode");
+			mNinjaNode.AttachObject(mNinjaEntity);
 			//mNinjaNode.Vector2 += Vector3.ZERO;
 
 			Entity ent2 = m_SceneManager.CreateEntity("Head2", "ogrehead.mesh");
@@ -176,12 +183,15 @@ namespace TrianglesInSpace
 
 		private static bool ProcessUnbufferedInput(FrameEvent evt)
 		{
-			//m_Object.draw(m_time);
+			
 			mNinjaKeyboard.Capture();
 			mNinjaMouse.Capture();
 
-			m_time += 10 * evt.timeSinceLastFrame;
+			m_time += (ulong) (evt.timeSinceLastFrame*1000);
+			var motion =  m_Circle.GetMotion(m_time);
+			motion.x += 50;
 
+			mNinjaNode.Position = new Vector3(motion.x,  0.0, motion.y);
 			Vector3 ninjaMove = Vector3.ZERO;
 
 			if (mNinjaKeyboard.IsKeyDown(MOIS.KeyCode.KC_I))

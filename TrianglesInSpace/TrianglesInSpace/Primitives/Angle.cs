@@ -42,6 +42,11 @@ namespace TrianglesInSpace.Primitives
 
 			return angle;
 		}
+
+		public void ReduceAngle()
+		{
+			m_Radians = ReduceAngle(m_Radians);
+		}
 		/// <summary>
 		/// Creates a number for the facing of the vector
 		/// 261

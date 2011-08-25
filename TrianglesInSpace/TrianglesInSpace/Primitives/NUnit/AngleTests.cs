@@ -26,7 +26,8 @@ namespace TrianglesInSpace.Primitives.NUnit
 		public static void Create_Angle_Check_Value_Greater_Than_Two_Pi()
 		{
 			Angle angle = new Angle(3 * Math.PI);
-			
+			angle.ReduceAngle();
+
 			Assert.AreEqual(Math.PI, angle.Value, 0.00001);
 		}
 
@@ -34,6 +35,7 @@ namespace TrianglesInSpace.Primitives.NUnit
 		public static void Create_Angle_Check_Value_Less_Than_Two_Pi()
 		{
 			Angle angle = new Angle(-3 * Math.PI);
+			angle.ReduceAngle();
 
 			Assert.AreEqual(Math.PI, angle.Value, 0.00001);
 		}
