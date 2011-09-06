@@ -37,6 +37,7 @@ namespace TrianglesInSpace
 		//private static GameObject m_Object;
 
 		private static CircularMotion m_Circle;
+		private static LinearMotion m_Linear;
 
 		private static ulong m_time;
 
@@ -129,7 +130,7 @@ namespace TrianglesInSpace
 
 			//m_Object = new GameObject(m_SceneManager);
 			m_Circle = new CircularMotion(0, 50, new Angle(0), new Angle(Math.PI/2),2);
-
+			m_Linear = new LinearMotion(0, new Vector2(10,0));
 
 			m_SceneManager.AmbientLight = new ColourValue(1, 1, 1);
 
@@ -188,23 +189,23 @@ namespace TrianglesInSpace
 			mNinjaMouse.Capture();
 
 			m_time += (ulong) (evt.timeSinceLastFrame*1000);
-			var motion =  m_Circle.GetMotion(m_time);
-			motion.x += 50;
+			var motion = m_Linear.GetMotion(m_time);
+			//motion.x += 50;
 
 			mNinjaNode.Position = new Vector3(motion.x,  0.0, motion.y);
-			Vector3 ninjaMove = Vector3.ZERO;
+			//Vector3 ninjaMove = Vector3.ZERO;
 
-			if (mNinjaKeyboard.IsKeyDown(MOIS.KeyCode.KC_I))
-				ninjaMove.z -= 1;
+			//if (mNinjaKeyboard.IsKeyDown(MOIS.KeyCode.KC_I))
+			//    ninjaMove.z -= 1;
 
-			if (mNinjaKeyboard.IsKeyDown(MOIS.KeyCode.KC_K))
-				ninjaMove.z += 1;
+			//if (mNinjaKeyboard.IsKeyDown(MOIS.KeyCode.KC_K))
+			//    ninjaMove.z += 1;
 
-			if (mNinjaKeyboard.IsKeyDown(MOIS.KeyCode.KC_J))
-				ninjaMove.x -= 1;
+			//if (mNinjaKeyboard.IsKeyDown(MOIS.KeyCode.KC_J))
+			//    ninjaMove.x -= 1;
 
-			if (mNinjaKeyboard.IsKeyDown(MOIS.KeyCode.KC_L))
-				ninjaMove.x += 1;
+			//if (mNinjaKeyboard.IsKeyDown(MOIS.KeyCode.KC_L))
+			//    ninjaMove.x += 1;
 
 			//mNinjaNode.Translate(ninjaMove, Node.TransformSpace.TS_LOCAL);
 

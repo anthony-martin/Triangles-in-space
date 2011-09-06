@@ -68,6 +68,8 @@
     <Compile Include="Motion\LinearMotion.cs" />
     <Compile Include="Motion\Nunit\CircularMotionTests.cs" />
     <Compile Include="Motion\Nunit\LinearMotionTests.cs" />
+    <Compile Include="Motion\Nunit\PathTests.cs" />
+    <Compile Include="Motion\Path.cs" />
     <Compile Include="Primitives\Angle.cs" />
     <Compile Include="Primitives\NUnit\AngleTests.cs" />
     <Compile Include="TestSpecification.cs" />
