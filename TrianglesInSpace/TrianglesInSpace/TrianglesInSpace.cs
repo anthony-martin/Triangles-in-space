@@ -189,8 +189,8 @@ namespace TrianglesInSpace
 			mNinjaMouse.Capture();
 
 			m_time += (ulong) (evt.timeSinceLastFrame*1000);
-			var motion = m_Linear.GetMotion(m_time);
-			//motion.x += 50;
+			var motion = m_Circle.GetMotion(m_time);
+			motion.x += 50;
 
 			mNinjaNode.Position = new Vector3(motion.x,  0.0, motion.y);
 			//Vector3 ninjaMove = Vector3.ZERO;
