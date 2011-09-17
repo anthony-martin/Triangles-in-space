@@ -38,7 +38,6 @@ namespace TrianglesInSpace.Motion
 
 		public static double CalcRadius(double velocity, double accel)
 		{
-
 			double radius = 0.0;
 			// dont divide by 0
 			if (accel > 0)
@@ -47,7 +46,25 @@ namespace TrianglesInSpace.Motion
 			}
 
 			return radius;
+		}
 
+		public Vector2 SelectTuriningCircle(Vector2 circleCentreOne, Vector2 circleCentreTwo, Vector2 targetPosition, double turningRadius)
+		{
+			double displacementOne = (circleCentreOne - targetPosition).Length;
+			double displacementTwo = (circleCentreTwo - targetPosition).Length;
+
+			Vector2 selectedCircle;
+
+			if(displacementOne < displacementTwo && displacementOne >= turningRadius )
+			{
+				selectedCircle = circleCentreOne;
+			}
+			else
+			{
+				selectedCircle = circleCentreTwo;
+			}
+
+			return selectedCircle;
 		}
 	}
 }
