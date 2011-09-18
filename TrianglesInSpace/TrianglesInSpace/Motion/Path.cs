@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Mogre;
+using TrianglesInSpace.Primitives;
 using Angle = TrianglesInSpace.Primitives.Angle;
 using Math = System.Math;
 
@@ -65,6 +63,25 @@ namespace TrianglesInSpace.Motion
 			}
 
 			return selectedCircle;
+		}
+
+		public TurnDirection DetermineTurnDirection(Vector2 velocity, Vector2 turiningCircleOffset)
+		{
+			int velocityFacing = Angle.FacingNumber(velocity);
+			int offsetFacing = Angle.FacingNumber(turiningCircleOffset);
+
+			TurnDirection turnDirection = TurnDirection.Unknown;
+
+			if ((velocityFacing == (offsetFacing + 3)) || (velocityFacing == (offsetFacing - 1)))
+			{
+				turnDirection = TurnDirection.AntiClockwise;
+			}
+			else if ((velocityFacing == (offsetFacing - 3)) || (velocityFacing == (offsetFacing + 1)))
+			{
+				turnDirection = TurnDirection.Clockwise;
+			}
+
+			return turnDirection;
 		}
 	}
 }

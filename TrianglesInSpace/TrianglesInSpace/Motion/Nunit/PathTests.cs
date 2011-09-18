@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Mogre;
 using NUnit.Framework;
+using TrianglesInSpace.Primitives;
 
 namespace TrianglesInSpace.Motion.Nunit
 {
@@ -159,5 +160,96 @@ namespace TrianglesInSpace.Motion.Nunit
 			Assert.AreEqual(selectedCircle.y, circleTwo.y, 0.000000001);
 		}
 
+
+		[Test]
+		public void DetermineTurnDirectionClockwiseSimple()
+		{
+			var path = new Path();
+			Vector2 velocity = new Vector2(0, 1);
+			Vector2 turningCircleOffset = new Vector2(1, 0);
+
+
+			var turnDirection = path.DetermineTurnDirection(velocity, turningCircleOffset);
+
+			Assert.AreEqual(TurnDirection.Clockwise, turnDirection);
+		}
+
+
+		[Test]
+		public void DetermineTurnDirectionAntiClockwiseSimple()
+		{
+			var path = new Path();
+			Vector2 velocity = new Vector2(0, 1);
+			Vector2 turningCircleOffset = new Vector2(-1, 0);
+
+
+			var turnDirection = path.DetermineTurnDirection(velocity, turningCircleOffset);
+
+			Assert.AreEqual(TurnDirection.AntiClockwise, turnDirection);
+		}
+
+		[Test]
+		public void DetermineTurnDirectionOpositeClockwiseSimple()
+		{
+			var path = new Path();
+			Vector2 velocity = new Vector2(0, -1);
+			Vector2 turningCircleOffset = new Vector2(-1, 0);
+
+
+			var turnDirection = path.DetermineTurnDirection(velocity, turningCircleOffset);
+
+			Assert.AreEqual(TurnDirection.Clockwise, turnDirection);
+		}
+
+		[Test]
+		public void DetermineTurnDirectionOpositeAntiClockwiseSimple()
+		{
+			var path = new Path();
+			Vector2 velocity = new Vector2(0, -1);
+			Vector2 turningCircleOffset = new Vector2(1, 0);
+
+
+			var turnDirection = path.DetermineTurnDirection(velocity, turningCircleOffset);
+
+			Assert.AreEqual(TurnDirection.AntiClockwise, turnDirection);
+		}
+
+		[Test]
+		public void DetermineTurnDirectionrRoughly45DegreesClockwise()
+		{
+			var path = new Path();
+			Vector2 velocity = new Vector2(1, 1);
+			Vector2 turningCircleOffset = new Vector2(1, -1);
+
+			var turnDirection = path.DetermineTurnDirection(velocity, turningCircleOffset);
+
+			Assert.AreEqual(TurnDirection.Clockwise, turnDirection);
+
+			velocity = new Vector2(-1, -1);
+			turningCircleOffset = new Vector2(-1, 1);
+
+			turnDirection = path.DetermineTurnDirection(velocity, turningCircleOffset);
+
+			Assert.AreEqual(TurnDirection.Clockwise, turnDirection);
+		}
+
+		[Test]
+		public void DetermineTurnDirectionrRoughly45DegreesAntiClockwise()
+		{
+			var path = new Path();
+			Vector2 velocity = new Vector2(1, 1);
+			Vector2 turningCircleOffset = new Vector2(-1, 1);
+
+			var turnDirection = path.DetermineTurnDirection(velocity, turningCircleOffset);
+
+			Assert.AreEqual(TurnDirection.AntiClockwise, turnDirection);
+
+			velocity = new Vector2(-1, -1);
+			turningCircleOffset = new Vector2(1, -1);
+
+			turnDirection = path.DetermineTurnDirection(velocity, turningCircleOffset);
+
+			Assert.AreEqual(TurnDirection.AntiClockwise, turnDirection);
+		}
 	}
 }
