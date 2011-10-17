@@ -13,7 +13,14 @@ namespace TrianglesInSpace.Motion
 		{
 			
 		}
-
+		/// <summary>
+		/// Determines the positions of the two possible turning circles 
+		/// Relative to the initial position which is not passed into the function
+		/// </summary>
+		/// <param name="initialVelocity">The current velocity of the object</param>
+		/// <param name="acceleration">The desired acceleration of the object</param>
+		/// <param name="circleOne">The first of the two possible turning circles</param>
+		/// <param name="circleTwo">The second of the two possible turning circles</param>
 		public void DetermineTurningCircles(Vector2 initialVelocity, double acceleration, out Vector2 circleOne, out Vector2 circleTwo)
 		{
 			Angle velocityAngle;
@@ -45,7 +52,16 @@ namespace TrianglesInSpace.Motion
 
 			return radius;
 		}
-
+		/// <summary>
+		/// Select the closest turning circle to the desitnation unless the closest circle is within the 
+		/// radius of the turning circle.
+		/// All positions need to be in the same reference frame
+		/// </summary>
+		/// <param name="circleCentreOne"></param>
+		/// <param name="circleCentreTwo"></param>
+		/// <param name="targetPosition">The destination</param>
+		/// <param name="turningRadius">The radius of the circles</param>
+		/// <returns></returns>
 		public Vector2 SelectTuriningCircle(Vector2 circleCentreOne, Vector2 circleCentreTwo, Vector2 targetPosition, double turningRadius)
 		{
 			double displacementOne = (circleCentreOne - targetPosition).Length;
@@ -65,6 +81,12 @@ namespace TrianglesInSpace.Motion
 			return selectedCircle;
 		}
 
+		/// <summary>
+		/// Determines if a turn is clockwise or anti clockwise
+		/// </summary>
+		/// <param name="velocity">The current velocity of the object</param>
+		/// <param name="turiningCircleOffset">The position of the turning circle relative to the initial position</param>
+		/// <returns>Clockwise or anti clockwise</returns>
 		public TurnDirection DetermineTurnDirection(Vector2 velocity, Vector2 turiningCircleOffset)
 		{
 			int velocityFacing = Angle.FacingNumber(velocity);
@@ -82,6 +104,37 @@ namespace TrianglesInSpace.Motion
 			}
 
 			return turnDirection;
+		}
+	
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="destination">The position of the destination relative to the turning point</param>
+		/// <param name="radius">The radius of the turning circle</param>
+		/// <param name="turnDirection">If the turn is clockwise or anti clockwise</param>
+		/// <returns></returns>
+		public Angle DetermineTurnEnd(Vector2 destination, double radius, TurnDirection turnDirection)
+		{
+			Angle angleTowardsDestination = new Angle( destination);
+
+			Angle tangentAngles = new Angle(Math.Acos(radius / destination.Length));
+
+			Angle desiredEndPoint;
+			if (turnDirection == TurnDirection.Clockwise)
+			{
+				desiredEndPoint = angleTowardsDestination + tangentAngles;
+			}
+			else
+			{
+				desiredEndPoint = angleTowardsDestination - tangentAngles;
+			}
+			desiredEndPoint.ReduceAngle();
+			return desiredEndPoint;
+		}
+
+		public static Vector2 RadialToVector(Angle angle, double radius)
+		{
+			return new Vector2((radius * Math.Cos(angle.Value)) , (radius * Math.Sin(angle.Value)));
 		}
 	}
 }

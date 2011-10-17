@@ -115,6 +115,11 @@ namespace TrianglesInSpace.Primitives
 			return ReduceAngle(Math.Atan2(vector.y, vector.x));
 		}
 
+		//public bool Equals( Angle pointTwo)
+		//{
+		//    return m_Radians == pointTwo.m_Radians;
+		//}
+
 		#region mathOverloads
 		public static bool operator ==(Angle leftSide , Angle rightSide)
 		{
@@ -144,6 +149,21 @@ namespace TrianglesInSpace.Primitives
 		public static bool operator <=(Angle leftSide, Angle rightSide)
 		{
 			return leftSide.m_Radians <= rightSide.m_Radians;
+		}
+
+		public static Angle operator +(Angle leftSide, Angle rightSide)
+		{
+			return new Angle(leftSide.m_Radians + rightSide.m_Radians);
+		}
+
+		public static Angle operator -(Angle leftSide, Angle rightSide)
+		{
+			return new Angle(leftSide.m_Radians - rightSide.m_Radians);
+		}
+
+		public override string ToString()
+		{
+			return m_Radians.ToString();
 		}
 
 		#endregion 

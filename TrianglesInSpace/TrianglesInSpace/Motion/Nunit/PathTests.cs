@@ -5,6 +5,8 @@ using System.Text;
 using Mogre;
 using NUnit.Framework;
 using TrianglesInSpace.Primitives;
+using Angle = TrianglesInSpace.Primitives.Angle;
+using Math = System.Math;
 
 namespace TrianglesInSpace.Motion.Nunit
 {
@@ -250,6 +252,157 @@ namespace TrianglesInSpace.Motion.Nunit
 			turnDirection = path.DetermineTurnDirection(velocity, turningCircleOffset);
 
 			Assert.AreEqual(TurnDirection.AntiClockwise, turnDirection);
+		}
+
+		[Test]
+		public void DetermineTurnEndSimpleClockwise()
+		{
+			Vector2 turningCircle = new Vector2(2,0);
+			Vector2 destination = new Vector2(6,3);
+			double turningCircleRadius = 2;
+
+			Vector2 turnPointToDestinationOffset = destination - turningCircle;
+			Angle tangle = new Angle(turnPointToDestinationOffset);
+			Angle cosangle = new Angle(Math.Acos(2.0 / 5.0));
+			Angle expectedAngle = tangle + cosangle;
+			expectedAngle.ReduceAngle();
+			var path = new Path();
+
+
+			Assert.AreEqual(expectedAngle, path.DetermineTurnEnd(turnPointToDestinationOffset, turningCircleRadius, TurnDirection.Clockwise));
+
+		}
+
+		[Test]
+		public void DetermineTurnEndSimpleAntiClockwise()
+		{
+			Vector2 turningCircle = new Vector2(2, 0);
+			Vector2 destination = new Vector2(6, 3);
+			double turningCircleRadius = 2;
+
+			Vector2 turnPointToDestinationOffset = destination - turningCircle;
+			Angle tangle = new Angle(turnPointToDestinationOffset);
+			Angle cosangle = new Angle(Math.Acos(2.0 / 5.0));
+			Angle expectedAngle = tangle - cosangle;
+			expectedAngle.ReduceAngle();
+			var path = new Path();
+
+
+			Assert.AreEqual(expectedAngle, path.DetermineTurnEnd(turnPointToDestinationOffset, turningCircleRadius, TurnDirection.AntiClockwise));
+
+		}
+
+		[Test]
+		public void DetermineTurnEndInverseClockwise()
+		{
+			Vector2 turningCircle = new Vector2(2, 0);
+			Vector2 destination = new Vector2(-2, -3);
+			double turningCircleRadius = 2;
+
+			Vector2 turnPointToDestinationOffset = destination - turningCircle;
+			Angle tangle = new Angle(turnPointToDestinationOffset);
+			Angle cosangle = new Angle(Math.Acos(2.0 / 5.0));
+			Angle expectedAngle = tangle + cosangle;
+			expectedAngle.ReduceAngle();
+			var path = new Path();
+
+
+			Assert.AreEqual(expectedAngle, path.DetermineTurnEnd(turnPointToDestinationOffset, turningCircleRadius, TurnDirection.Clockwise));
+
+		}
+
+		[Test]
+		public void DetermineTurnEndInverseAntiClockwise()
+		{
+			Vector2 turningCircle = new Vector2(2, 0);
+			Vector2 destination = new Vector2(-2, -3);
+			double turningCircleRadius = 2;
+
+			Vector2 turnPointToDestinationOffset = destination - turningCircle;
+			Angle tangle = new Angle(turnPointToDestinationOffset);
+			Angle cosangle = new Angle(Math.Acos(2.0 / 5.0));
+			Angle expectedAngle = tangle - cosangle;
+			expectedAngle.ReduceAngle();
+			var path = new Path();
+
+
+			Assert.AreEqual(expectedAngle, path.DetermineTurnEnd(turnPointToDestinationOffset, turningCircleRadius, TurnDirection.AntiClockwise));
+
+		}
+
+
+		[Test]
+		public void DetermineTurnEndEastClockwise()
+		{
+			Vector2 turningCircle = new Vector2(2, 0);
+			Vector2 destination = new Vector2(7, 0);
+			double turningCircleRadius = 2;
+
+			Vector2 turnPointToDestinationOffset = destination - turningCircle;
+			Angle tangle = new Angle(turnPointToDestinationOffset);
+			Angle cosangle = new Angle(Math.Acos(2.0 / 5.0));
+			Angle expectedAngle = tangle + cosangle;
+			expectedAngle.ReduceAngle();
+			var path = new Path();
+
+
+			Assert.AreEqual(expectedAngle, path.DetermineTurnEnd(turnPointToDestinationOffset, turningCircleRadius, TurnDirection.Clockwise));
+		}
+
+		[Test]
+		public void DetermineTurnEndEastAntiClockwise()
+		{
+			Vector2 turningCircle = new Vector2(2, 0);
+			Vector2 destination = new Vector2(7, 0);
+			double turningCircleRadius = 2;
+
+			Vector2 turnPointToDestinationOffset = destination - turningCircle;
+			Angle tangle = new Angle(turnPointToDestinationOffset);
+			Angle cosangle = new Angle(Math.Acos(2.0 / 5.0));
+			Angle expectedAngle = tangle - cosangle;
+			expectedAngle.ReduceAngle();
+			var path = new Path();
+
+
+			Assert.AreEqual(expectedAngle, path.DetermineTurnEnd(turnPointToDestinationOffset, turningCircleRadius, TurnDirection.AntiClockwise));
+		}
+
+		[Test]
+		public void DetermineTurnEndWestClockwise()
+		{
+			Vector2 turningCircle = new Vector2(2, 0);
+			Vector2 destination = new Vector2(-3, 0);
+			double turningCircleRadius = 2;
+
+			Vector2 turnPointToDestinationOffset = destination - turningCircle;
+			Angle tangle = new Angle(turnPointToDestinationOffset);
+			Angle cosangle = new Angle(Math.Acos(2.0 / 5.0));
+			Angle expectedAngle = tangle + cosangle;
+			expectedAngle.ReduceAngle();
+			var path = new Path();
+
+
+			Assert.AreEqual(expectedAngle, path.DetermineTurnEnd(turnPointToDestinationOffset, turningCircleRadius, TurnDirection.Clockwise));
+
+		}
+
+		[Test]
+		public void DetermineTurnEndWestAntiClockwise()
+		{
+			Vector2 turningCircle = new Vector2(2, 0);
+			Vector2 destination = new Vector2(-3, 0);
+			double turningCircleRadius = 2;
+
+			Vector2 turnPointToDestinationOffset = destination - turningCircle;
+			Angle tangle = new Angle(turnPointToDestinationOffset);
+			Angle cosangle = new Angle(Math.Acos(2.0 / 5.0));
+			Angle expectedAngle = tangle - cosangle;
+			expectedAngle.ReduceAngle();
+			var path = new Path();
+
+
+			Assert.AreEqual(expectedAngle, path.DetermineTurnEnd(turnPointToDestinationOffset, turningCircleRadius, TurnDirection.AntiClockwise));
+
 		}
 	}
 }
