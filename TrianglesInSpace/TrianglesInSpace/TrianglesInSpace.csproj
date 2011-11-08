@@ -65,6 +65,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Motion\CircularMotion.cs" />
+    <Compile Include="Motion\CoordinateConversions.cs" />
     <Compile Include="Motion\LinearMotion.cs" />
     <Compile Include="Motion\Nunit\CircularMotionTests.cs" />
     <Compile Include="Motion\Nunit\LinearMotionTests.cs" />

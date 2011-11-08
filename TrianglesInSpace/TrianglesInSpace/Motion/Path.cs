@@ -8,10 +8,45 @@ namespace TrianglesInSpace.Motion
 {
 	public class Path
 	{
-		
-		public void CreatePathTo()
+		private double m_Acceleration;
+
+		public Path()
 		{
-			
+			m_Acceleration = 0;
+		}
+
+		public Path(double maximumAcceleration)
+		{
+			m_Acceleration = maximumAcceleration;
+		}
+
+
+		public void CreatePathTo(Vector2 destination, Vector2 initialVelocity)
+		{
+			// get initial velocity
+			//determine turning circles
+			Vector2 circleOnePosition, circleTwoPosition;
+
+			double circleRadius = CalcRadius(initialVelocity.Length, m_Acceleration);
+
+			DetermineTurningCircles(initialVelocity, circleRadius, out circleOnePosition, out circleTwoPosition);
+
+			//select a turning circle
+			Vector2 selectedTuringCicle =  SelectTuriningCircle(circleOnePosition, circleTwoPosition, destination, circleRadius);
+
+			//determine turn direction
+			TurnDirection turnDirection = DetermineTurnDirection(initialVelocity, selectedTuringCicle);
+
+			//determine turn end
+			Angle turnStart = new Angle(-selectedTuringCicle);
+			// zero the destination arou
+			Angle turnEnd = DetermineTurnEnd(destination, circleRadius, turnDirection);
+
+			// create circular motion
+
+			// create linear motion
+
+			// add motion to list
 		}
 		/// <summary>
 		/// Determines the positions of the two possible turning circles 
@@ -21,7 +56,7 @@ namespace TrianglesInSpace.Motion
 		/// <param name="acceleration">The desired acceleration of the object</param>
 		/// <param name="circleOne">The first of the two possible turning circles</param>
 		/// <param name="circleTwo">The second of the two possible turning circles</param>
-		public void DetermineTurningCircles(Vector2 initialVelocity, double acceleration, out Vector2 circleOne, out Vector2 circleTwo)
+		public void DetermineTurningCircles(Vector2 initialVelocity, double radius, out Vector2 circleOne, out Vector2 circleTwo)
 		{
 			Angle velocityAngle;
 
@@ -29,16 +64,16 @@ namespace TrianglesInSpace.Motion
 			velocityAngle = new Angle(initialVelocity);
 			velocityAngle.ReduceAngle();
 
-			double vesselSpeed = initialVelocity.Length;
+			//double vesselSpeed = initialVelocity.Length;
 			// calculate the radius if the turning circle based on the acceleration and current speed
-			double radius = CalcRadius(vesselSpeed, acceleration);
+			//double radius = CalcRadius(vesselSpeed, acceleration);
 
 			// calcualte both of the turning circles
-			circleOne = new Vector2((radius * Math.Cos(velocityAngle.Value + (Math.PI / 2)))
-								   , (radius * Math.Sin(velocityAngle.Value + (Math.PI / 2))));
+			Angle angleOne = new Angle(velocityAngle.Value + (Math.PI / 2));
+			circleOne = CoordinateConversions.RadialToVector(angleOne, radius);
 
-			circleTwo = new Vector2((radius * Math.Cos(velocityAngle.Value - (Math.PI / 2)))
-								   , (radius * Math.Sin(velocityAngle.Value - (Math.PI / 2))));
+			Angle angleTwo = new Angle(velocityAngle.Value - (Math.PI / 2));
+			circleTwo = CoordinateConversions.RadialToVector(angleTwo, radius);
 		}
 
 		public static double CalcRadius(double velocity, double accel)
@@ -132,9 +167,6 @@ namespace TrianglesInSpace.Motion
 			return desiredEndPoint;
 		}
 
-		public static Vector2 RadialToVector(Angle angle, double radius)
-		{
-			return new Vector2((radius * Math.Cos(angle.Value)) , (radius * Math.Sin(angle.Value)));
-		}
+		
 	}
 }

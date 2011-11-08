@@ -20,7 +20,7 @@ namespace TrianglesInSpace.Motion
 		/// <param name="radius">The radius of the turning circle</param>
 		/// <param name="startAngle">The angle to the start point on the circle</param>
 		/// <param name="turnRate">The turn rate in radians</param>
-		/// <param name="initialSpeed"></param>
+		/// <param name="initialSpeed">Speed used to determine the current velocity</param>
 		public CircularMotion(ulong startTime, double radius, Angle startAngle, Angle turnRate, double initialSpeed)
 		{
 			m_StartTime = startTime;
@@ -29,7 +29,7 @@ namespace TrianglesInSpace.Motion
 			m_TurnRate = turnRate;
 			m_InitialSpeed = initialSpeed;
 
-			m_InitialPosition = GetMotion(startTime);
+			m_InitialPosition = CoordinateConversions.RadialToVector(startAngle, m_Radius);
 		}
 
 		public ulong StartTime
@@ -44,8 +44,6 @@ namespace TrianglesInSpace.Motion
 		{
 			double vectorOffset;
 			double timeElapsed = 0;
-			double xComponent, yComponent;
-			Vector2 temporyPosition;
 			// the vector is 90degrees from the angle of acceleration
 			// the angle to the current position
 			if (m_TurnRate >= new Angle(0.0))
@@ -61,28 +59,21 @@ namespace TrianglesInSpace.Motion
 			timeElapsed = (currentTime - m_StartTime);
 			timeElapsed = timeElapsed / 1000;
 
-			xComponent = (m_InitialSpeed * Math.Cos(m_StartAngle.Value + (m_TurnRate.Value * timeElapsed) + vectorOffset));
-
-			yComponent = (m_InitialSpeed * Math.Sin(m_StartAngle.Value + (m_TurnRate.Value * timeElapsed) + vectorOffset));
-
-			temporyPosition = new Vector2(xComponent, yComponent);
-
-			return temporyPosition;
+			Angle angle = new Angle(m_StartAngle.Value + (m_TurnRate.Value * timeElapsed) + vectorOffset);
+			return CoordinateConversions.RadialToVector(angle, m_InitialSpeed);
 		}
 
 		public Vector2 GetMotion(ulong currentTime)
 		{
 			double timeElapsed = 0;
-			double xComponent, yComponent;
 
 			timeElapsed = (currentTime - m_StartTime);
 			timeElapsed = timeElapsed / 1000;
 
-			xComponent = (m_Radius * Math.Cos(m_StartAngle.Value + (m_TurnRate.Value * timeElapsed)));
+			Angle angle =new Angle( m_StartAngle.Value + (m_TurnRate.Value*timeElapsed));
+			var positionOnCirlce = CoordinateConversions.RadialToVector(angle, m_Radius);
 
-			yComponent = (m_Radius * Math.Sin(m_StartAngle.Value + (m_TurnRate.Value * timeElapsed)));
-
-			return new Vector2(xComponent, yComponent) - m_InitialPosition;
+			return positionOnCirlce - m_InitialPosition;
 		}
 	}
 }
