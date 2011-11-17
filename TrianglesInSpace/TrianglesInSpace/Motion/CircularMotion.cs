@@ -10,7 +10,7 @@ namespace TrianglesInSpace.Motion
 		private Angle m_StartAngle;
 		private Angle m_TurnRate;
 		private double m_InitialSpeed;
-		private Vector2 m_InitialPosition;
+		private Vector2 m_CircleOffset;
 
 
 		/// <summary>
@@ -29,7 +29,7 @@ namespace TrianglesInSpace.Motion
 			m_TurnRate = turnRate;
 			m_InitialSpeed = initialSpeed;
 
-			m_InitialPosition = CoordinateConversions.RadialToVector(startAngle, m_Radius);
+			m_CircleOffset = CoordinateConversions.RadialToVector(startAngle, m_Radius);
 		}
 
 		public ulong StartTime
@@ -73,7 +73,7 @@ namespace TrianglesInSpace.Motion
 			Angle angle =new Angle( m_StartAngle.Value + (m_TurnRate.Value*timeElapsed));
 			var positionOnCirlce = CoordinateConversions.RadialToVector(angle, m_Radius);
 
-			return positionOnCirlce - m_InitialPosition;
+			return positionOnCirlce - m_CircleOffset;
 		}
 	}
 }

@@ -32,7 +32,7 @@ namespace TrianglesInSpace.Motion
 			DetermineTurningCircles(initialVelocity, circleRadius, out circleOnePosition, out circleTwoPosition);
 
 			//select a turning circle
-			Vector2 selectedTuringCicle =  SelectTuriningCircle(circleOnePosition, circleTwoPosition, destination, circleRadius);
+			Vector2 selectedTuringCicle = SelectTuriningCircle(circleOnePosition, circleTwoPosition, destination, circleRadius);
 
 			//determine turn direction
 			TurnDirection turnDirection = DetermineTurnDirection(initialVelocity, selectedTuringCicle);
@@ -167,6 +167,41 @@ namespace TrianglesInSpace.Motion
 			return desiredEndPoint;
 		}
 
+		public Angle DetermineTurnRate(double speed, double radius, TurnDirection turnDirection)
+		{
+			var turnTime = (Math.PI * radius) / speed;
+
+			double turnRate = Math.PI / turnTime;
+
+			if(turnDirection == TurnDirection.Clockwise)
+			{
+				turnRate = -turnRate;
+			}
+
+			return new Angle(turnRate);
+		}
+
+		public ulong DetermineDurationOfTurn(Angle start, Angle end, Angle turnRate, TurnDirection turnDirection)
+		{
+			if(turnDirection == TurnDirection.Clockwise)
+			{
+				if (  end > start)
+				{
+					end = new Angle(end.Value - (Math.PI*2));
+				}
+			}
+
+			if (turnDirection == TurnDirection.AntiClockwise)
+			{
+				if (end < start)
+				{
+					end = new Angle(end.Value + (Math.PI * 2));
+				}
+			}
+			var turnAngle = start - end;
+			var stuff = (turnAngle.Value / turnRate.Value) * -1000.0;
+			return (ulong)(Math.Round(stuff));
+		}
 		
 	}
 }

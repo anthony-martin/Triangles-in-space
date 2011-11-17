@@ -404,5 +404,93 @@ namespace TrianglesInSpace.Motion.Nunit
 			Assert.AreEqual(expectedAngle, path.DetermineTurnEnd(turnPointToDestinationOffset, turningCircleRadius, TurnDirection.AntiClockwise));
 
 		}
+
+		[Test]
+		public void DetermineTunrRateClockwise()
+		{
+			TurnDirection turnDirection = TurnDirection.Clockwise;
+			double speed = 1.0;
+			double radius = 2.0;
+
+			var path = new Path();
+
+			var turnRate = path.DetermineTurnRate( speed, radius, turnDirection);
+
+			Assert.AreEqual(new Angle(-(Math.PI/2)/Math.PI), turnRate);
+		}
+
+		[Test]
+		public void DetermineTunrRateAntiClockwise()
+		{
+			TurnDirection turnDirection = TurnDirection.AntiClockwise;
+			double speed = 1.0;
+			double radius = 2.0;
+
+			var path = new Path();
+
+			var turnRate = path.DetermineTurnRate( speed, radius, turnDirection);
+
+			Assert.AreEqual(new Angle((Math.PI/2)/Math.PI), turnRate);
+		}
+
+		[Test]
+		public void DetermineDurationOfTurnClockwiseSimple()
+		{
+			Angle start = new Angle(Math.PI);
+			Angle end = new Angle();
+			Angle rate = new Angle(-Math.PI/10);
+			TurnDirection turnDirection = TurnDirection.Clockwise;
+
+			var path = new Path();
+
+			var turnDuration = path.DetermineDurationOfTurn(start, end, rate, turnDirection);
+
+			Assert.AreEqual(10000, turnDuration);
+		}
+
+
+		[Test]
+		public void DetermineDurationOfTurnClockwiseComplex()
+		{
+			Angle start = new Angle(Math.PI -0.1);
+			Angle end = new Angle((Math.PI*2) -0.1);
+			Angle rate = new Angle(-Math.PI / 10);
+			TurnDirection turnDirection = TurnDirection.Clockwise;
+
+			var path = new Path();
+
+			var turnDuration = path.DetermineDurationOfTurn(start, end, rate, turnDirection);
+
+			Assert.AreEqual(10000, turnDuration);
+		}
+		[Test]
+		public void DetermineDurationOfTurnAntiClockwiseComplex()
+		{
+			Angle end = new Angle(Math.PI + 0.1);
+			Angle start = new Angle((Math.PI * 2) + 0.1);
+			Angle rate = new Angle(Math.PI / 10);
+			TurnDirection turnDirection = TurnDirection.AntiClockwise;
+
+			var path = new Path();
+
+			var turnDuration = path.DetermineDurationOfTurn(start, end, rate, turnDirection);
+
+			Assert.AreEqual(10000, turnDuration);
+		}
+
+		[Test]
+		public void DetermineDurationOfTurnAntiClockwiseSimple()
+		{
+			Angle end = new Angle(Math.PI );
+			Angle start = new Angle((Math.PI * 2));
+			Angle rate = new Angle(Math.PI / 10);
+			TurnDirection turnDirection = TurnDirection.AntiClockwise;
+
+			var path = new Path();
+
+			var turnDuration = path.DetermineDurationOfTurn(start, end, rate, turnDirection);
+
+			Assert.AreEqual(10000, turnDuration);
+		}
 	}
 }
