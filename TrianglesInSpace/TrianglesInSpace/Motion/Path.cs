@@ -21,7 +21,7 @@ namespace TrianglesInSpace.Motion
 		}
 
 
-		public void CreatePathTo(Vector2 destination, Vector2 initialVelocity)
+		public CircularMotion CreatePathTo(Vector2 destination, Vector2 initialVelocity)
 		{
 			// get initial velocity
 			//determine turning circles
@@ -32,6 +32,7 @@ namespace TrianglesInSpace.Motion
 			DetermineTurningCircles(initialVelocity, circleRadius, out circleOnePosition, out circleTwoPosition);
 
 			//select a turning circle
+			
 			Vector2 selectedTuringCicle = SelectTuriningCircle(circleOnePosition, circleTwoPosition, destination, circleRadius);
 
 			//determine turn direction
@@ -42,10 +43,22 @@ namespace TrianglesInSpace.Motion
 			// zero the destination arou
 			Angle turnEnd = DetermineTurnEnd(destination, circleRadius, turnDirection);
 
+			Angle turnRate = DetermineTurnRate(initialVelocity.Length, circleRadius, turnDirection);
+
+			var turnDuration = DetermineDurationOfTurn(turnStart, turnEnd, turnRate, turnDirection);
+
 			// create circular motion
+			//todo take inital position into account
+			Vector2 initialPosition = Vector2.ZERO;
+
+			var circle = new CircularMotion(0, circleRadius, turnStart, turnRate, initialVelocity.Length, initialPosition);
 
 			// create linear motion
+			var tbd = Vector2.ZERO;
+			var linear = new LinearMotion(turnDuration, tbd);
 
+
+			return circle;
 			// add motion to list
 		}
 		/// <summary>

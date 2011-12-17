@@ -129,7 +129,9 @@ namespace TrianglesInSpace
 			m_Camera.AspectRatio = viewport.ActualWidth / viewport.ActualHeight;
 
 			//m_Object = new GameObject(m_SceneManager);
-			m_Circle = new CircularMotion(0, 50, new Angle(0), new Angle(Math.PI/2),2);
+			var path = new Path(2);
+			m_Circle = path.CreatePathTo(new Vector2(100, -100), new Vector2(0, 10));
+			//m_Circle = new CircularMotion(0, 50, new Angle(0), new Angle(Math.PI/2),2);
 			m_Linear = new LinearMotion(0, new Vector2(10,0));
 
 			m_SceneManager.AmbientLight = new ColourValue(1, 1, 1);
@@ -143,6 +145,7 @@ namespace TrianglesInSpace
 			Entity ent2 = m_SceneManager.CreateEntity("Head2", "ogrehead.mesh");
 			SceneNode node2 = m_SceneManager.RootSceneNode.CreateChildSceneNode("HeadNode2");
 			node2.AttachObject(ent2);
+			node2.SetPosition(100, 0, -100);
 			//m_Camera.LookAt(node2.Position);
 
 
@@ -190,9 +193,14 @@ namespace TrianglesInSpace
 
 			m_time += (ulong) (evt.timeSinceLastFrame*1000);
 			var motion = m_Circle.GetMotion(m_time);
-			motion.x += 50;
+			//motion.x += 50;
+			var rotation = new Angle(m_Circle.GetVelocity(m_time));
+			rotation.ReduceAngle();
+			
+			Quaternion quat = new Quaternion(new Radian(rotation.Value + Math.PI/2), new Vector3(0, -1, 0));
 
 			mNinjaNode.Position = new Vector3(motion.x,  0.0, motion.y);
+			mNinjaNode.Orientation = quat;
 			//Vector3 ninjaMove = Vector3.ZERO;
 
 			//if (mNinjaKeyboard.IsKeyDown(MOIS.KeyCode.KC_I))

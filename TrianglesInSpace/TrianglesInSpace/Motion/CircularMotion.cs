@@ -11,6 +11,7 @@ namespace TrianglesInSpace.Motion
 		private Angle m_TurnRate;
 		private double m_InitialSpeed;
 		private Vector2 m_CircleOffset;
+		private Vector2 m_InitialPosition;
 
 
 		/// <summary>
@@ -21,7 +22,8 @@ namespace TrianglesInSpace.Motion
 		/// <param name="startAngle">The angle to the start point on the circle</param>
 		/// <param name="turnRate">The turn rate in radians</param>
 		/// <param name="initialSpeed">Speed used to determine the current velocity</param>
-		public CircularMotion(ulong startTime, double radius, Angle startAngle, Angle turnRate, double initialSpeed)
+		/// <param name="initialPosition">The position when this motion started</param>
+		public CircularMotion(ulong startTime, double radius, Angle startAngle, Angle turnRate, double initialSpeed, Vector2 initialPosition)
 		{
 			m_StartTime = startTime;
 			m_Radius = radius;
@@ -30,6 +32,7 @@ namespace TrianglesInSpace.Motion
 			m_InitialSpeed = initialSpeed;
 
 			m_CircleOffset = CoordinateConversions.RadialToVector(startAngle, m_Radius);
+			m_InitialPosition = initialPosition;
 		}
 
 		public ulong StartTime
@@ -74,6 +77,11 @@ namespace TrianglesInSpace.Motion
 			var positionOnCirlce = CoordinateConversions.RadialToVector(angle, m_Radius);
 
 			return positionOnCirlce - m_CircleOffset;
+		}
+
+		public Vector2 GetCurrentPosition(ulong currentTime)
+		{
+			return m_InitialPosition + GetMotion(currentTime);
 		}
 	}
 }

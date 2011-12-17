@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Mogre;
+﻿using Mogre;
 using NUnit.Framework;
 using TrianglesInSpace.Primitives;
 using Angle = TrianglesInSpace.Primitives.Angle;
@@ -436,7 +432,7 @@ namespace TrianglesInSpace.Motion.Nunit
 		[Test]
 		public void DetermineDurationOfTurnClockwiseSimple()
 		{
-			Angle start = new Angle(Math.PI);
+			Angle start = new Angle(Math.PI/2);
 			Angle end = new Angle();
 			Angle rate = new Angle(-Math.PI/10);
 			TurnDirection turnDirection = TurnDirection.Clockwise;
@@ -445,7 +441,7 @@ namespace TrianglesInSpace.Motion.Nunit
 
 			var turnDuration = path.DetermineDurationOfTurn(start, end, rate, turnDirection);
 
-			Assert.AreEqual(10000, turnDuration);
+			Assert.AreEqual(5000, turnDuration);
 		}
 
 
@@ -481,7 +477,7 @@ namespace TrianglesInSpace.Motion.Nunit
 		[Test]
 		public void DetermineDurationOfTurnAntiClockwiseSimple()
 		{
-			Angle end = new Angle(Math.PI );
+			Angle end = new Angle(Math.PI/2 );
 			Angle start = new Angle((Math.PI * 2));
 			Angle rate = new Angle(Math.PI / 10);
 			TurnDirection turnDirection = TurnDirection.AntiClockwise;
@@ -490,7 +486,7 @@ namespace TrianglesInSpace.Motion.Nunit
 
 			var turnDuration = path.DetermineDurationOfTurn(start, end, rate, turnDirection);
 
-			Assert.AreEqual(10000, turnDuration);
+			Assert.AreEqual(5000, turnDuration);
 		}
 	}
 }
