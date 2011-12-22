@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Mogre;
 using TrianglesInSpace.Primitives;
 using Angle = TrianglesInSpace.Primitives.Angle;
@@ -9,6 +10,7 @@ namespace TrianglesInSpace.Motion
 	public class Path
 	{
 		private double m_Acceleration;
+		private List<IMotion> m_Path;
 
 		public Path()
 		{
@@ -56,6 +58,7 @@ namespace TrianglesInSpace.Motion
 			var startOfLine = initialPosition + CoordinateConversions.RadialToVector(turnEnd, circleRadius); 
 
 			// create linear motion
+
 			var velocity = (destination - startOfLine)/initialVelocity.Length;
 
 			var linear = new LinearMotion(turnDuration, velocity, startOfLine);

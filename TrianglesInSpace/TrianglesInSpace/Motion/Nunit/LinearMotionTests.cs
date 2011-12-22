@@ -9,7 +9,7 @@ namespace TrianglesInSpace.Motion.Nunit
 		private LinearMotion CreateMotionAtZero()
 		{
 			Vector2 vector = new Vector2(1, 1);
-			return  new LinearMotion(0, vector);
+			return new LinearMotion(0, vector, Vector2.ZERO);
 		}
 
 		[Test]
@@ -23,9 +23,9 @@ namespace TrianglesInSpace.Motion.Nunit
 		{
 			Vector2 vector = new Vector2(1, 1);
 			ulong startTime = 0;
-			LinearMotion motion = new LinearMotion(startTime, vector);
+			LinearMotion motion = new LinearMotion(startTime, vector, Vector2.ZERO);
 
-			Assert.AreEqual(vector , motion.GetVelocity());
+			Assert.AreEqual(vector , motion.GetVelocity(0));
 		}
 
 		[Test]
@@ -33,7 +33,7 @@ namespace TrianglesInSpace.Motion.Nunit
 		{
 			Vector2 vector = new Vector2(1, 1);
 			ulong startTime = 0;
-			LinearMotion motion = new LinearMotion(startTime, vector);
+			LinearMotion motion = new LinearMotion(startTime, vector, Vector2.ZERO);
 
 			Assert.AreEqual(startTime, motion.StartTime);
 		}

@@ -3,7 +3,7 @@ using Angle = TrianglesInSpace.Primitives.Angle;
 
 namespace TrianglesInSpace.Motion
 {
-	public class CircularMotion
+	public class CircularMotion : IMotion
 	{
 		private ulong m_StartTime;
 		private double m_Radius;

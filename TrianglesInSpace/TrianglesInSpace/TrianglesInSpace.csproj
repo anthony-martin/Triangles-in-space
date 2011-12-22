@@ -66,6 +66,7 @@
     </Compile>
     <Compile Include="Motion\CircularMotion.cs" />
     <Compile Include="Motion\CoordinateConversions.cs" />
+    <Compile Include="Motion\IMotion.cs" />
     <Compile Include="Motion\LinearMotion.cs" />
     <Compile Include="Motion\Nunit\CircularMotionTests.cs" />
     <Compile Include="Motion\Nunit\LinearMotionTests.cs" />

@@ -132,7 +132,7 @@ namespace TrianglesInSpace
 			var path = new Path(2);
 			m_Circle = path.CreatePathTo(new Vector2(100, -100), new Vector2(0, 10));
 			//m_Circle = new CircularMotion(0, 50, new Angle(0), new Angle(Math.PI/2),2);
-			m_Linear = new LinearMotion(0, new Vector2(10,0));
+			m_Linear = new LinearMotion(0, new Vector2(10,0), Vector2.ZERO);
 
 			m_SceneManager.AmbientLight = new ColourValue(1, 1, 1);
 
@@ -182,6 +182,7 @@ namespace TrianglesInSpace
 
 			mNinjaKeyboard = (MOIS.Keyboard)mInputMgr.CreateInputObject(MOIS.Type.OISKeyboard, false);
 			mNinjaMouse = (MOIS.Mouse)mInputMgr.CreateInputObject(MOIS.Type.OISMouse, false);
+			//mNinjaMouse.MousePressed += MousePressed;
 
 		}
 
@@ -191,7 +192,7 @@ namespace TrianglesInSpace
 			mNinjaKeyboard.Capture();
 			mNinjaMouse.Capture();
 
-			m_time += (ulong) (evt.timeSinceLastFrame*1000);
+			m_time += (ulong) (evt.timeSinceLastFrame*10000);
 			var motion = m_Circle.GetMotion(m_time);
 			//motion.x += 50;
 			var rotation = new Angle(m_Circle.GetVelocity(m_time));
@@ -203,6 +204,11 @@ namespace TrianglesInSpace
 			mNinjaNode.Orientation = quat;
 			//Vector3 ninjaMove = Vector3.ZERO;
 
+			if (mNinjaMouse.MouseState.ButtonDown(MOIS.MouseButtonID.MB_Left))
+			{
+				Axis_NativePtr x = mNinjaMouse.MouseState.X;
+				var y = mNinjaMouse.MouseState.Y;
+			}
 			//if (mNinjaKeyboard.IsKeyDown(MOIS.KeyCode.KC_I))
 			//    ninjaMove.z -= 1;
 
@@ -240,5 +246,10 @@ namespace TrianglesInSpace
 
 			return true;
 		}
+
+		//private bool MousePressed(MouseEvent mouseEvent, MouseButtonID id)
+		//{
+			
+		//}
 	}
 }

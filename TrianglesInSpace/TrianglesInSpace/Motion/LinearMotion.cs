@@ -4,7 +4,7 @@ using Mogre;
 
 namespace TrianglesInSpace.Motion
 {
-	public class LinearMotion
+	public class LinearMotion : IMotion
 	{
 		private Vector2 m_Velocity;
 		private ulong m_StartTime;
@@ -15,6 +15,7 @@ namespace TrianglesInSpace.Motion
 		/// </summary>
 		/// <param name="startTime">The begining time of this motion</param>
 		/// <param name="velocity">The velocity per second or 1000 time units</param>
+		/// <param name="initialPosition">The starting point of the line</param>
 		public LinearMotion(ulong startTime, Vector2 velocity, Vector2 initialPosition)
 		{
 			// the starting time for this set of motion
@@ -24,8 +25,9 @@ namespace TrianglesInSpace.Motion
 			m_InitialPosition = initialPosition;
 		}
 
-		public Vector2 GetVelocity()
+		public Vector2 GetVelocity(ulong currentTime)
 		{
+			//to match the interface and incase acceleration is added
 			return m_Velocity;
 		}
 
