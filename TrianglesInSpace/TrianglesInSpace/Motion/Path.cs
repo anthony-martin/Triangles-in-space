@@ -53,9 +53,12 @@ namespace TrianglesInSpace.Motion
 
 			var circle = new CircularMotion(0, circleRadius, turnStart, turnRate, initialVelocity.Length, initialPosition);
 
+			var startOfLine = initialPosition + CoordinateConversions.RadialToVector(turnEnd, circleRadius); 
+
 			// create linear motion
-			var tbd = Vector2.ZERO;
-			var linear = new LinearMotion(turnDuration, tbd);
+			var velocity = (destination - startOfLine)/initialVelocity.Length;
+
+			var linear = new LinearMotion(turnDuration, velocity, startOfLine);
 
 
 			return circle;
