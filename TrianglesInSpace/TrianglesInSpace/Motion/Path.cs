@@ -17,13 +17,51 @@ namespace TrianglesInSpace.Motion
 			m_Acceleration = 0;
 		}
 
-		public Path(double maximumAcceleration)
+		public Path(double maximumAcceleration, IMotion startingMotion)
 		{
 			m_Acceleration = maximumAcceleration;
+            m_Path = new List<IMotion>();
+            m_Path.Add(startingMotion);
 		}
 
+        public void MoveToDestination(Vector2 destination, ulong currentTime)
+        {
+            var currentMotion = m_Path[0];
+            var initialPosition = currentMotion.GetCurrentPosition(currentTime);
+            var initialVelocity = currentMotion.GetVelocity(currentTime);
 
-		public CircularMotion CreatePathTo(Vector2 destination, Vector2 initialVelocity)
+            var newPath = CreatePathTo(destination, initialVelocity, initialPosition, currentTime);
+
+            if (newPath[0].GetCurrentPosition(currentTime) != initialPosition)
+            {
+                throw new InvalidOperationException("The positions do not match up");
+            }
+
+            m_Path = new List<IMotion>(newPath);
+        }
+
+        public IMotion GetCurrentMotion(ulong currentTime)
+        {
+            IMotion pathSegment;
+            int index = m_Path.Count;
+            do
+            {
+                index--;
+                pathSegment = m_Path[index];
+
+            }
+            while (index > 0 && pathSegment.StartTime > currentTime);
+
+            if (index != 0)
+            {
+                m_Path.RemoveRange(0, index);
+            }
+
+            return pathSegment;
+        }
+
+
+		public List<IMotion> CreatePathTo(Vector2 destination, Vector2 initialVelocity, Vector2 initialPosition, ulong startTime)
 		{
 			// get initial velocity
 			//determine turning circles
@@ -48,24 +86,27 @@ namespace TrianglesInSpace.Motion
 			Angle turnRate = DetermineTurnRate(initialVelocity.Length, circleRadius, turnDirection);
 
 			var turnDuration = DetermineDurationOfTurn(turnStart, turnEnd, turnRate, turnDirection);
-
+            turnDuration += startTime;
 			// create circular motion
-			//todo take inital position into account
-			Vector2 initialPosition = Vector2.ZERO;
 
-			var circle = new CircularMotion(0, circleRadius, turnStart, turnRate, initialVelocity.Length, initialPosition);
+            var circle = new CircularMotion(startTime, circleRadius, turnStart, turnRate, initialVelocity.Length, initialPosition);
 
 			var startOfLine = initialPosition + CoordinateConversions.RadialToVector(turnEnd, circleRadius); 
 
 			// create linear motion
 
 			var velocity = (destination - startOfLine)/initialVelocity.Length;
-
+            ulong destinationTime = (ulong)(velocity.Length / initialVelocity.Length);
 			var linear = new LinearMotion(turnDuration, velocity, startOfLine);
+            var linear2 = new LinearMotion(turnDuration + destinationTime, velocity, destination);
 
-
-			return circle;
-			// add motion to list
+            List<IMotion> path = new List<IMotion>
+            {
+                circle,
+                linear,
+                linear2,
+            };
+            return path;
 		}
 		/// <summary>
 		/// Determines the positions of the two possible turning circles 
