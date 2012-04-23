@@ -95,8 +95,10 @@ namespace TrianglesInSpace.Motion
 
 			// create linear motion
 
-			var velocity = (destination - startOfLine)/initialVelocity.Length;
+			var velocity = (destination - startOfLine);
             ulong destinationTime = (ulong)(velocity.Length / initialVelocity.Length);
+            velocity.Normalise();
+            velocity = velocity * initialVelocity.Length;
 			var linear = new LinearMotion(turnDuration, velocity, startOfLine);
             var linear2 = new LinearMotion(turnDuration + destinationTime, velocity, destination);
 
