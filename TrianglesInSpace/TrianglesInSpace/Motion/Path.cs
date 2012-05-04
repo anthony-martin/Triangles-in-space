@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Mogre;
+using NUnit.Framework;
 using TrianglesInSpace.Primitives;
 using Angle = TrianglesInSpace.Primitives.Angle;
 using Math = System.Math;
@@ -80,8 +81,11 @@ namespace TrianglesInSpace.Motion
 
 			//determine turn end
 			Angle turnStart = new Angle(-selectedTuringCicle);
-			// zero the destination arou
-			Angle turnEnd = DetermineTurnEnd(destination, circleRadius, turnDirection);
+			// zero the destination around the turning circle
+		    var relativeDestination = destination - (initialPosition + selectedTuringCicle);
+
+            //use the relative destination to pick an end point for the turn
+            Angle turnEnd = DetermineTurnEnd(relativeDestination, circleRadius, turnDirection);
 
 			Angle turnRate = DetermineTurnRate(initialVelocity.Length, circleRadius, turnDirection);
 
@@ -91,17 +95,18 @@ namespace TrianglesInSpace.Motion
 
             var circle = new CircularMotion(startTime, circleRadius, turnStart, turnRate, initialVelocity.Length, initialPosition);
 
-			var startOfLine = initialPosition + CoordinateConversions.RadialToVector(turnEnd, circleRadius); 
-
+			Vector2 startOfLine = initialPosition + selectedTuringCicle + CoordinateConversions.RadialToVector(turnEnd, circleRadius); 
+		    //Vector2 startOfLine = circle.GetCurrentPosition(turnDuration);
 			// create linear motion
 
 			var velocity = (destination - startOfLine);
-            ulong destinationTime = (ulong)(velocity.Length / initialVelocity.Length);
+            ulong destinationTime = (ulong)(velocity.Length / initialVelocity.Length)*1000;
             velocity.Normalise();
             velocity = velocity * initialVelocity.Length;
 			var linear = new LinearMotion(turnDuration, velocity, startOfLine);
             var linear2 = new LinearMotion(turnDuration + destinationTime, velocity, destination);
 
+            //Assert.AreEqual(circle.GetVelocity(turnDuration), linear.GetVelocity(turnDuration));
             List<IMotion> path = new List<IMotion>
             {
                 circle,
@@ -115,7 +120,7 @@ namespace TrianglesInSpace.Motion
 		/// Relative to the initial position which is not passed into the function
 		/// </summary>
 		/// <param name="initialVelocity">The current velocity of the object</param>
-		/// <param name="acceleration">The desired acceleration of the object</param>
+        /// <param name="radius">The desired radius of the object</param>
 		/// <param name="circleOne">The first of the two possible turning circles</param>
 		/// <param name="circleTwo">The second of the two possible turning circles</param>
 		public void DetermineTurningCircles(Vector2 initialVelocity, double radius, out Vector2 circleOne, out Vector2 circleTwo)

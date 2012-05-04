@@ -60,7 +60,7 @@ namespace TrianglesInSpace.Motion
 
 			// set the elapsed time to get an accurate resutlt
 			timeElapsed = (currentTime - m_StartTime);
-			timeElapsed = timeElapsed / 1000;
+			timeElapsed = timeElapsed / 1000.0;
 
 			Angle angle = new Angle(m_StartAngle.Value + (m_TurnRate.Value * timeElapsed) + vectorOffset);
 			return CoordinateConversions.RadialToVector(angle, m_InitialSpeed);
@@ -71,7 +71,7 @@ namespace TrianglesInSpace.Motion
 			double timeElapsed = 0;
 
 			timeElapsed = (currentTime - m_StartTime);
-			timeElapsed = timeElapsed / 1000;
+			timeElapsed = timeElapsed / 1000.0;
 
 			Angle angle =new Angle( m_StartAngle.Value + (m_TurnRate.Value*timeElapsed));
 			var positionOnCirlce = CoordinateConversions.RadialToVector(angle, m_Radius);

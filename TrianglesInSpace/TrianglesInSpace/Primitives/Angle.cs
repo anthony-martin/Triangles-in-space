@@ -27,6 +27,7 @@ namespace TrianglesInSpace.Primitives
 
 		public static double ReduceAngle(double angle)
 		{
+            //angle%(2*Math.PI)
 			// make sure the angle between -Pi and Pi not including -Pi
 			while ((angle > Math.PI) || (angle <= (-Math.PI)))
 			{

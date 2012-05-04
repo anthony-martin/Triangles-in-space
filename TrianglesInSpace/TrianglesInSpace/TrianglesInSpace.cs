@@ -130,7 +130,7 @@ namespace TrianglesInSpace
 			m_Camera.AspectRatio = viewport.ActualWidth / viewport.ActualHeight;
 
 			//m_Object = new GameObject(m_SceneManager);
-            m_Path = new Path(0.1, new CircularMotion(0, 50, new Angle(0), new Angle(Math.PI / 10), 1, Vector2.ZERO));
+            m_Path = new Path(4, new CircularMotion(0, 50, new Angle(0), new Angle(Math.PI / 10), 20, Vector2.ZERO));
 			//m_Circle = path.CreatePathTo(new Vector2(100, -100), new Vector2(0, 10), Vector2.ZERO);
 			//m_Circle = new CircularMotion(0, 50, new Angle(0), new Angle(Math.PI/2),2);
 			m_Linear = new LinearMotion(0, new Vector2(10,0), Vector2.ZERO);
@@ -221,7 +221,7 @@ namespace TrianglesInSpace
 			mNinjaMouse.Capture();
 
 			m_time += (ulong) (evt.timeSinceLastFrame*1000);
-            var currentMovement= m_Path.GetCurrentMotion(m_time);
+            IMotion currentMovement= m_Path.GetCurrentMotion(m_time);
             var motion = currentMovement.GetCurrentPosition(m_time);
 			//motion.x += 50;
             var rotation = new Angle(currentMovement.GetVelocity(m_time));

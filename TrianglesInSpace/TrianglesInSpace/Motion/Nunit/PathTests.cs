@@ -488,5 +488,8 @@ namespace TrianglesInSpace.Motion.Nunit
 
 			Assert.AreEqual(5000, turnDuration);
 		}
+
+
+
 	}
 }

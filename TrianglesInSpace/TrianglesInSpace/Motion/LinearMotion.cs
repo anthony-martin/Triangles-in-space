@@ -42,7 +42,7 @@ namespace TrianglesInSpace.Motion
 		public Vector2 GetMotion(ulong currentTime)
 		{
 			double timeDIfference = (currentTime - m_StartTime);
-			timeDIfference = timeDIfference/1000;
+			timeDIfference = timeDIfference/1000.0;
 			return m_Velocity * timeDIfference;
 		}
 
