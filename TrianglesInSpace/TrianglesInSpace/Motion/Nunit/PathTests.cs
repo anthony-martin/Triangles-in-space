@@ -133,7 +133,7 @@ namespace TrianglesInSpace.Motion.Nunit
 			Vector2 circleOne = new Vector2(1, 0);
 			Vector2 circleTwo = new Vector2(-1, 0);
 			Vector2 targetPosition = new Vector2(1, 1);
-			double turningRadius = 3;
+			double turningRadius = 1.5;
 
 
 			Vector2 selectedCircle = path.SelectTuriningCircle(circleOne, circleTwo, targetPosition, turningRadius);
@@ -158,6 +158,21 @@ namespace TrianglesInSpace.Motion.Nunit
 			Assert.AreEqual(selectedCircle.y, circleTwo.y, 0.000000001);
 		}
 
+        [Test]
+        public void SelectTurningCircleCloserToSecondPointWithinRadius()
+        {
+            var path = new Path();
+            Vector2 circleOne = new Vector2(1, 0);
+            Vector2 circleTwo = new Vector2(-1, 0);
+            Vector2 targetPosition = new Vector2(-1, 1);
+            double turningRadius = 1.5;
+
+
+            Vector2 selectedCircle = path.SelectTuriningCircle(circleOne, circleTwo, targetPosition, turningRadius);
+
+            Assert.AreEqual(selectedCircle.x, circleOne.x, 0.000000001);
+            Assert.AreEqual(selectedCircle.y, circleOne.y, 0.000000001);
+        }
 
 		[Test]
 		public void DetermineTurnDirectionClockwiseSimple()

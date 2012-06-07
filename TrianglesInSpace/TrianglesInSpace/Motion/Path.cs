@@ -73,8 +73,10 @@ namespace TrianglesInSpace.Motion
 			DetermineTurningCircles(initialVelocity, circleRadius, out circleOnePosition, out circleTwoPosition);
 
 			//select a turning circle
-			
-			Vector2 selectedTuringCicle = SelectTuriningCircle(circleOnePosition, circleTwoPosition, destination, circleRadius);
+
+		    Vector2 destinationRelativeToInitialPosition = destination - initialPosition;
+
+            Vector2 selectedTuringCicle = SelectTuriningCircle(circleOnePosition, circleTwoPosition, destinationRelativeToInitialPosition, circleRadius);
 
 			//determine turn direction
 			TurnDirection turnDirection = DetermineTurnDirection(initialVelocity, selectedTuringCicle);
@@ -82,10 +84,10 @@ namespace TrianglesInSpace.Motion
 			//determine turn end
 			Angle turnStart = new Angle(-selectedTuringCicle);
 			// zero the destination around the turning circle
-		    var relativeDestination = destination - (initialPosition + selectedTuringCicle);
+		    var destinationRelativeToTurningCircle = destination - (initialPosition + selectedTuringCicle);
 
             //use the relative destination to pick an end point for the turn
-            Angle turnEnd = DetermineTurnEnd(relativeDestination, circleRadius, turnDirection);
+            Angle turnEnd = DetermineTurnEnd(destinationRelativeToTurningCircle, circleRadius, turnDirection);
 
 			Angle turnRate = DetermineTurnRate(initialVelocity.Length, circleRadius, turnDirection);
 
@@ -177,7 +179,7 @@ namespace TrianglesInSpace.Motion
 			}
 			else
 			{
-				selectedCircle = circleCentreTwo;
+                selectedCircle = displacementTwo < turningRadius ? circleCentreOne : circleCentreTwo;
 			}
 
 			return selectedCircle;
