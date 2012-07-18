@@ -64,12 +64,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Disposers\Disposer.cs" />
+    <Compile Include="Disposers\NUnit\DisposerTests.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Messaging\IMessage.cs" />
     <Compile Include="Messaging\MessageBus.cs" />
     <Compile Include="Messaging\NUnit\MessageBusTests.cs" />
     <Compile Include="Motion\CircularMotion.cs" />
@@ -111,6 +114,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
