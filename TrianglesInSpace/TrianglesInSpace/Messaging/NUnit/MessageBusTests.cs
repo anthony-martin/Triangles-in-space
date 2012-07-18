@@ -15,6 +15,17 @@ namespace TrianglesInSpace.Messaging.NUnit
             unsubscribe();
         }
 
+        [Test]
+        public void RemoveCanBeCalledTwiceSafely()
+        {
+            var bus = new MessageBus();
+
+            var unsubscribe = bus.Subscribe<TestMessage>(HandleMessage);
+
+            unsubscribe();
+            unsubscribe();
+        }
+
         private void HandleMessage(TestMessage message)
         {
 
@@ -23,6 +34,20 @@ namespace TrianglesInSpace.Messaging.NUnit
         private class TestMessage : IMessage
         {
 
+        }
+
+        [Test]
+        public void SendCallHandler()
+        {
+            var bus = new MessageBus();
+
+            bool handled = false;
+
+            bus.Subscribe<TestMessage>(x => { handled = true; });
+
+            bus.Send(new TestMessage());
+
+            Assert.True(handled);
         }
     }
 
