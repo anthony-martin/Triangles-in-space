@@ -144,27 +144,27 @@ namespace TrianglesInSpace
             mNinjaNode.SetPosition(500, 0, -500);
 			//mNinjaNode.Vector2 += Vector3.ZERO;
 
-			Entity ent2 = m_SceneManager.CreateEntity("Head2", "ogrehead.mesh");
-			SceneNode node2 = m_SceneManager.RootSceneNode.CreateChildSceneNode("HeadNode2");
-			node2.AttachObject(ent2);
-			//m_Camera.LookAt(node2.Position);
+            //Entity ent2 = m_SceneManager.CreateEntity("Head2", "ogrehead.mesh");
+            //SceneNode node2 = m_SceneManager.RootSceneNode.CreateChildSceneNode("HeadNode2");
+            //node2.AttachObject(ent2);
+            ////m_Camera.LookAt(node2.Position);
 
-            Entity ent3 = m_SceneManager.CreateEntity("Head3", "ogrehead.mesh");
-            SceneNode node3 = m_SceneManager.RootSceneNode.CreateChildSceneNode("HeadNode3");
-            node3.AttachObject(ent3);
-            node3.SetPosition(-500, 0, 500);
-            Entity ent4 = m_SceneManager.CreateEntity("Head4", "ogrehead.mesh");
-            SceneNode node4 = m_SceneManager.RootSceneNode.CreateChildSceneNode("HeadNode4");
-            node4.AttachObject(ent4);
-            node4.SetPosition(-500, 0, -500);
-            Entity ent5 = m_SceneManager.CreateEntity("Head5", "ogrehead.mesh");
-            SceneNode node5 = m_SceneManager.RootSceneNode.CreateChildSceneNode("HeadNode5");
-            node5.AttachObject(ent5);
-            node5.SetPosition(500, 0, 500);
-            Entity ent6 = m_SceneManager.CreateEntity("Head6", "ogrehead.mesh");
-            SceneNode node6 = m_SceneManager.RootSceneNode.CreateChildSceneNode("HeadNode6");
-            node6.AttachObject(ent6);
-            node6.SetPosition(500, 0, -500);
+            //Entity ent3 = m_SceneManager.CreateEntity("Head3", "ogrehead.mesh");
+            //SceneNode node3 = m_SceneManager.RootSceneNode.CreateChildSceneNode("HeadNode3");
+            //node3.AttachObject(ent3);
+            //node3.SetPosition(-500, 0, 500);
+            //Entity ent4 = m_SceneManager.CreateEntity("Head4", "ogrehead.mesh");
+            //SceneNode node4 = m_SceneManager.RootSceneNode.CreateChildSceneNode("HeadNode4");
+            //node4.AttachObject(ent4);
+            //node4.SetPosition(-500, 0, -500);
+            //Entity ent5 = m_SceneManager.CreateEntity("Head5", "ogrehead.mesh");
+            //SceneNode node5 = m_SceneManager.RootSceneNode.CreateChildSceneNode("HeadNode5");
+            //node5.AttachObject(ent5);
+            //node5.SetPosition(500, 0, 500);
+            //Entity ent6 = m_SceneManager.CreateEntity("Head6", "ogrehead.mesh");
+            //SceneNode node6 = m_SceneManager.RootSceneNode.CreateChildSceneNode("HeadNode6");
+            //node6.AttachObject(ent6);
+            //node6.SetPosition(500, 0, -500);
 
 			mLight = m_SceneManager.CreateLight("pointLight");
 			mLight.Type = Light.LightTypes.LT_POINT;
