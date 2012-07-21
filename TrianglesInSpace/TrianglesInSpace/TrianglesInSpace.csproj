@@ -72,8 +72,11 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Messages\SetPathToTarget.cs" />
+    <Compile Include="Messaging\IBus.cs" />
     <Compile Include="Messaging\IMessage.cs" />
     <Compile Include="Messaging\MessageBus.cs" />
+    <Compile Include="Messaging\MessageSerialiser.cs" />
     <Compile Include="Messaging\NUnit\MessageBusTests.cs" />
     <Compile Include="Motion\CircularMotion.cs" />
     <Compile Include="Motion\CoordinateConversions.cs" />

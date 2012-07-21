@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Forms;
 using Mogre;
 using MOIS;
+using TrianglesInSpace.Messages;
+using TrianglesInSpace.Messaging;
 using TrianglesInSpace.Motion;
 using Angle = TrianglesInSpace.Primitives.Angle;
 using Math = System.Math;
@@ -35,6 +34,7 @@ namespace TrianglesInSpace
 		protected static RenderWindow mRenderWindow;
 
 		//private static GameObject m_Object;
+	    private static MessageBus m_Bus;
         private static Path m_Path;
 		private static CircularMotion m_Circle;
 		private static LinearMotion m_Linear;
@@ -129,8 +129,10 @@ namespace TrianglesInSpace
 			viewport.BackgroundColour = ColourValue.Black;
 			m_Camera.AspectRatio = viewport.ActualWidth / viewport.ActualHeight;
 
+            m_Bus = new MessageBus();
+
 			//m_Object = new GameObject(m_SceneManager);
-            m_Path = new Path(4, new CircularMotion(0, 50, new Angle(0), new Angle(Math.PI / 10), 20, Vector2.ZERO));
+            m_Path = new Path(4, new CircularMotion(0, 50, new Angle(0), new Angle(Math.PI / 10), 20, Vector2.ZERO), m_Bus);
 			//m_Circle = path.CreatePathTo(new Vector2(100, -100), new Vector2(0, 10), Vector2.ZERO);
 			//m_Circle = new CircularMotion(0, 50, new Angle(0), new Angle(Math.PI/2),2);
 			m_Linear = new LinearMotion(0, new Vector2(10,0), Vector2.ZERO);
@@ -142,29 +144,6 @@ namespace TrianglesInSpace
 			mNinjaNode = m_SceneManager.RootSceneNode.CreateChildSceneNode("NinjaNode");
 			mNinjaNode.AttachObject(mNinjaEntity);
             mNinjaNode.SetPosition(500, 0, -500);
-			//mNinjaNode.Vector2 += Vector3.ZERO;
-
-            //Entity ent2 = m_SceneManager.CreateEntity("Head2", "ogrehead.mesh");
-            //SceneNode node2 = m_SceneManager.RootSceneNode.CreateChildSceneNode("HeadNode2");
-            //node2.AttachObject(ent2);
-            ////m_Camera.LookAt(node2.Position);
-
-            //Entity ent3 = m_SceneManager.CreateEntity("Head3", "ogrehead.mesh");
-            //SceneNode node3 = m_SceneManager.RootSceneNode.CreateChildSceneNode("HeadNode3");
-            //node3.AttachObject(ent3);
-            //node3.SetPosition(-500, 0, 500);
-            //Entity ent4 = m_SceneManager.CreateEntity("Head4", "ogrehead.mesh");
-            //SceneNode node4 = m_SceneManager.RootSceneNode.CreateChildSceneNode("HeadNode4");
-            //node4.AttachObject(ent4);
-            //node4.SetPosition(-500, 0, -500);
-            //Entity ent5 = m_SceneManager.CreateEntity("Head5", "ogrehead.mesh");
-            //SceneNode node5 = m_SceneManager.RootSceneNode.CreateChildSceneNode("HeadNode5");
-            //node5.AttachObject(ent5);
-            //node5.SetPosition(500, 0, 500);
-            //Entity ent6 = m_SceneManager.CreateEntity("Head6", "ogrehead.mesh");
-            //SceneNode node6 = m_SceneManager.RootSceneNode.CreateChildSceneNode("HeadNode6");
-            //node6.AttachObject(ent6);
-            //node6.SetPosition(500, 0, -500);
 
 			mLight = m_SceneManager.CreateLight("pointLight");
 			mLight.Type = Light.LightTypes.LT_POINT;
@@ -278,7 +257,8 @@ namespace TrianglesInSpace
                 var desiredPosition = cornerPosition + mouseOffset;
                 //mNinjaNode.SetPosition(desiredPosition.x,0,desiredPosition.z);
 
-                m_Path.MoveToDestination(new Vector2(desiredPosition.x, desiredPosition.z), m_time);
+                //m_Path.MoveToDestination(new Vector2(desiredPosition.x, desiredPosition.z), m_time);
+                m_Bus.Send(new SetPathToTarget(new Vector2(desiredPosition.x, desiredPosition.z), m_time));
             }
             return true;
 		}

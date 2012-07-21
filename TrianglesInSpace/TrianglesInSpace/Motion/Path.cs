@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Mogre;
-using NUnit.Framework;
+using TrianglesInSpace.Messages;
+using TrianglesInSpace.Messaging;
 using TrianglesInSpace.Primitives;
 using Angle = TrianglesInSpace.Primitives.Angle;
 using Math = System.Math;
@@ -12,18 +13,27 @@ namespace TrianglesInSpace.Motion
 	{
 		private double m_Acceleration;
 		private List<IMotion> m_Path;
+	    private IBus m_Bus;
 
 		public Path()
 		{
 			m_Acceleration = 0;
 		}
 
-		public Path(double maximumAcceleration, IMotion startingMotion)
+        public Path(double maximumAcceleration, IMotion startingMotion, IBus bus)
 		{
+		    m_Bus = bus;
+		    m_Bus.Subscribe<SetPathToTarget>(OnSetPathToTarget);
+
 			m_Acceleration = maximumAcceleration;
             m_Path = new List<IMotion>();
             m_Path.Add(startingMotion);
 		}
+
+        public void OnSetPathToTarget(SetPathToTarget message)
+        {
+            MoveToDestination(message.WorldPosition, message.Time);
+        }
 
         public void MoveToDestination(Vector2 destination, ulong currentTime)
         {

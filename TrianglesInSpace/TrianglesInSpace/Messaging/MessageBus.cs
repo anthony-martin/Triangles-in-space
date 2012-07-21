@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 namespace TrianglesInSpace.Messaging
 {
-    public class MessageBus
+    public class MessageBus : IBus
     {
         private readonly Dictionary<Type, List<Delegate>> m_Subscribers;
         private readonly object m_Lock;
