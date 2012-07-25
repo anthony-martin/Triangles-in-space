@@ -4,54 +4,55 @@ namespace TrianglesInSpace.Messaging
 {
     public class MessageBus : IBus
     {
-        private readonly Dictionary<Type, List<Delegate>> m_Subscribers;
+        private readonly Dictionary<Type, Delegate> m_Subscribers;
         private readonly object m_Lock;
 
         public MessageBus()
         {
             m_Lock = new object();
-            m_Subscribers = new Dictionary<Type, List<Delegate>>();
+            m_Subscribers = new Dictionary<Type, Delegate>();
         }
 
-        public Action Subscribe<T>(Action<T> handler) 
-            where T : IMessage
+        public Action Subscribe<T>(Action<T> handler)
         {
-            List<Delegate> handlers = GetHandlersForType(typeof(T));
+            Delegate handlers;
 
-            handlers.Add(handler);
+            lock (m_Lock)
+            {
+                m_Subscribers.TryGetValue(typeof(T), out handlers);
 
-            return () => RemoveHandler(handlers, handler); 
+                if (handlers == null)
+                {
+                    handlers = new Action<T>(x => { });
+                }
+                m_Subscribers[typeof(T)] = Delegate.Combine(handlers,handler);
+            }
+
+            return () => RemoveHandler(typeof(T), handlers, handler); 
         }
 
-        private void RemoveHandler(List<Delegate> handlers, Delegate handler)
+        private void RemoveHandler(Type target, Delegate source, Delegate handler)
         {
-            handlers.Remove(handler);
+            lock (m_Lock)
+            {
+                m_Subscribers[target] = Delegate.Remove(source, handler);
+            }
         }
 
         public void Send(IMessage message)
         {
-            List<Delegate> handlers = GetHandlersForType(message.GetType());
-
-            foreach (var handler in handlers)
-            {
-                handler.DynamicInvoke(new object[] { message });
-            }
-        }
-
-        private List<Delegate> GetHandlersForType(Type type)
-        {
-            List<Delegate> handlers;
+            Delegate handlers;    
             lock (m_Lock)
             {
-                m_Subscribers.TryGetValue(type, out handlers);
-
-                if (handlers == null)
-                {
-                    handlers = new List<Delegate>();
-                    m_Subscribers[type] = handlers;
-                }
+                m_Subscribers.TryGetValue(message.GetType(), out handlers);
             }
-            return handlers;
+
+            if (handlers != null)
+            {
+                handlers.DynamicInvoke(new object[] { message });
+            }
+            
         }
+
     }
 }
