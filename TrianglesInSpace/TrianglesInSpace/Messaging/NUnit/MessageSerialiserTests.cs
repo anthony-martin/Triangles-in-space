@@ -8,7 +8,7 @@ namespace TrianglesInSpace.Messaging.NUnit
         public void MessageName()
         {
             var serialiser = new MessageSerialiser();
-
+            serialiser.Register(typeof(TestSerialiserMessage));
             var messageString = serialiser.Serialise(new TestSerialiserMessage());
 
             var message = serialiser.Deserialise(messageString);

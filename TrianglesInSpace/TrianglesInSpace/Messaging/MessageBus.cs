@@ -23,9 +23,13 @@ namespace TrianglesInSpace.Messaging
 
                 if (handlers == null)
                 {
-                    handlers = new Action<T>(x => { });
+                    m_Subscribers[typeof (T)] = handler;
                 }
-                m_Subscribers[typeof(T)] = Delegate.Combine(handlers,handler);
+                else
+                {
+                    m_Subscribers[typeof(T)] = Delegate.Combine(handlers, handler);
+                }
+                
             }
 
             return () => RemoveHandler(typeof(T), handlers, handler); 

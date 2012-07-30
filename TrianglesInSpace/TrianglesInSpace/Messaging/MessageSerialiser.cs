@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Reflection;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace TrianglesInSpace.Messaging
@@ -10,6 +10,18 @@ namespace TrianglesInSpace.Messaging
     }
     public class MessageSerialiser : IMessageSerialiser
     {
+        private readonly Dictionary<string, Type> m_Types;
+ 
+        public MessageSerialiser()
+        {
+            m_Types = new Dictionary<string, Type>();
+        }
+
+        public void Register(Type type)
+        {
+            m_Types.Add(type.Name, type);
+        }
+
         public string Serialise(IMessage message)
         {
             var name = message.GetType().Name;
@@ -22,8 +34,8 @@ namespace TrianglesInSpace.Messaging
             string className = message.Substring(0, lenthOfMessageName);
             string messageContent = message.Substring(lenthOfMessageName);
 
-            //note the typename needs to be the full type name here which I am no sending at the moment
-            var messageType = Type.GetType(className);
+            Type messageType;
+            m_Types.TryGetValue(className, out messageType);
 
             return JsonConvert.DeserializeObject(messageContent, messageType) as IMessage;
 
