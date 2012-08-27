@@ -80,6 +80,7 @@
     <Compile Include="Messaging\IMessage.cs" />
     <Compile Include="Messaging\MessageBus.cs" />
     <Compile Include="Messaging\MessageSerialiser.cs" />
+    <Compile Include="Messaging\Messages\InvalidMessage.cs" />
     <Compile Include="Messaging\NUnit\MessageBusTests.cs" />
     <Compile Include="Messaging\NUnit\MessageSerialiserTests.cs" />
     <Compile Include="Motion\CircularMotion.cs" />

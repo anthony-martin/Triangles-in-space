@@ -1,15 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using TrianglesInSpace.Messaging.Messages;
 
 namespace TrianglesInSpace.Messaging
 {
     public interface IMessageSerialiser
     {
-        
+    	void Register(Type type);
+    	string Serialise(IMessage message);
+    	IMessage Deserialise(string messageString);
     }
+
     public class MessageSerialiser : IMessageSerialiser
     {
+    	internal const string InvalidTypeMessage = "Unregistered or invalid message type";
+		internal const string InvalidContents = "Message contents could not be deserialised";
         private readonly Dictionary<string, Type> m_Types;
  
         public MessageSerialiser()
@@ -28,17 +34,29 @@ namespace TrianglesInSpace.Messaging
             return name + JsonConvert.SerializeObject(message);
         }
 
-        public IMessage Deserialise(string message)
+        public IMessage Deserialise(string messageString)
         {
-            int lenthOfMessageName = message.IndexOf('{');
-            string className = message.Substring(0, lenthOfMessageName);
-            string messageContent = message.Substring(lenthOfMessageName);
+            int lenthOfMessageName = messageString.IndexOf('{');
+            string className = messageString.Substring(0, lenthOfMessageName);
+            string messageContent = messageString.Substring(lenthOfMessageName);
 
             Type messageType;
             m_Types.TryGetValue(className, out messageType);
 
-            return JsonConvert.DeserializeObject(messageContent, messageType) as IMessage;
+        	IMessage message = null;
+			if (messageType != null)
+			{
+				message = JsonConvert.DeserializeObject(messageContent, messageType) as IMessage;
+			}
 
+        	if (message == null)
+        	{
+				string error = messageType == null ? InvalidTypeMessage : InvalidContents;
+
+				message = new InvalidMessage(className, messageContent, error);
+			}
+
+        	return message;
         }
     }
 }

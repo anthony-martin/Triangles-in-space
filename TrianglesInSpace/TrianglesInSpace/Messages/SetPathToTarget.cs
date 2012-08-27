@@ -5,8 +5,8 @@ namespace TrianglesInSpace.Messages
 {
     public class SetPathToTarget : IMessage
     {
-        public readonly Vector2 WorldPosition;
-        public readonly ulong Time;
+        public readonly Vector2 WorldPosition = Vector2.ZERO;
+        public readonly ulong Time = 0;
 
         public SetPathToTarget(Vector2 worldPosition, ulong time)
         {
