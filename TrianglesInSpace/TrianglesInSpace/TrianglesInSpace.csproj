@@ -34,11 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="clrzmq">
-      <HintPath>..\packages\clrzmq.2.2.3\lib\clrzmq.dll</HintPath>
-    </Reference>
-    <Reference Include="clrzmq-ext">
-      <HintPath>..\packages\clrzmq.2.2.3\lib\clrzmq-ext.dll</HintPath>
+    <Reference Include="clrzmq, Version=3.0.0.0, Culture=neutral, PublicKeyToken=ef95cdc29d237b0d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\clrzmq.3.0.0-beta2\lib\net40\clrzmq.dll</HintPath>
     </Reference>
     <Reference Include="Mogre, Version=1.7.1.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -81,8 +79,10 @@
     <Compile Include="Messaging\MessageBus.cs" />
     <Compile Include="Messaging\MessageSerialiser.cs" />
     <Compile Include="Messaging\Messages\InvalidMessage.cs" />
+    <Compile Include="Messaging\MessageTransmission.cs" />
     <Compile Include="Messaging\NUnit\MessageBusTests.cs" />
     <Compile Include="Messaging\NUnit\MessageSerialiserTests.cs" />
+    <Compile Include="Messaging\NUnit\MessageTransmissionTests.cs" />
     <Compile Include="Motion\CircularMotion.cs" />
     <Compile Include="Motion\CoordinateConversions.cs" />
     <Compile Include="Motion\IMotion.cs" />
@@ -117,12 +117,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="libzmq.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

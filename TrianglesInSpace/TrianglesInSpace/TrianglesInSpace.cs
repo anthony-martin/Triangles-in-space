@@ -47,10 +47,12 @@ namespace TrianglesInSpace
 			try
 			{
 				CreateRoot();
-
+                var message = new MessageTransmission();
+                message.Connect();
 				DefineResources();
 
 				CreateRenderSystem();
+                message.Dispose();
 
 				CreateRenderWindow();
 
@@ -63,7 +65,7 @@ namespace TrianglesInSpace
 				CreateFrameListeners();
 
 				EnterRenderLoop();
-
+                
 
 			}
 			catch (OperationCanceledException) { }
