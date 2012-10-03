@@ -31,6 +31,16 @@ namespace TrianglesInSpace.Messaging
             m_SubscribeSocket.Bind("epgm://127.0.0.1:9500");
         }
 
+        public void Send(string message)
+        {
+            m_PublishSocket.Send(message, Encoding.UTF8);
+        }
+
+        public string Recieve()
+        {
+            return m_SubscribeSocket.Receive(Encoding.UTF8,new TimeSpan(0,0,1));
+        }
+
         public void Dispose()
         {
             m_PublishSocket.Dispose();
