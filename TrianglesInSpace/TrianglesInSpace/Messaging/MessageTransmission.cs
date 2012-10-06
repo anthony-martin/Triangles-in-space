@@ -27,8 +27,12 @@ namespace TrianglesInSpace.Messaging
 
         public void Connect()
         {
-            m_PublishSocket.Connect("epgm://127.0.0.1:9500");
-            m_SubscribeSocket.Bind("epgm://127.0.0.1:9500");
+            
+            
+            m_PublishSocket.Bind("epgm://239.1.1.1:9500");
+            m_PublishSocket.Bind("tcp://*:9501");
+            m_SubscribeSocket.SubscribeAll();
+            m_SubscribeSocket.Connect("epgm://239.1.1.1:9500");
         }
 
         public void Send(string message)
@@ -38,14 +42,20 @@ namespace TrianglesInSpace.Messaging
 
         public string Recieve()
         {
-            return m_SubscribeSocket.Receive(Encoding.UTF8,new TimeSpan(0,0,1));
+            var bytes = new byte[100];
+            var size = m_SubscribeSocket.Receive(bytes, TimeSpan.FromSeconds(1));
+            if(size > 0)
+            {
+                return Encoding.UTF8.GetString(bytes, 0, size);
+            }
+            return string.Empty;
         }
 
         public void Dispose()
         {
             m_PublishSocket.Dispose();
             m_SubscribeSocket.Dispose();
-            bool sf = true;
+            m_Context.Dispose();
         }
     }
 }
