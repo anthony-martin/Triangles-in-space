@@ -7,6 +7,7 @@ using TrianglesInSpace.Motion;
 using Angle = TrianglesInSpace.Primitives.Angle;
 using Math = System.Math;
 using Vector3 = Mogre.Vector3;
+using TrianglesInSpace.Rendering;
 
 namespace TrianglesInSpace
 {
@@ -125,13 +126,14 @@ namespace TrianglesInSpace
 			m_Camera.FarClipDistance = 2501;
 			m_Camera.LookAt(Vector3.ZERO);
 
-
-
 			Viewport viewport = mRenderWindow.AddViewport(m_Camera);
 			viewport.BackgroundColour = ColourValue.Black;
 			m_Camera.AspectRatio = viewport.ActualWidth / viewport.ActualHeight;
 
             m_Bus = new MessageBus();
+
+            var creator = new ShapeCreator(m_SceneManager);
+            creator.CreateUnitTrianlge();
 
 			//m_Object = new GameObject(m_SceneManager);
             m_Path = new Path(4, new CircularMotion(0, 50, new Angle(0), new Angle(Math.PI / 10), 20, Vector2.ZERO), m_Bus);
@@ -141,7 +143,7 @@ namespace TrianglesInSpace
 
 			m_SceneManager.AmbientLight = new ColourValue(1, 1, 1);
 
-			mNinjaEntity = m_SceneManager.CreateEntity("Ninja", "ninja.mesh");
+            mNinjaEntity = m_SceneManager.CreateEntity("Ninja", "triangle");
 
 			mNinjaNode = m_SceneManager.RootSceneNode.CreateChildSceneNode("NinjaNode");
 			mNinjaNode.AttachObject(mNinjaEntity);
@@ -208,7 +210,7 @@ namespace TrianglesInSpace
             var rotation = new Angle(currentMovement.GetVelocity(m_time));
 			rotation.ReduceAngle();
 			
-            Quaternion quat = new Quaternion(new Radian(rotation.Value + Math.PI/2), new Vector3(0, -1, 0));
+            Quaternion quat = new Quaternion(new Radian(rotation.Value ), new Vector3(0, -1, 0));
 
             mNinjaNode.Position = new Vector3(motion.x,  0.0, motion.y);
             mNinjaNode.Orientation = quat;

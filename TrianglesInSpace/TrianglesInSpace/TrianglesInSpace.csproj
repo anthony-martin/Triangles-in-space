@@ -94,6 +94,7 @@
     <Compile Include="Primitives\Angle.cs" />
     <Compile Include="Primitives\TurnDirection.cs" />
     <Compile Include="Primitives\NUnit\AngleTests.cs" />
+    <Compile Include="Rendering\ShapeCreator.cs" />
     <Compile Include="TestSpecification.cs" />
     <Compile Include="TrianglesInSpace.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
