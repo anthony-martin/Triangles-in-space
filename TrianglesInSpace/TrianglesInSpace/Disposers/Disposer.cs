@@ -1,28 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace TrianglesInSpace.Disposers
 {
-    class Disposer : IDisposable
+    public class Disposer : IDisposable
     {
-        private readonly List<Action> m_Disposables;
+        private Action m_Disposables;
         
-        public Disposer()
-        {
-            m_Disposables = new List<Action>();
-        }
-
         public void Add(Action dispose)
         {
-            m_Disposables.Add(dispose);
+            m_Disposables += dispose;
         }
 
         public void Dispose()
         {
-            foreach (var disposable in m_Disposables)
-            {
-                disposable();
-            }
+            m_Disposables();
         }
     }
+
+    public static class DisposerExtensions
+    {
+        public static void AddTo(this Action action, Disposer disposer)
+        {
+            disposer.Add(action);
+        }
+    }
+
 }

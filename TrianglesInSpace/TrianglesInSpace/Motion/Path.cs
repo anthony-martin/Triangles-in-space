@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Mogre;
+using TrianglesInSpace.Disposers;
 using TrianglesInSpace.Messages;
 using TrianglesInSpace.Messaging;
 using TrianglesInSpace.Primitives;
@@ -9,13 +10,14 @@ using Math = System.Math;
 
 namespace TrianglesInSpace.Motion
 {
-	public class Path
+	public class Path : IDisposable
 	{
 		private double m_Acceleration;
 		private List<IMotion> m_Path;
 	    private IBus m_Bus;
+	    private Disposer m_Disposer;
 
-		public Path()
+	    public Path()
 		{
 			m_Acceleration = 0;
 		}
@@ -23,7 +25,8 @@ namespace TrianglesInSpace.Motion
         public Path(double maximumAcceleration, IMotion startingMotion, IBus bus)
 		{
 		    m_Bus = bus;
-		    m_Bus.Subscribe<SetPathToTarget>(OnSetPathToTarget);
+            m_Disposer = new Disposer();
+            m_Bus.Subscribe<SetPathToTarget>(OnSetPathToTarget).AddTo(m_Disposer);
 
 			m_Acceleration = maximumAcceleration;
             m_Path = new List<IMotion>();
@@ -281,6 +284,10 @@ namespace TrianglesInSpace.Motion
 			var stuff = (turnAngle.Value / turnRate.Value) * -1000.0;
 			return (ulong)(Math.Round(stuff));
 		}
-		
+
+	    public void Dispose()
+	    {
+	        m_Disposer.Dispose();
+	    }
 	}
 }
