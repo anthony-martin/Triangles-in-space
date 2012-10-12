@@ -77,6 +77,7 @@
     <Compile Include="Messaging\IBus.cs" />
     <Compile Include="Messaging\IMessage.cs" />
     <Compile Include="Messaging\MessageBus.cs" />
+    <Compile Include="Messaging\MessageReceiver.cs" />
     <Compile Include="Messaging\MessageSerialiser.cs" />
     <Compile Include="Messaging\Messages\InvalidMessage.cs" />
     <Compile Include="Messaging\MessageTransmission.cs" />

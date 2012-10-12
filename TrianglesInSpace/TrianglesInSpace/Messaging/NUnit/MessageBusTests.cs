@@ -1,13 +1,19 @@
 ﻿using NUnit.Framework;
+using ZeroMQ;
 
 namespace TrianglesInSpace.Messaging.NUnit
 {
     class MessageBusTests : TestSpecification
     {
+        private MessageBus CreateBus()
+        {
+            return new MessageBus(ZmqContext.Create());
+        }
+
         [Test]
         public void SubscribeReturnsUnsubscribeAction()
         {
-            var bus = new MessageBus();
+            var bus = CreateBus();
 
             var unsubscribe = bus.Subscribe<TestMessage>(HandleMessage);
 
@@ -17,7 +23,7 @@ namespace TrianglesInSpace.Messaging.NUnit
         [Test]
         public void RemoveCanBeCalledTwiceSafely()
         {
-            var bus = new MessageBus();
+            var bus = CreateBus();
 
             var unsubscribe = bus.Subscribe<TestMessage>(HandleMessage);
 
@@ -38,7 +44,7 @@ namespace TrianglesInSpace.Messaging.NUnit
         [Test]
         public void SendCallHandler()
         {
-            var bus = new MessageBus();
+            var bus = CreateBus();
 
             bool handled = false;
 

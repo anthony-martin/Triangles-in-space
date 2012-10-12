@@ -4,6 +4,7 @@ using MOIS;
 using TrianglesInSpace.Messages;
 using TrianglesInSpace.Messaging;
 using TrianglesInSpace.Motion;
+using ZeroMQ;
 using Angle = TrianglesInSpace.Primitives.Angle;
 using Math = System.Math;
 using Vector3 = Mogre.Vector3;
@@ -48,12 +49,9 @@ namespace TrianglesInSpace
 			try
 			{
 				CreateRoot();
-                var message = new MessageTransmission();
-                message.Connect();
 				DefineResources();
 
 				CreateRenderSystem();
-                message.Dispose();
 
 				CreateRenderWindow();
 
@@ -130,7 +128,7 @@ namespace TrianglesInSpace
 			viewport.BackgroundColour = ColourValue.Black;
 			m_Camera.AspectRatio = viewport.ActualWidth / viewport.ActualHeight;
 
-            m_Bus = new MessageBus();
+            m_Bus = new MessageBus(ZmqContext.Create());
 
             var creator = new ShapeCreator(m_SceneManager);
             creator.CreateUnitTrianlge();

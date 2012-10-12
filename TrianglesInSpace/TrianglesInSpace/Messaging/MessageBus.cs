@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using ZeroMQ;
+
 namespace TrianglesInSpace.Messaging
 {
     public class MessageBus : IBus
@@ -7,10 +10,22 @@ namespace TrianglesInSpace.Messaging
         private readonly Dictionary<Type, Delegate> m_Subscribers;
         private readonly object m_Lock;
 
-        public MessageBus()
+        private readonly MessageSerialiser m_MessageSerialiser;
+        private readonly MessageSender m_MessageSender;
+        private readonly MessageReceiver m_MessageReceiver;
+
+        private readonly ConcurrentQueue<IMessage> m_Messages; 
+
+        public MessageBus(ZmqContext messageContext)
         {
             m_Lock = new object();
             m_Subscribers = new Dictionary<Type, Delegate>();
+
+            m_MessageSerialiser = new MessageSerialiser();
+            m_MessageSender = new MessageSender(messageContext);
+            m_MessageReceiver = new MessageReceiver(messageContext, ReceiveFromRemote);
+
+            m_Messages = new ConcurrentQueue<IMessage>();
         }
 
         public Action Subscribe<T>(Action<T> handler)
@@ -45,7 +60,35 @@ namespace TrianglesInSpace.Messaging
 
         public void Send(IMessage message)
         {
-            Delegate handlers;    
+            SendRemote(message);
+            SendLocal(message);
+        }
+
+        public void SendRemote(IMessage message)
+        {
+            var serialisedMessage = m_MessageSerialiser.Serialise(message);
+            m_MessageSender.Send(serialisedMessage);
+        }
+
+        public void ReceiveFromRemote(string jsonMessage)
+        {
+            m_Messages.Enqueue( m_MessageSerialiser.Deserialise(jsonMessage));
+        }
+
+        public void ProcessMessages()
+        {
+            IMessage message;
+            m_Messages.TryDequeue(out message);
+
+            if(message != null)
+            {
+                SendLocal(message);
+            }
+        }
+
+        public void SendLocal(IMessage message)
+        {
+            Delegate handlers;
             lock (m_Lock)
             {
                 m_Subscribers.TryGetValue(message.GetType(), out handlers);
@@ -55,8 +98,6 @@ namespace TrianglesInSpace.Messaging
             {
                 handlers.DynamicInvoke(new object[] { message });
             }
-            
         }
-
     }
 }
