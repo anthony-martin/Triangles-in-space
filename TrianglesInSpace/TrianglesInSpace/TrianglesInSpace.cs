@@ -106,6 +106,7 @@ namespace TrianglesInSpace
 			RenderSystem renderSystem = mRoot.GetRenderSystemByName("Direct3D9 Rendering Subsystem");
 			renderSystem.SetConfigOption("Full Screen", "No");
 			renderSystem.SetConfigOption("Video Mode", "800 x 600 @ 32-bit colour");
+			renderSystem.SetConfigOption("FSAA", "16");
 			mRoot.RenderSystem = renderSystem;
 		}
 
