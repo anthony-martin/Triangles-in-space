@@ -61,7 +61,10 @@ namespace TrianglesInSpace.Messaging
 
         public void Dispose()
         {
-            m_SubscribeSocket.Dispose();
+            if (m_SubscribeSocket != null)
+            {
+                m_SubscribeSocket.Dispose();
+            }
             m_MessageThread.Abort();
         }
     }

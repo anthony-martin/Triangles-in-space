@@ -5,7 +5,7 @@ using ZeroMQ;
 
 namespace TrianglesInSpace.Messaging
 {
-    public class MessageBus : IBus
+    public class MessageBus : IBus, IDisposable
     {
         private readonly Dictionary<Type, Delegate> m_Subscribers;
         private readonly object m_Lock;
@@ -61,7 +61,7 @@ namespace TrianglesInSpace.Messaging
         public void Send(IMessage message)
         {
             SendRemote(message);
-            SendLocal(message);
+            m_Messages.Enqueue(message);
         }
 
         public void SendRemote(IMessage message)
@@ -72,18 +72,22 @@ namespace TrianglesInSpace.Messaging
 
         public void ReceiveFromRemote(string jsonMessage)
         {
-            m_Messages.Enqueue( m_MessageSerialiser.Deserialise(jsonMessage));
+            m_Messages.Enqueue(m_MessageSerialiser.Deserialise(jsonMessage));
         }
 
         public void ProcessMessages()
         {
             IMessage message;
-            m_Messages.TryDequeue(out message);
-
-            if(message != null)
+            do
             {
-                SendLocal(message);
-            }
+                message = null;
+                m_Messages.TryDequeue(out message);
+
+                if(message != null)
+                {
+                    SendLocal(message);
+                }
+            } while (message != null);
         }
 
         public void SendLocal(IMessage message)
@@ -98,6 +102,12 @@ namespace TrianglesInSpace.Messaging
             {
                 handlers.DynamicInvoke(new object[] { message });
             }
+        }
+
+        public void Dispose()
+        {
+            m_MessageSender.Dispose();
+            m_MessageReceiver.Dispose();
         }
     }
 }

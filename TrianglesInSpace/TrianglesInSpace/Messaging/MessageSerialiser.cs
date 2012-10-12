@@ -31,7 +31,9 @@ namespace TrianglesInSpace.Messaging
         public string Serialise(IMessage message)
         {
             var name = message.GetType().Name;
-            return name + JsonConvert.SerializeObject(message);
+            var settings = new JsonSerializerSettings();
+            settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            return name + JsonConvert.SerializeObject(message, settings);
         }
 
         public IMessage Deserialise(string messageString)

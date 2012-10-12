@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using Mogre;
+using NUnit.Framework;
 using TrianglesInSpace.Messaging.Messages;
 
 namespace TrianglesInSpace.Messaging.NUnit
@@ -10,7 +11,7 @@ namespace TrianglesInSpace.Messaging.NUnit
         {
             var serialiser = new MessageSerialiser();
             serialiser.Register(typeof(TestSerialiserMessage));
-            var messageString = serialiser.Serialise(new TestSerialiserMessage("bob"));
+            var messageString = serialiser.Serialise(new TestSerialiserMessage("bob", new Vector2(1, 5)));
 
 			var message = (TestSerialiserMessage)serialiser.Deserialise(messageString);
 
@@ -23,7 +24,7 @@ namespace TrianglesInSpace.Messaging.NUnit
 		{
 			var serialiser = new MessageSerialiser();
 
-			var messageString = serialiser.Serialise(new TestSerialiserMessage("bob"));
+            var messageString = serialiser.Serialise(new TestSerialiserMessage("bob", new Vector2(1, 5)));
 
 			InvalidMessage message = serialiser.Deserialise(messageString) as InvalidMessage;
 
@@ -36,7 +37,7 @@ namespace TrianglesInSpace.Messaging.NUnit
 		{
 			var serialiser = new MessageSerialiser();
 			serialiser.Register(typeof(TestSerialiserMessage));
-			var messageString = serialiser.Serialise(new TestSerialiserMessage("bob"));
+            var messageString = serialiser.Serialise(new TestSerialiserMessage("bob", new Vector2(1, 5)));
 
 			InvalidMessage message = serialiser.Deserialise(messageString.Substring(20)) as InvalidMessage;
 
@@ -47,10 +48,12 @@ namespace TrianglesInSpace.Messaging.NUnit
         private class TestSerialiserMessage : IMessage
         {
 			public readonly string Name = "Freddy";
+            public readonly Vector2 Vector = Vector2.ZERO;
 
-            public TestSerialiserMessage(string name)
+            public TestSerialiserMessage(string name, Vector2 vector2)
             {
 				Name = name;
+                Vector = vector2;
             }
         }
     }

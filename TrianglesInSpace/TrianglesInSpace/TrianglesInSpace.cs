@@ -197,7 +197,7 @@ namespace TrianglesInSpace
 
 		private static bool ProcessUnbufferedInput(FrameEvent evt)
 		{
-			
+			m_Bus.ProcessMessages();
 			mNinjaKeyboard.Capture();
 			mNinjaMouse.Capture();
 
