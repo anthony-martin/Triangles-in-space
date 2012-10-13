@@ -25,7 +25,6 @@ namespace TrianglesInSpace.Messaging.NUnit
         [Test]
         public void SubscribeReturnsUnsubscribeAction()
         {
-
             var unsubscribe = m_Bus.Subscribe<TestMessage>(HandleMessage);
 
             unsubscribe();

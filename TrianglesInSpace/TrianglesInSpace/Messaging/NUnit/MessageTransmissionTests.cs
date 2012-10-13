@@ -8,8 +8,10 @@ namespace TrianglesInSpace.Messaging.NUnit
         [Test]
         public void DisposesCleanly()
         {
-            var transmitter = new MessageSender(ZmqContext.Create());
+            var context = ZmqContext.Create();
+            var transmitter = new MessageSender(context);
             transmitter.Dispose();
+            context.Dispose();
 
         }
 
@@ -29,8 +31,8 @@ namespace TrianglesInSpace.Messaging.NUnit
             string recieved = receiver.Receive();
 
             Assert.AreEqual(message, recieved);
-            transmitter.Dispose();
             receiver.Dispose();
+            transmitter.Dispose();
             context.Dispose();
         }
     }
