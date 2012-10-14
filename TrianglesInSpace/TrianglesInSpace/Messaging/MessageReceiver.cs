@@ -20,8 +20,8 @@ namespace TrianglesInSpace.Messaging
         public MessageReceiver(ZmqContext context)
         {
             m_Context = context;
-            
-            m_MessageThread = new Thread(CreateReceiveSocket);
+
+            m_MessageThread = new Thread(SubscribeAndWait);
         }
 
         public void Listen(Action<string> onMessageReceived)

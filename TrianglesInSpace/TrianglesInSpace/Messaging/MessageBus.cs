@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using TrianglesInSpace.Messages;
 
 namespace TrianglesInSpace.Messaging
 {
@@ -15,6 +16,11 @@ namespace TrianglesInSpace.Messaging
 
         private readonly ConcurrentQueue<IMessage> m_Messages; 
 
+        /// <summary>
+        /// Create a new bus that will use the sender and reciever provided communication outside of the buses context
+        /// </summary>
+        /// <param name="messageSender">Due to sockets this should be a shared instance between all buses</param>
+        /// <param name="messageReceiver">Each bus should get their own receiver</param>
         public MessageBus(IMessageSender messageSender,
                           IMessageReceiver messageReceiver)
         {
@@ -22,6 +28,7 @@ namespace TrianglesInSpace.Messaging
             m_Subscribers = new Dictionary<Type, Delegate>();
 
             m_MessageSerialiser = new MessageSerialiser();
+            m_MessageSerialiser.Register(typeof(SetPathToTarget));
             m_MessageSender = messageSender;
             m_MessageReceiver = messageReceiver;
 
@@ -63,7 +70,7 @@ namespace TrianglesInSpace.Messaging
         public void Send(IMessage message)
         {
             SendRemote(message);
-            m_Messages.Enqueue(message);
+            //m_Messages.Enqueue(message);
         }
 
         public void SendRemote(IMessage message)
