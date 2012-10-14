@@ -129,7 +129,9 @@ namespace TrianglesInSpace
 			viewport.BackgroundColour = ColourValue.Black;
 			m_Camera.AspectRatio = viewport.ActualWidth / viewport.ActualHeight;
 
-            m_Bus = new MessageBus(ZmqContext.Create());
+
+		    var context = ZmqContext.Create();
+            m_Bus = new MessageBus(new MessageSender(context), new MessageReceiver(context));
 
             var creator = new ShapeCreator(m_SceneManager);
             creator.CreateUnitTrianlge();

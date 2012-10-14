@@ -3,7 +3,7 @@ using ZeroMQ;
 
 namespace TrianglesInSpace.Messaging.NUnit
 {
-    internal class MessageTransmissionTests : TestSpecification
+    internal class MessageSenderTests : TestSpecification
     {
         [Test]
         public void DisposesCleanly()
@@ -21,7 +21,7 @@ namespace TrianglesInSpace.Messaging.NUnit
         {
             var context = ZmqContext.Create();
             var transmitter = new MessageSender(context);
-            var receiver = new MessageReceiver(context, s => {});
+            var receiver = new MessageReceiver(context);
             receiver.CreateReceiveSocket();
 
             string message = "Hello world";

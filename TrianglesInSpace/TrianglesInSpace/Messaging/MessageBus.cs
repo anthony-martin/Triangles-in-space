@@ -1,29 +1,31 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using ZeroMQ;
 
 namespace TrianglesInSpace.Messaging
 {
-    public class MessageBus : IBus, IDisposable
+    public class MessageBus : IBus
     {
         private readonly Dictionary<Type, Delegate> m_Subscribers;
         private readonly object m_Lock;
 
         private readonly MessageSerialiser m_MessageSerialiser;
-        private readonly MessageSender m_MessageSender;
-        private readonly MessageReceiver m_MessageReceiver;
+        private readonly IMessageSender m_MessageSender;
+        private readonly IMessageReceiver m_MessageReceiver;
 
         private readonly ConcurrentQueue<IMessage> m_Messages; 
 
-        public MessageBus(ZmqContext messageContext)
+        public MessageBus(IMessageSender messageSender,
+                          IMessageReceiver messageReceiver)
         {
             m_Lock = new object();
             m_Subscribers = new Dictionary<Type, Delegate>();
 
             m_MessageSerialiser = new MessageSerialiser();
-            m_MessageSender = new MessageSender(messageContext);
-            m_MessageReceiver = new MessageReceiver(messageContext, ReceiveFromRemote);
+            m_MessageSender = messageSender;
+            m_MessageReceiver = messageReceiver;
+
+            m_MessageReceiver.Listen(ReceiveFromRemote);
 
             m_Messages = new ConcurrentQueue<IMessage>();
         }
@@ -102,12 +104,6 @@ namespace TrianglesInSpace.Messaging
             {
                 handlers.DynamicInvoke(new object[] { message });
             }
-        }
-
-        public void Dispose()
-        {
-            m_MessageSender.Dispose();
-            m_MessageReceiver.Dispose();
         }
     }
 }

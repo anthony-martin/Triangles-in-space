@@ -4,12 +4,12 @@ using ZeroMQ;
 
 namespace TrianglesInSpace.Messaging
 {
-    public interface IMessageSender
+    public interface IMessageSender: IDisposable
     {
-            
+        void Send(string message);
     }
 
-    public class MessageSender : IMessageSender, IDisposable
+    public class MessageSender : IMessageSender
     {
         private readonly ZmqContext m_Context;
         private ZmqSocket m_PublishSocket;

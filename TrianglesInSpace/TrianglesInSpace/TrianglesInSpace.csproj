@@ -49,6 +49,9 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\JSonSerialiser\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="NSubstitute">
+      <HintPath>..\packages\NSubstitute.1.4.3.0\lib\NET40\NSubstitute.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework, Version=2.5.10.11092, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Debug\nunit.framework.dll</HintPath>
@@ -80,10 +83,10 @@
     <Compile Include="Messaging\MessageReceiver.cs" />
     <Compile Include="Messaging\MessageSerialiser.cs" />
     <Compile Include="Messaging\Messages\InvalidMessage.cs" />
-    <Compile Include="Messaging\MessageTransmission.cs" />
+    <Compile Include="Messaging\MessageSender.cs" />
     <Compile Include="Messaging\NUnit\MessageBusTests.cs" />
     <Compile Include="Messaging\NUnit\MessageSerialiserTests.cs" />
-    <Compile Include="Messaging\NUnit\MessageTransmissionTests.cs" />
+    <Compile Include="Messaging\NUnit\MessageSenderTests.cs" />
     <Compile Include="Motion\CircularMotion.cs" />
     <Compile Include="Motion\CoordinateConversions.cs" />
     <Compile Include="Motion\IMotion.cs" />

@@ -7,25 +7,26 @@ namespace TrianglesInSpace.Messaging
 {
     public interface IMessageReceiver
     {
-        
+        void Listen(Action<string> onMessageReceived);
     }
     public class MessageReceiver : IMessageReceiver, IDisposable
     {
         private readonly ZmqContext m_Context;
-        private readonly Action<string> m_MessageReceived;
+        private Action<string> m_MessageReceived;
         private ZmqSocket m_SubscribeSocket;
 
         private readonly Thread m_MessageThread;
 
-        public MessageReceiver(ZmqContext context, Action<string> messageReceived)
+        public MessageReceiver(ZmqContext context)
         {
             m_Context = context;
-            m_MessageReceived = messageReceived;
+            
             m_MessageThread = new Thread(CreateReceiveSocket);
         }
 
-        public void Listen()
+        public void Listen(Action<string> onMessageReceived)
         {
+            m_MessageReceived = onMessageReceived;
             m_MessageThread.Start();
         }
 

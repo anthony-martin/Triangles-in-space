@@ -1,26 +1,19 @@
 ﻿using NUnit.Framework;
-using ZeroMQ;
+using NSubstitute;
 
 namespace TrianglesInSpace.Messaging.NUnit
 {
     class MessageBusTests : TestSpecification
     {
         private MessageBus m_Bus;
-        private ZmqContext m_Context;
 
         [SetUp]
         public void CreateBus()
         {
-            m_Context = ZmqContext.Create();
-            m_Bus = new MessageBus(m_Context);
+            m_Bus = new MessageBus(Substitute.For<IMessageSender>(),
+                                    Substitute.For<IMessageReceiver>());
         }
 
-        [TearDown]
-        public void DestroyBus()
-        {
-            m_Bus.Dispose();
-            m_Context.Dispose();
-        }
 
         [Test]
         public void SubscribeReturnsUnsubscribeAction()
