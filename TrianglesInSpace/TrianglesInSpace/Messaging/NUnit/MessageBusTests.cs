@@ -67,6 +67,24 @@ namespace TrianglesInSpace.Messaging.NUnit
             Assert.AreEqual(2, handled);
         }
 
+        [Test]
+        public void SubscriberIsNotLost()
+        {
+            bool handledOne = false;
+            bool handledTwo = false;
+
+            var unsubscribeOne = m_Bus.Subscribe<TestMessage>(x => { handledOne = true; });
+            m_Bus.Subscribe<TestMessage>(x => { handledTwo = true; });
+
+            unsubscribeOne();
+
+            m_Bus.SendLocal(new TestMessage());
+
+            Assert.False(handledOne);
+            Assert.True(handledTwo);
+
+        }
+
 
         private void HandleMessage(TestMessage message)
         {
