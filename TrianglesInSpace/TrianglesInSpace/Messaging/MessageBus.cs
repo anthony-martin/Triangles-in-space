@@ -56,21 +56,24 @@ namespace TrianglesInSpace.Messaging
                 
             }
 
-            return () => RemoveHandler(typeof(T), handlers, handler); 
+            return () => RemoveHandler(typeof(T), handler); 
         }
 
-        private void RemoveHandler(Type target, Delegate source, Delegate handler)
+        private void RemoveHandler(Type target, Delegate handler)
         {
             lock (m_Lock)
             {
-                m_Subscribers[target] = Delegate.Remove(source, handler);
+                Delegate handlers;
+                m_Subscribers.TryGetValue(target, out handlers);
+
+                m_Subscribers[target] = Delegate.Remove(handlers, handler);
+                
             }
         }
 
         public void Send(IMessage message)
         {
             SendRemote(message);
-            //m_Messages.Enqueue(message);
         }
 
         public void SendRemote(IMessage message)

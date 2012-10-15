@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using NSubstitute;
 
 namespace TrianglesInSpace.Messaging.NUnit
@@ -26,10 +27,12 @@ namespace TrianglesInSpace.Messaging.NUnit
         [Test]
         public void RemoveCanBeCalledTwiceSafely()
         {
-            var unsubscribe = m_Bus.Subscribe<TestMessage>(HandleMessage);
+            bool handled = false;
+            Action<TestMessage> handler = x => { handled = true; };
+            var unsubscribe = m_Bus.Subscribe<TestMessage>(handler);
 
             unsubscribe();
-            unsubscribe();
+            Assert.DoesNotThrow( () => unsubscribe());
         }
 
         [Test]
