@@ -131,7 +131,9 @@ namespace TrianglesInSpace
 
 
 		    var context = ZmqContext.Create();
-            m_Bus = new MessageBus(new MessageSender(context), new MessageReceiver(context));
+		    var receiver = new MessageReceiver(context);
+            receiver.Listen();
+            m_Bus = new MessageBus(new MessageSender(context), receiver);
 
             var creator = new ShapeCreator(m_SceneManager);
             creator.CreateUnitTrianlge();

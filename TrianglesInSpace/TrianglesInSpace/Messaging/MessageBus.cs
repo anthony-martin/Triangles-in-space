@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using TrianglesInSpace.Disposers;
 using TrianglesInSpace.Messages;
 
 namespace TrianglesInSpace.Messaging
 {
-    public class MessageBus : IBus
+    public class MessageBus : IBus, IDisposable
     {
         private readonly Dictionary<Type, Delegate> m_Subscribers;
         private readonly object m_Lock;
@@ -14,13 +15,15 @@ namespace TrianglesInSpace.Messaging
         private readonly IMessageSender m_MessageSender;
         private readonly IMessageReceiver m_MessageReceiver;
 
-        private readonly ConcurrentQueue<IMessage> m_Messages; 
+        private readonly ConcurrentQueue<IMessage> m_Messages;
+
+        private readonly Disposer m_Disposer;
 
         /// <summary>
         /// Create a new bus that will use the sender and reciever provided communication outside of the buses context
         /// </summary>
-        /// <param name="messageSender">Due to sockets this should be a shared instance between all buses</param>
-        /// <param name="messageReceiver">Each bus should get their own receiver</param>
+        /// <param name="messageSender">Shared isntance of the sender</param>
+        /// <param name="messageReceiver">Shared instance of the receiver</param>
         public MessageBus(IMessageSender messageSender,
                           IMessageReceiver messageReceiver)
         {
@@ -32,7 +35,9 @@ namespace TrianglesInSpace.Messaging
             m_MessageSender = messageSender;
             m_MessageReceiver = messageReceiver;
 
-            m_MessageReceiver.Listen(ReceiveFromRemote);
+            m_Disposer = new Disposer();
+
+            m_MessageReceiver.AddListener(ReceiveFromRemote).AddTo(m_Disposer);
 
             m_Messages = new ConcurrentQueue<IMessage>();
         }
@@ -114,6 +119,11 @@ namespace TrianglesInSpace.Messaging
             {
                 handlers.DynamicInvoke(new object[] { message });
             }
+        }
+
+        public void Dispose()
+        {
+            m_Disposer.Dispose();
         }
     }
 }

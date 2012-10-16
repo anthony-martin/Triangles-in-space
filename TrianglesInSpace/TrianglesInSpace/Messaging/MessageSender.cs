@@ -38,7 +38,7 @@ namespace TrianglesInSpace.Messaging
         {
             m_PublishSocket = m_Context.CreateSocket(SocketType.PUB);
             m_PublishSocket.Bind("epgm://239.1.1.1:9500");
-            m_PublishSocket.Bind("tcp://*:9501");
+            m_PublishSocket.Bind("tcp://*:9500");
             m_PublishSocket.Bind("inproc://Local");
         }
 

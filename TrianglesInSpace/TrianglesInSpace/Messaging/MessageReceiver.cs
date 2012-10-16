@@ -7,13 +7,16 @@ namespace TrianglesInSpace.Messaging
 {
     public interface IMessageReceiver
     {
-        void Listen(Action<string> onMessageReceived);
+        void Listen();
+        Action AddListener(Action<string> onMessageReceived);
+
     }
     public class MessageReceiver : IMessageReceiver, IDisposable
     {
         private readonly ZmqContext m_Context;
-        private Action<string> m_MessageReceived;
+        private Action<string> m_MessageHandlers;
         private ZmqSocket m_SubscribeSocket;
+        private readonly object m_Lock;
 
         private readonly Thread m_MessageThread;
 
@@ -21,12 +24,31 @@ namespace TrianglesInSpace.Messaging
         {
             m_Context = context;
 
+            m_Lock = new object();
+
             m_MessageThread = new Thread(SubscribeAndWait);
         }
 
-        public void Listen(Action<string> onMessageReceived)
+        public Action AddListener(Action<string> onMessageReceived)
         {
-            m_MessageReceived = onMessageReceived;
+            lock (m_Lock)
+            {
+                m_MessageHandlers += onMessageReceived;
+            }
+            return () => RemoveListener( onMessageReceived);
+        }
+
+        public void RemoveListener(Action<string> onMessageReceived)
+        {
+            lock (m_Lock)
+            {
+                m_MessageHandlers -= onMessageReceived;
+            }
+        }
+
+        public void Listen()
+        {
+            
             m_MessageThread.Start();
         }
 
@@ -42,6 +64,7 @@ namespace TrianglesInSpace.Messaging
 
             m_SubscribeSocket.SubscribeAll();
             m_SubscribeSocket.Connect("epgm://239.1.1.1:9500");
+            m_SubscribeSocket.Bind("tcp://*:9501");
             m_SubscribeSocket.Connect("inproc://Local");
         }
 
@@ -51,7 +74,12 @@ namespace TrianglesInSpace.Messaging
             while (message != "quit")
             {
                 message = Receive();
-                m_MessageReceived(message);
+                Action<string> messageHandlers;
+                lock (m_Lock)
+                {
+                    messageHandlers = m_MessageHandlers;
+                }
+                messageHandlers(message);
             }
         }
 
