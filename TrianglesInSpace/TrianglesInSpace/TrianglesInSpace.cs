@@ -28,7 +28,9 @@ namespace TrianglesInSpace
 		protected static Mouse mNinjaMouse;
 
 		protected static Entity mNinjaEntity;
+        protected static Entity m_ClickStar;
 		protected static SceneNode mNinjaNode;
+        protected static SceneNode m_ClickNode;
 		protected static Light mLight;
 		protected static double mLightToggleTimeout = 0;
 
@@ -137,6 +139,7 @@ namespace TrianglesInSpace
 
             var creator = new ShapeCreator(m_SceneManager);
             creator.CreateUnitTrianlge();
+            creator.CreateStar();
 
 			//m_Object = new GameObject(m_SceneManager);
             m_Path = new Path(4, new CircularMotion(0, 50, new Angle(0), new Angle(Math.PI / 10), 20, Vector2.ZERO), m_Bus);
@@ -151,6 +154,10 @@ namespace TrianglesInSpace
 			mNinjaNode = m_SceneManager.RootSceneNode.CreateChildSceneNode("NinjaNode");
 			mNinjaNode.AttachObject(mNinjaEntity);
             mNinjaNode.SetPosition(500, 0, -500);
+
+            m_ClickStar = m_SceneManager.CreateEntity("Star", "star");
+            m_ClickNode = m_SceneManager.RootSceneNode.CreateChildSceneNode("ClickNode");
+            m_ClickNode.AttachObject(m_ClickStar);
 
 			mLight = m_SceneManager.CreateLight("pointLight");
 			mLight.Type = Light.LightTypes.LT_POINT;
@@ -262,7 +269,7 @@ namespace TrianglesInSpace
                                               0,
                                               windowWidth * (double)mouseEvent.state.X.abs / 800.0);
                 var desiredPosition = cornerPosition + mouseOffset;
-                //mNinjaNode.SetPosition(desiredPosition.x,0,desiredPosition.z);
+                m_ClickNode.SetPosition(desiredPosition.x,0,desiredPosition.z);
 
                 //m_Path.MoveToDestination(new Vector2(desiredPosition.x, desiredPosition.z), m_time);
                 m_Bus.Send(new SetPathToTarget(new Vector2(desiredPosition.x, desiredPosition.z), m_time));
