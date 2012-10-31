@@ -4,6 +4,7 @@ using MOIS;
 using TrianglesInSpace.Messages;
 using TrianglesInSpace.Messaging;
 using TrianglesInSpace.Motion;
+using TrianglesInSpace.Primitives;
 using ZeroMQ;
 using Angle = TrianglesInSpace.Primitives.Angle;
 using Math = System.Math;
@@ -272,7 +273,7 @@ namespace TrianglesInSpace
                 m_ClickNode.SetPosition(desiredPosition.x,0,desiredPosition.z);
 
                 //m_Path.MoveToDestination(new Vector2(desiredPosition.x, desiredPosition.z), m_time);
-                m_Bus.Send(new SetPathToTarget(new Vector2(desiredPosition.x, desiredPosition.z), m_time));
+                m_Bus.Send(new SetPathToTarget(new Vector(desiredPosition.x, desiredPosition.z), m_time));
             }
             return true;
 		}

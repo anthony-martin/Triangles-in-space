@@ -96,8 +96,10 @@
     <Compile Include="Motion\Nunit\PathTests.cs" />
     <Compile Include="Motion\Path.cs" />
     <Compile Include="Primitives\Angle.cs" />
+    <Compile Include="Primitives\NUnit\VectorTests.cs" />
     <Compile Include="Primitives\TurnDirection.cs" />
     <Compile Include="Primitives\NUnit\AngleTests.cs" />
+    <Compile Include="Primitives\Vector.cs" />
     <Compile Include="Rendering\ShapeCreator.cs" />
     <Compile Include="TestSpecification.cs" />
     <Compile Include="TrianglesInSpace.cs" />

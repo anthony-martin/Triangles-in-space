@@ -35,7 +35,8 @@ namespace TrianglesInSpace.Motion
 
         public void OnSetPathToTarget(SetPathToTarget message)
         {
-            MoveToDestination(message.WorldPosition, message.Time);
+            var vector2 = new Vector2(message.WorldPosition.X, message.WorldPosition.X);
+            MoveToDestination(vector2, message.Time);
         }
 
         public void MoveToDestination(Vector2 destination, ulong currentTime)
