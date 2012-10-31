@@ -91,12 +91,151 @@ namespace TrianglesInSpace.Primitives.NUnit
             Assert.AreEqual(yOne - yTwo, result.Y);
         }
 
+        [Test]
         public void VectorZeroHasZeroValues()
         {
             var vector = new Vector(0, 0);
 
             Assert.AreEqual(vector.X, Vector.Zero.X);
             Assert.AreEqual(vector.Y, Vector.Zero.Y);
+        }
+
+        [Test]
+        public void MultiplyByDoubleAppliesToX()
+        {
+            const double x = 2.0;
+            const double multiple = 4;
+
+            var vector = new Vector(x, 0) * multiple;
+
+            Assert.AreEqual(8, vector.X);
+        }
+
+        [Test]
+        public void MultiplyByDoubleAppliesToY()
+        {
+            const double y = 3.0;
+            const double multiple = -3;
+
+            var vector = new Vector(0, y) * multiple;
+
+            Assert.AreEqual(-9, vector.Y);
+        }
+
+        [Test]
+        public void MultiplyIsCommutative()
+        {
+            const double x = 2.0;
+            const double y = 3.0;
+            const double multiple = 4;
+
+            var resultOne  = new Vector(x, y) * multiple;
+            var resultwo = multiple * new Vector(x, y);
+
+            Assert.AreEqual(resultOne.X, resultwo.X);
+            Assert.AreEqual(resultOne.Y, resultwo.Y);
+        }
+
+        [Test]
+        public void OperatorEqualIfXsAreEqual()
+        {
+            var vectorOne = new Vector(2.3, 0);
+            var vectorTwo = new Vector(2.3, 0);
+
+            Assert.True(vectorOne.X.Equals( vectorTwo.X));
+            Assert.True(vectorOne == vectorTwo);
+        }
+
+        [Test]
+        public void OperatorEqualIfYsAreEqual()
+        {
+            var vectorOne = new Vector(0, 3.33);
+            var vectorTwo = new Vector(0, 3.33);
+
+            Assert.True(vectorOne.Y.Equals(vectorTwo.Y));
+            Assert.True(vectorOne == vectorTwo);
+        }
+
+        [Test]
+        public void OperatorNotEqualIfXsAreNotEqual()
+        {
+            var vectorOne = new Vector(2.3, 0);
+            var vectorTwo = new Vector(32, 0);
+
+            Assert.False(vectorOne.X.Equals(vectorTwo.X));
+            Assert.True(vectorOne.Y.Equals(vectorTwo.Y));
+            Assert.False(vectorOne == vectorTwo);
+        }
+
+        [Test]
+        public void OperatorNotEqualIfYsAreNotEqual()
+        {
+            var vectorOne = new Vector(0, 3.33);
+            var vectorTwo = new Vector(0, 1);
+
+            Assert.True(vectorOne.X.Equals(vectorTwo.X));
+            Assert.False(vectorOne.Y.Equals(vectorTwo.Y));
+            Assert.False(vectorOne == vectorTwo);
+        }
+
+        [Test]
+        public void EqualIfXsAreEqual()
+        {
+            var vectorOne = new Vector(2.3, 0);
+            var vectorTwo = new Vector(2.3, 0);
+
+            Assert.True(vectorOne.X.Equals(vectorTwo.X));
+            Assert.True(vectorOne.Equals( vectorTwo));
+        }
+
+        [Test]
+        public void EqualIfYsAreEqual()
+        {
+            var vectorOne = new Vector(0, 3.33);
+            var vectorTwo = new Vector(0, 3.33);
+
+            Assert.True(vectorOne.Y.Equals(vectorTwo.Y));
+            Assert.True(vectorOne.Equals(vectorTwo));
+        }
+
+        [Test]
+        public void NotEqualIfXsAreNotEqual()
+        {
+            var vectorOne = new Vector(2.3, 0);
+            var vectorTwo = new Vector(32, 0);
+
+            Assert.False(vectorOne.X.Equals(vectorTwo.X));
+            Assert.True(vectorOne.Y.Equals(vectorTwo.Y));
+            Assert.False(vectorOne.Equals(vectorTwo));
+        }
+
+        [Test]
+        public void NotEqualIfYsAreNotEqual()
+        {
+            var vectorOne = new Vector(0, 3.33);
+            var vectorTwo = new Vector(0, 1);
+
+            Assert.True(vectorOne.X.Equals(vectorTwo.X));
+            Assert.False(vectorOne.Y.Equals(vectorTwo.Y));
+            Assert.False(vectorOne.Equals(vectorTwo));
+        }
+
+        [Test]
+        public void DivideByDoubleDividesX()
+        {
+            const int divisor = 3;
+            var vector = new Vector(3, 0)/divisor;
+
+            Assert.AreEqual(1, vector.X);
+        }
+
+        [Test]
+        public void DivideByDoubleDividesY()
+        {
+            const int divisor = 5;
+            var vector = new Vector(0, 10) / divisor;
+
+            Assert.AreEqual(2, vector.Y);
         }
     }
 }
