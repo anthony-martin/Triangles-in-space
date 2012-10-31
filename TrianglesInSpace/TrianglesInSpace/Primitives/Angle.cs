@@ -1,11 +1,12 @@
-﻿using Mogre;
+﻿using System.Globalization;
+using Mogre;
 using Math = System.Math;
 
 namespace TrianglesInSpace.Primitives
 {
 	public struct Angle
 	{
-		private double m_Radians;
+		private readonly double m_Radians;
 
 		public Angle(double angle)
 		{
@@ -44,9 +45,9 @@ namespace TrianglesInSpace.Primitives
 			return angle;
 		}
 
-		public void ReduceAngle()
+		public Angle ReduceAngle()
 		{
-			m_Radians = ReduceAngle(m_Radians);
+			return new Angle(ReduceAngle(m_Radians));
 		}
 		/// <summary>
 		/// Creates a number for the facing of the vector
@@ -159,9 +160,32 @@ namespace TrianglesInSpace.Primitives
 
 		public override string ToString()
 		{
-			return m_Radians.ToString();
+			return m_Radians.ToString(CultureInfo.InvariantCulture);
 		}
 
-		#endregion 
+		#endregion
+
+	    public bool Equals(Angle other)
+	    {
+	        return other.m_Radians.Equals(m_Radians);
+	    }
+
+	    public override bool Equals(object obj)
+	    {
+	        if (ReferenceEquals(null, obj))
+	        {
+	            return false;
+	        }
+	        if (obj.GetType() != typeof(Angle))
+	        {
+	            return false;
+	        }
+	        return Equals((Angle) obj);
+	    }
+
+	    public override int GetHashCode()
+	    {
+	        return m_Radians.GetHashCode();
+	    }
 	}
 }
