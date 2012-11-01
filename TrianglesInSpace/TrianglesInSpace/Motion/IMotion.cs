@@ -1,4 +1,4 @@
-﻿using Mogre;
+﻿using TrianglesInSpace.Primitives;
 
 namespace TrianglesInSpace.Motion
 {
@@ -9,8 +9,8 @@ namespace TrianglesInSpace.Motion
 			get;
 		}
 
-		Vector2 GetVelocity(ulong currentTime);
-		Vector2 GetMotion(ulong currentTime);
-		Vector2 GetCurrentPosition(ulong currentTime);
+		Vector GetVelocity(ulong currentTime);
+		Vector GetMotion(ulong currentTime);
+		Vector GetCurrentPosition(ulong currentTime);
 	}
 }

@@ -1,14 +1,12 @@
-﻿
-using System;
-using Mogre;
+﻿using TrianglesInSpace.Primitives;
 
 namespace TrianglesInSpace.Motion
 {
 	public class LinearMotion : IMotion
 	{
-		private Vector2 m_Velocity;
+		private Vector m_Velocity;
 		private ulong m_StartTime;
-		private Vector2 m_InitialPosition;
+		private Vector m_InitialPosition;
 
 		/// <summary>
 		/// Time based constant velocity linear motion
@@ -16,7 +14,7 @@ namespace TrianglesInSpace.Motion
 		/// <param name="startTime">The begining time of this motion</param>
 		/// <param name="velocity">The velocity per second or 1000 time units</param>
 		/// <param name="initialPosition">The starting point of the line</param>
-		public LinearMotion(ulong startTime, Vector2 velocity, Vector2 initialPosition)
+		public LinearMotion(ulong startTime, Vector velocity, Vector initialPosition)
 		{
 			// the starting time for this set of motion
 			m_StartTime = startTime;
@@ -25,7 +23,7 @@ namespace TrianglesInSpace.Motion
 			m_InitialPosition = initialPosition;
 		}
 
-		public Vector2 GetVelocity(ulong currentTime)
+		public Vector GetVelocity(ulong currentTime)
 		{
 			//to match the interface and incase acceleration is added
 			return m_Velocity;
@@ -39,14 +37,14 @@ namespace TrianglesInSpace.Motion
 			}
 		}
 
-		public Vector2 GetMotion(ulong currentTime)
+		public Vector GetMotion(ulong currentTime)
 		{
 			double timeDIfference = (currentTime - m_StartTime);
 			timeDIfference = timeDIfference/1000.0;
 			return m_Velocity * timeDIfference;
 		}
 
-		public Vector2 GetCurrentPosition(ulong currentTime)
+		public Vector GetCurrentPosition(ulong currentTime)
 		{
 			return m_InitialPosition + GetMotion(currentTime);
 		}

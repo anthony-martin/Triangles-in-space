@@ -5,23 +5,34 @@ namespace TrianglesInSpace.Messaging.NUnit
 {
     internal class MessageSenderTests : TestSpecification
     {
-        [Test]
-        public void DisposesCleanly()
-        {
-            var context = ZmqContext.Create();
-            var transmitter = new MessageSender(context);
-            transmitter.Dispose();
-            context.Dispose();
+        private ZmqContext m_Context;
 
+        [TestFixtureSetUp]
+        public void CreateContext()
+        {
+            m_Context = ZmqContext.Create();
+        }
+
+
+        [TestFixtureTearDown]
+        public void DiposeContext()
+        {
+            m_Context.Dispose();
         }
 
         [Test]
+        public void DisposesCleanly()
+        {
+            var transmitter = new MessageSender(m_Context);
+            transmitter.Dispose();
+        }
+
+        //[Test] not hangs the unit tests due to threads
         //note the ability for this to function internally depends on what type of connection is created
         public void RoundTrip()
         {
-            var context = ZmqContext.Create();
-            var transmitter = new MessageSender(context);
-            var receiver = new MessageReceiver(context);
+            var transmitter = new MessageSender(m_Context);
+            var receiver = new MessageReceiver(m_Context);
             receiver.CreateReceiveSocket();
 
             string message = "Hello world";
@@ -33,7 +44,6 @@ namespace TrianglesInSpace.Messaging.NUnit
             Assert.AreEqual(message, recieved);
             receiver.Dispose();
             transmitter.Dispose();
-            context.Dispose();
         }
     }
 }

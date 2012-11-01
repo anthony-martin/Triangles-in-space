@@ -40,7 +40,7 @@ namespace TrianglesInSpace
 
 		//private static GameObject m_Object;
 	    private static MessageBus m_Bus;
-        private static Path m_Path;
+        //private static Path m_Path;
 		private static CircularMotion m_Circle;
 		private static LinearMotion m_Linear;
 
@@ -143,10 +143,10 @@ namespace TrianglesInSpace
             creator.CreateStar();
 
 			//m_Object = new GameObject(m_SceneManager);
-            m_Path = new Path(4, new CircularMotion(0, 50, new Angle(0), new Angle(Math.PI / 10), 20, Vector2.ZERO), m_Bus);
+            //m_Path = new Path(4, new CircularMotion(0, 50, new Angle(0), new Angle(Math.PI / 10), 20, Vector.Zero), m_Bus);
 			//m_Circle = path.CreatePathTo(new Vector2(100, -100), new Vector2(0, 10), Vector2.ZERO);
 			//m_Circle = new CircularMotion(0, 50, new Angle(0), new Angle(Math.PI/2),2);
-			m_Linear = new LinearMotion(0, new Vector2(10,0), Vector2.ZERO);
+			m_Linear = new LinearMotion(0, new Vector(10,0), Vector.Zero);
 
 			m_SceneManager.AmbientLight = new ColourValue(1, 1, 1);
 
@@ -215,17 +215,17 @@ namespace TrianglesInSpace
 			mNinjaMouse.Capture();
 
 			m_time += (ulong) (evt.timeSinceLastFrame*1000);
-            IMotion currentMovement= m_Path.GetCurrentMotion(m_time);
-            var motion = currentMovement.GetCurrentPosition(m_time);
-			//motion.x += 50;
-            var rotation = new Angle(currentMovement.GetVelocity(m_time));
-			rotation.ReduceAngle();
+            ////IMotion currentMovement= m_Path.GetCurrentMotion(m_time);
+            //var motion = currentMovement.GetCurrentPosition(m_time);
+            ////motion.x += 50;
+            //var rotation = new Angle(currentMovement.GetVelocity(m_time));
+            //rotation.ReduceAngle();
 			
-            Quaternion quat = new Quaternion(new Radian(rotation.Value ), new Vector3(0, -1, 0));
+            //Quaternion quat = new Quaternion(new Radian(rotation.Value ), new Vector3(0, -1, 0));
 
-            mNinjaNode.Position = new Vector3(motion.x,  0.0, motion.y);
-            mNinjaNode.Orientation = quat;
-			//Vector3 ninjaMove = Vector3.ZERO;
+            //mNinjaNode.Position = new Vector3(motion.x,  0.0, motion.y);
+            //mNinjaNode.Orientation = quat;
+            ////Vector3 ninjaMove = Vector3.ZERO;
 
 			if (mNinjaMouse.MouseState.ButtonDown(MOIS.MouseButtonID.MB_Left))
 			{

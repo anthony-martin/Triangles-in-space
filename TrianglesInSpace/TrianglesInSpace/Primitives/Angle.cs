@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using Mogre;
 using Math = System.Math;
 
 namespace TrianglesInSpace.Primitives
@@ -13,10 +12,10 @@ namespace TrianglesInSpace.Primitives
 			m_Radians = angle;
 		}
 
-		public Angle(Vector2 vector)
-		{
-			m_Radians = TanAngle(vector);
-		}
+        public Angle(Vector vector)
+        {
+            m_Radians = TanAngle(vector);
+        }
 
 		public double Value
 		{
@@ -57,10 +56,10 @@ namespace TrianglesInSpace.Primitives
 		/// </summary>
 		/// <param name="vector"></param>
 		/// <returns></returns>
-		public static int FacingNumber(Vector2 vector)
+		public static int FacingNumber(Vector vector)
 		{
-			double xValue = vector.x;
-			double yValue = vector.y;
+			double xValue = vector.X;
+			double yValue = vector.Y;
 
 			int facing = 0;
 			// positive x and y
@@ -112,10 +111,10 @@ namespace TrianglesInSpace.Primitives
 			return facing;
 		}
 
-		public static double TanAngle(Vector2 vector)
-		{
-			return ReduceAngle(Math.Atan2(vector.y, vector.x));
-		}
+        public static double TanAngle(Vector vector)
+        {
+            return ReduceAngle(Math.Atan2(vector.Y, vector.X));
+        }
 
 		#region mathOverloads
 		public static bool operator ==(Angle leftSide , Angle rightSide)

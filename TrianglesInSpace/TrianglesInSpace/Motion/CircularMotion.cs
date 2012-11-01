@@ -1,4 +1,5 @@
 ﻿using Mogre;
+using TrianglesInSpace.Primitives;
 using Angle = TrianglesInSpace.Primitives.Angle;
 
 namespace TrianglesInSpace.Motion
@@ -10,8 +11,8 @@ namespace TrianglesInSpace.Motion
 		private Angle m_StartAngle;
 		private Angle m_TurnRate;
 		private double m_InitialSpeed;
-		private Vector2 m_CircleOffset;
-		private Vector2 m_InitialPosition;
+		private Vector m_CircleOffset;
+		private Vector m_InitialPosition;
 
 
 		/// <summary>
@@ -23,7 +24,7 @@ namespace TrianglesInSpace.Motion
 		/// <param name="turnRate">The turn rate in radians</param>
 		/// <param name="initialSpeed">Speed used to determine the current velocity</param>
 		/// <param name="initialPosition">The position when this motion started</param>
-		public CircularMotion(ulong startTime, double radius, Angle startAngle, Angle turnRate, double initialSpeed, Vector2 initialPosition)
+		public CircularMotion(ulong startTime, double radius, Angle startAngle, Angle turnRate, double initialSpeed, Vector initialPosition)
 		{
 			m_StartTime = startTime;
 			m_Radius = radius;
@@ -43,7 +44,7 @@ namespace TrianglesInSpace.Motion
 			}
 		}
 
-		public Vector2 GetVelocity(ulong currentTime)
+		public Vector GetVelocity(ulong currentTime)
 		{
 			double vectorOffset;
 			double timeElapsed = 0;
@@ -66,7 +67,7 @@ namespace TrianglesInSpace.Motion
 			return CoordinateConversions.RadialToVector(angle, m_InitialSpeed);
 		}
 
-		public Vector2 GetMotion(ulong currentTime)
+		public Vector GetMotion(ulong currentTime)
 		{
 			double timeElapsed = 0;
 
@@ -79,7 +80,7 @@ namespace TrianglesInSpace.Motion
 			return positionOnCirlce - m_CircleOffset;
 		}
 
-		public Vector2 GetCurrentPosition(ulong currentTime)
+		public Vector GetCurrentPosition(ulong currentTime)
 		{
 			return m_InitialPosition + GetMotion(currentTime);
 		}

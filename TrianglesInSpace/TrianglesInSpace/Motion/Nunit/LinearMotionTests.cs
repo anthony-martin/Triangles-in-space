@@ -1,5 +1,5 @@
-﻿using Mogre;
-using NUnit.Framework;
+﻿using NUnit.Framework;
+using TrianglesInSpace.Primitives;
 
 namespace TrianglesInSpace.Motion.Nunit
 {
@@ -8,8 +8,8 @@ namespace TrianglesInSpace.Motion.Nunit
 
 		private LinearMotion CreateMotionAtZero()
 		{
-			Vector2 vector = new Vector2(1, 1);
-			return new LinearMotion(0, vector, Vector2.ZERO);
+			Vector vector = new Vector(1, 1);
+			return new LinearMotion(0, vector, Vector.Zero);
 		}
 
 		[Test]
@@ -21,9 +21,9 @@ namespace TrianglesInSpace.Motion.Nunit
 		[Test]
 		public void Test_Get_Velocity()
 		{
-			Vector2 vector = new Vector2(1, 1);
+			Vector vector = new Vector(1, 1);
 			ulong startTime = 0;
-			LinearMotion motion = new LinearMotion(startTime, vector, Vector2.ZERO);
+			LinearMotion motion = new LinearMotion(startTime, vector, Vector.Zero);
 
 			Assert.AreEqual(vector , motion.GetVelocity(0));
 		}
@@ -31,9 +31,9 @@ namespace TrianglesInSpace.Motion.Nunit
 		[Test]
 		public void Test_Get_StartTime()
 		{
-			Vector2 vector = new Vector2(1, 1);
+			Vector vector = new Vector(1, 1);
 			ulong startTime = 0;
-			LinearMotion motion = new LinearMotion(startTime, vector, Vector2.ZERO);
+			LinearMotion motion = new LinearMotion(startTime, vector, Vector.Zero);
 
 			Assert.AreEqual(startTime, motion.StartTime);
 		}
@@ -43,9 +43,9 @@ namespace TrianglesInSpace.Motion.Nunit
 		{
 			LinearMotion motion = CreateMotionAtZero();
 
-			Vector2 distanceMoved = motion.GetMotion(1000);
+			Vector distanceMoved = motion.GetMotion(1000);
 
-			Assert.AreEqual(new Vector2(1, 1), distanceMoved);
+			Assert.AreEqual(new Vector(1, 1), distanceMoved);
 		}
 
 		[Test]
@@ -53,9 +53,9 @@ namespace TrianglesInSpace.Motion.Nunit
 		{
 			LinearMotion motion = CreateMotionAtZero();
 
-			Vector2 distanceMoved = motion.GetMotion(10000);
+			Vector distanceMoved = motion.GetMotion(10000);
 
-			Assert.AreEqual(new Vector2(10, 10), distanceMoved);
+			Assert.AreEqual(new Vector(10, 10), distanceMoved);
 		}
 	}
 }

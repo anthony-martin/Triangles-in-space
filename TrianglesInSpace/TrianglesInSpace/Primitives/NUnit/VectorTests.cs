@@ -24,6 +24,22 @@ namespace TrianglesInSpace.Primitives.NUnit
         }
 
         [Test]
+        public void Length()
+        {
+            var vector = new Vector(3.0, 4.0);
+
+            Assert.AreEqual(5, vector.Length);
+        }
+
+        [Test]
+        public void Normalise()
+        {
+            var normal = new Vector(4, 7).Normalise();
+
+            Assert.AreEqual(1, normal.Length);
+        }
+
+        [Test]
         public void AddSumsXs()
         {
             const double xOne = 2.1;
@@ -89,6 +105,26 @@ namespace TrianglesInSpace.Primitives.NUnit
             var result = vectorOne - vectorTwo;
 
             Assert.AreEqual(yOne - yTwo, result.Y);
+        }
+
+        [Test]
+        public void NegativeVectorHasFlippedSignX()
+        {
+            const double x = 3;
+            var vector = new Vector(x, 0);
+            var negative = -vector;
+
+            Assert.AreEqual(-3, negative.X);
+        }
+
+        [Test]
+        public void NegativeVectorHasFlippedSignY()
+        {
+            const double y = -3;
+            var vector = new Vector(0, y);
+            var negative = -vector;
+
+            Assert.AreEqual(3, negative.Y);
         }
 
         [Test]

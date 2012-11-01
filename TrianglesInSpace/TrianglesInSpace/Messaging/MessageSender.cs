@@ -63,8 +63,11 @@ namespace TrianglesInSpace.Messaging
 
         public void Dispose()
         {
+            if (m_PublishSocket != null)
+            {
+                m_PublishSocket.Dispose();
+            }
             m_MessageThread.Abort();
-            m_PublishSocket.Dispose();
         }
     }
 }

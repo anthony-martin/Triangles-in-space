@@ -1,4 +1,6 @@
-﻿namespace TrianglesInSpace.Primitives
+﻿using System;
+
+namespace TrianglesInSpace.Primitives
 {
     public struct Vector
     {
@@ -19,6 +21,20 @@
             }
         }
 
+        public double Length
+        {
+            get
+            {
+                return Math.Sqrt(Math.Pow(X, 2) + Math.Pow(Y, 2));
+
+            }
+        }
+
+        public Vector Normalise()
+        {
+            return new Vector(X/Length, Y/Length);
+        }
+
         public static Vector operator +(Vector leftSide, Vector rightSide)
         {
             return new Vector(leftSide.X + rightSide.X, leftSide.Y + rightSide.Y);
@@ -27,6 +43,11 @@
         public static Vector operator -(Vector leftSide, Vector rightSide)
         {
             return new Vector(leftSide.X - rightSide.X, leftSide.Y - rightSide.Y);
+        }
+
+        public static Vector operator -(Vector leftSide)
+        {
+            return new Vector(-leftSide.X , -leftSide.Y);
         }
 
         public static Vector operator *(Vector leftSide, double rightSide)

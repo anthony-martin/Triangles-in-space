@@ -7,12 +7,16 @@ namespace TrianglesInSpace.Messaging.NUnit
     class MessageBusTests : TestSpecification
     {
         private MessageBus m_Bus;
+        private IMessageSender m_Sender;
+        private IMessageReceiver m_Receiver;
 
         [SetUp]
         public void CreateBus()
         {
-            m_Bus = new MessageBus(Substitute.For<IMessageSender>(),
-                                    Substitute.For<IMessageReceiver>());
+            m_Sender = Substitute.For<IMessageSender>();
+            m_Receiver = Substitute.For<IMessageReceiver>();
+            m_Bus = new MessageBus(m_Sender,
+                                   m_Receiver);
         }
 
 
@@ -46,11 +50,22 @@ namespace TrianglesInSpace.Messaging.NUnit
         }
 
         [Test]
-        public void ProcessMessagesCallsSubscribers()
+        public void SendPutsTheMessageIntoTheSocket()
         {
             bool handled = false;
             m_Bus.Subscribe<TestMessage>(x => { handled = true; });
             m_Bus.Send(new TestMessage());
+
+            m_Sender.Received().Send(Arg.Any<string>());
+            Assert.False(handled);
+        }
+
+        [Test]
+        public void ProcessMessagesCallsSubscribers()
+        {
+            bool handled = false;
+            m_Bus.Subscribe<TestMessage>(x => { handled = true; });
+            m_Bus.SendLocal(new TestMessage());
 
             m_Bus.ProcessMessages();
 
@@ -62,10 +77,8 @@ namespace TrianglesInSpace.Messaging.NUnit
         {
             int handled = 0;
             m_Bus.Subscribe<TestMessage>(x => { handled ++; });
-            m_Bus.Send(new TestMessage());
-            m_Bus.Send(new TestMessage());
-
-            m_Bus.ProcessMessages();
+            m_Bus.SendLocal(new TestMessage());
+            m_Bus.SendLocal(new TestMessage());
 
             Assert.AreEqual(2, handled);
         }

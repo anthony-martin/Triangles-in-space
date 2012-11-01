@@ -94,7 +94,7 @@ namespace TrianglesInSpace.Messaging
             {
                 m_SubscribeSocket.Dispose();
             }
-            m_MessageThread.Abort();
+            //m_MessageThread.Abort();
         }
     }
 }
