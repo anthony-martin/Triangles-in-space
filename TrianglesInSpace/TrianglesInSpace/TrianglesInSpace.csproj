@@ -77,6 +77,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Messages\SetPathToTarget.cs" />
+    <Compile Include="Messaging\FieldContractResolver.cs" />
     <Compile Include="Messaging\IBus.cs" />
     <Compile Include="Messaging\IMessage.cs" />
     <Compile Include="Messaging\MessageBus.cs" />

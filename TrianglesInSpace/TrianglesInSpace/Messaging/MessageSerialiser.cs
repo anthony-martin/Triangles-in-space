@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization.Formatters;
 using Newtonsoft.Json;
 using TrianglesInSpace.Messaging.Messages;
 
@@ -17,10 +18,18 @@ namespace TrianglesInSpace.Messaging
     	internal const string InvalidTypeMessage = "Unregistered or invalid message type";
 		internal const string InvalidContents = "Message contents could not be deserialised";
         private readonly Dictionary<string, Type> m_Types;
- 
+        private readonly JsonSerializerSettings m_Settings;
+
         public MessageSerialiser()
         {
             m_Types = new Dictionary<string, Type>();
+            m_Settings = new JsonSerializerSettings
+            {
+                ContractResolver = new FieldContractResolver(),
+                TypeNameHandling = TypeNameHandling.Auto,
+                TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple,
+
+            };
         }
 
         public void Register(Type type)
@@ -31,9 +40,7 @@ namespace TrianglesInSpace.Messaging
         public string Serialise(IMessage message)
         {
             var name = message.GetType().Name;
-            var settings = new JsonSerializerSettings();
-            settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-            return name + JsonConvert.SerializeObject(message, settings);
+            return name + JsonConvert.SerializeObject(message, m_Settings);
         }
 
         public IMessage Deserialise(string messageString)
@@ -48,7 +55,7 @@ namespace TrianglesInSpace.Messaging
         	IMessage message = null;
 			if (messageType != null)
 			{
-				message = JsonConvert.DeserializeObject(messageContent, messageType) as IMessage;
+                message = JsonConvert.DeserializeObject(messageContent, messageType, m_Settings) as IMessage;
 			}
 
         	if (message == null)
