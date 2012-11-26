@@ -76,6 +76,9 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Messages\NUnit\PathMessageTests.cs" />
+    <Compile Include="Messages\NUnit\SetPathToTargetTests.cs" />
+    <Compile Include="Messages\PathMessage.cs" />
     <Compile Include="Messages\SetPathToTarget.cs" />
     <Compile Include="Messaging\FieldContractResolver.cs" />
     <Compile Include="Messaging\IBus.cs" />

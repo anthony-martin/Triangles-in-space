@@ -4,9 +4,9 @@ namespace TrianglesInSpace.Motion
 {
 	public class LinearMotion : IMotion
 	{
-		private Vector m_Velocity;
-		private ulong m_StartTime;
-		private Vector m_InitialPosition;
+		private readonly Vector m_Velocity;
+        private readonly ulong m_StartTime;
+        private readonly Vector m_InitialPosition;
 
 		/// <summary>
 		/// Time based constant velocity linear motion
@@ -48,5 +48,58 @@ namespace TrianglesInSpace.Motion
 		{
 			return m_InitialPosition + GetMotion(currentTime);
 		}
+
+	    public bool Equals(LinearMotion other)
+	    {
+	        if (ReferenceEquals(null, other))
+	        {
+	            return false;
+	        }
+	        if (ReferenceEquals(this, other))
+	        {
+	            return true;
+	        }
+	        return other.m_Velocity.Equals(m_Velocity) 
+                    && other.m_StartTime == m_StartTime 
+                    && other.m_InitialPosition.Equals(m_InitialPosition);
+	    }
+
+	    public override bool Equals(object obj)
+	    {
+	        if (ReferenceEquals(null, obj))
+	        {
+	            return false;
+	        }
+	        if (ReferenceEquals(this, obj))
+	        {
+	            return true;
+	        }
+	        if (obj.GetType() != typeof(LinearMotion))
+	        {
+	            return false;
+	        }
+	        return Equals((LinearMotion) obj);
+	    }
+
+	    public override int GetHashCode()
+	    {
+	        unchecked
+	        {
+	            int result = m_Velocity.GetHashCode();
+	            result = (result * 397) ^ m_StartTime.GetHashCode();
+	            result = (result * 397) ^ m_InitialPosition.GetHashCode();
+	            return result;
+	        }
+	    }
+
+	    public static bool operator ==(LinearMotion left, LinearMotion right)
+	    {
+	        return Equals(left, right);
+	    }
+
+	    public static bool operator !=(LinearMotion left, LinearMotion right)
+	    {
+	        return !Equals(left, right);
+	    }
 	}
 }

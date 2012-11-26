@@ -6,13 +6,13 @@ namespace TrianglesInSpace.Motion
 {
 	public class CircularMotion : IMotion
 	{
-		private ulong m_StartTime;
-		private double m_Radius;
-		private Angle m_StartAngle;
-		private Angle m_TurnRate;
-		private double m_InitialSpeed;
-		private Vector m_CircleOffset;
-		private Vector m_InitialPosition;
+		private readonly ulong m_StartTime;
+		private readonly double m_Radius;
+        private readonly Angle m_StartAngle;
+        private readonly Angle m_TurnRate;
+        private readonly double m_InitialSpeed;
+        private readonly Vector m_CircleOffset;
+        private readonly Vector m_InitialPosition;
 
 
 		/// <summary>
@@ -47,7 +47,6 @@ namespace TrianglesInSpace.Motion
 		public Vector GetVelocity(ulong currentTime)
 		{
 			double vectorOffset;
-			double timeElapsed = 0;
 			// the vector is 90degrees from the angle of acceleration
 			// the angle to the current position
 			if (m_TurnRate >= new Angle(0.0))
@@ -60,7 +59,7 @@ namespace TrianglesInSpace.Motion
 			}
 
 			// set the elapsed time to get an accurate resutlt
-			timeElapsed = (currentTime - m_StartTime);
+            double timeElapsed = (currentTime - m_StartTime);
 			timeElapsed = timeElapsed / 1000.0;
 
 			Angle angle = new Angle(m_StartAngle.Value + (m_TurnRate.Value * timeElapsed) + vectorOffset);
@@ -69,9 +68,7 @@ namespace TrianglesInSpace.Motion
 
 		public Vector GetMotion(ulong currentTime)
 		{
-			double timeElapsed = 0;
-
-			timeElapsed = (currentTime - m_StartTime);
+			double timeElapsed = (currentTime - m_StartTime);
 			timeElapsed = timeElapsed / 1000.0;
 
 			Angle angle =new Angle( m_StartAngle.Value + (m_TurnRate.Value*timeElapsed));
@@ -84,5 +81,66 @@ namespace TrianglesInSpace.Motion
 		{
 			return m_InitialPosition + GetMotion(currentTime);
 		}
+
+	    public bool Equals(CircularMotion other)
+	    {
+	        if (ReferenceEquals(null, other))
+	        {
+	            return false;
+	        }
+	        if (ReferenceEquals(this, other))
+	        {
+	            return true;
+	        }
+	        return other.m_StartTime == m_StartTime 
+                    && other.m_StartAngle.Equals(m_StartAngle) 
+                    && other.m_Radius.Equals(m_Radius) 
+                    && other.m_TurnRate.Equals(m_TurnRate) 
+                    && other.m_InitialSpeed.Equals(m_InitialSpeed) 
+                    && other.m_CircleOffset.Equals(m_CircleOffset) 
+                    && other.m_InitialPosition.Equals(m_InitialPosition);
+	    }
+
+	    public override bool Equals(object obj)
+	    {
+	        if (ReferenceEquals(null, obj))
+	        {
+	            return false;
+	        }
+	        if (ReferenceEquals(this, obj))
+	        {
+	            return true;
+	        }
+	        if (obj.GetType() != typeof(CircularMotion))
+	        {
+	            return false;
+	        }
+	        return Equals((CircularMotion) obj);
+	    }
+
+	    public override int GetHashCode()
+	    {
+	        unchecked
+	        {
+	            int result = m_StartTime.GetHashCode();
+	            result = (result * 397) ^ m_StartAngle.GetHashCode();
+	            result = (result * 397) ^ m_Radius.GetHashCode();
+	            result = (result * 397) ^ m_TurnRate.GetHashCode();
+	            result = (result * 397) ^ m_InitialSpeed.GetHashCode();
+	            result = (result * 397) ^ m_CircleOffset.GetHashCode();
+	            result = (result * 397) ^ m_InitialPosition.GetHashCode();
+	            return result;
+	        }
+	    }
+
+	    public static bool operator ==(CircularMotion left, CircularMotion right)
+	    {
+	        return Equals(left, right);
+	    }
+
+	    public static bool operator !=(CircularMotion left, CircularMotion right)
+	    {
+	        return !Equals(left, right);
+	    }
 	}
 }
