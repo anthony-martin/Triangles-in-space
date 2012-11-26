@@ -117,7 +117,7 @@ namespace TrianglesInSpace.Motion
 
             var velocity = (destination - startOfLine);
             ulong destinationTime = (ulong)((velocity.Length / initialVelocity.Length) * 1000.0);
-            velocity.Normalise();
+            velocity = velocity.Normalise();
             velocity = velocity * initialVelocity.Length;
             var linear = new LinearMotion(turnDuration, velocity, startOfLine);
             var linear2 = new LinearMotion(turnDuration + destinationTime, velocity, destination);
