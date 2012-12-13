@@ -1,8 +1,11 @@
 ﻿using Mogre;
 using NUnit.Framework;
+using TrianglesInSpace.Messages;
+using TrianglesInSpace.Messaging;
 using TrianglesInSpace.Primitives;
 using Angle = TrianglesInSpace.Primitives.Angle;
 using Math = System.Math;
+using NSubstitute;
 
 namespace TrianglesInSpace.Motion.Nunit
 {
@@ -504,7 +507,17 @@ namespace TrianglesInSpace.Motion.Nunit
             Assert.AreEqual(5000, turnDuration);
         }
 
+        [Test]
+        public void OnPathRequestSendsPath()
+        {
+            var motion = new CircularMotion(0, 50, new Angle(0), new Angle(Math.PI / 10), 20, Vector.Zero);
+            var bus = Get<IBus>();
+            Path path = new Path(5, motion, bus);
 
+            path.OnPathRequest(new RequestPathMessage());
+
+            bus.Received().Send(Arg.Any<PathMessage>());
+        }
 
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using TrianglesInSpace.Messaging;
 using TrianglesInSpace.Motion;
 
@@ -9,25 +10,34 @@ namespace TrianglesInSpace.Messages
         private readonly LinearMotion[] m_LinearMotion;
         private readonly CircularMotion[] m_CircularMotion;
 
-        public PathMessage(List<LinearMotion> linearMotion, List<CircularMotion> circularMotion)
+        public PathMessage(IEnumerable<IMotion> motions)
         {
-            m_LinearMotion = linearMotion.ToArray();
-            m_CircularMotion = circularMotion.ToArray();
-        }
-
-        public List<LinearMotion> LinearMotion
-        {
-            get
+            var linearMotions = new List<LinearMotion>();
+            var circularMotions = new List<CircularMotion>();
+            foreach (var motion in motions)
             {
-                return new List<LinearMotion>(m_LinearMotion);
+                var linear = motion as LinearMotion;
+                if (linear != null)
+                {
+                    linearMotions.Add(linear);
+                }
+
+                var circular = motion as CircularMotion;
+                if (circular != null)
+                {
+                    circularMotions.Add(circular);
+                }
             }
+            m_LinearMotion = linearMotions.ToArray();
+            m_CircularMotion = circularMotions.ToArray();
         }
 
-        public List<CircularMotion> CircularMotion
+        public IEnumerable<IMotion> Motion
         {
             get
             {
-                return new List<CircularMotion>(m_CircularMotion);
+                var motions = m_LinearMotion.Concat<IMotion>(m_CircularMotion);
+                return motions.OrderBy(x => x.StartTime).ToList();
             }
         }
     }

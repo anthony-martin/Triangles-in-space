@@ -27,10 +27,15 @@ namespace TrianglesInSpace.Motion
             m_Bus = bus;
             m_Disposer = new Disposer();
             m_Bus.Subscribe<SetPathToTarget>(OnSetPathToTarget).AddTo(m_Disposer);
-
+            m_Bus.Subscribe<RequestPathMessage>(OnPathRequest).AddTo(m_Disposer);
             m_Acceleration = maximumAcceleration;
             m_Path = new List<IMotion>();
             m_Path.Add(startingMotion);
+        }
+
+        public void OnPathRequest(RequestPathMessage message)
+        {
+            m_Bus.Send(new PathMessage(m_Path));
         }
 
         public void OnSetPathToTarget(SetPathToTarget message)

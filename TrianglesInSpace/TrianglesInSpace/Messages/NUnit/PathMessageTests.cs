@@ -12,21 +12,16 @@ namespace TrianglesInSpace.Messages.NUnit
         [Test]
         public void MessageRoundTrip()
         {
-            List<LinearMotion> linearMotion = new List<LinearMotion>
+            List<IMotion> motions = new List<IMotion>
             {
                 new LinearMotion(1, new Vector(5,10),new Vector(3,5.5)),
-                new LinearMotion(500, new Vector(7,20),new Vector(5,100))
-            };
-
-            List<CircularMotion> circularMotion = new List<CircularMotion>
-            {
                 new CircularMotion(30, 1, new Angle(0), new Angle(0), 1, Vector.Zero),
+                new LinearMotion(500, new Vector(7,20),new Vector(5,100)),
                 new CircularMotion(670, 0, new Angle(0), new Angle(-Math.PI), 1, Vector.Zero),
                 new CircularMotion(1500, 0, new Angle(-Math.PI / 2), new Angle(1), 1, Vector.Zero)
-
             };
 
-            var original = new PathMessage(linearMotion, circularMotion);
+            var original = new PathMessage(motions);
 
             var serialiser = new MessageSerialiser();
             serialiser.Register(typeof(PathMessage));
@@ -35,8 +30,7 @@ namespace TrianglesInSpace.Messages.NUnit
 
             var deserialised = (PathMessage)serialiser.Deserialise(text);
 
-            Assert.AreEqual(linearMotion, deserialised.LinearMotion);
-            Assert.AreEqual(circularMotion, deserialised.CircularMotion);
+            Assert.AreEqual(motions, deserialised.Motion);
         }
     }
 }

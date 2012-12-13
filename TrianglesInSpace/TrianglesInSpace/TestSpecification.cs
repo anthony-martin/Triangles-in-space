@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using NSubstitute;
+using NUnit.Framework;
 
 namespace TrianglesInSpace
 {
@@ -9,5 +10,10 @@ namespace TrianglesInSpace
 	[TestFixture]
 	public class TestSpecification
 	{
+        public T Get<T>()
+           where T : class
+        {
+            return Substitute.For<T>();
+        }
 	}
 }
