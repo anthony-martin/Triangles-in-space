@@ -1,8 +1,16 @@
-﻿using Mogre;
+﻿using System;
+using System.Globalization;
+using Mogre;
+using TrianglesInSpace.Input;
+using TrianglesInSpace.Messages;
+using TrianglesInSpace.Messaging;
+using TrianglesInSpace.Motion;
+using TrianglesInSpace.Primitives;
+using Math = System.Math;
 
 namespace TrianglesInSpace.Rendering
 {
-    public class Renderer
+    public class Renderer : IDisposable
     {
         private Camera m_Camera;
         private SceneManager m_SceneManager;
@@ -12,14 +20,32 @@ namespace TrianglesInSpace.Rendering
         private SceneNode m_ClickNode;
         private Light m_Light;
 
-        public Renderer()
+        private readonly InputController m_InputController;
+
+
+        private ulong m_Time;
+
+        private readonly IBus m_Bus;
+        private readonly Path m_Path;
+
+        public Renderer( IBus bus)
         {
+            m_Bus = bus;
+            m_Time = 0;
+
             CreateRoot();
             DefineResources();
             CreateRenderSystem();
             CreateRenderWindow();
             InitializeResources();
             CreateScene();
+            CreateFrameListeners();
+
+            int windowHandle;
+            m_RenderWindow.GetCustomAttribute("WINDOW", out windowHandle);
+            m_InputController = new InputController(windowHandle.ToString(), m_Camera, m_Bus);
+
+            m_Path = new Path(4, new CircularMotion(0, 50, new Primitives.Angle(0), new Primitives.Angle(Math.PI / 10), 20, Vector.Zero), m_Bus);
         }
 
         private void CreateRoot()
@@ -124,10 +150,43 @@ namespace TrianglesInSpace.Rendering
             m_Light.SpecularColour = ColourValue.White;
         }
 
+        private void CreateFrameListeners()
+        {
+            m_Root.FrameRenderingQueued += OnRenderingCompleted;
+
+        }
+
+        private bool OnRenderingCompleted(FrameEvent evt)
+        {
+            m_Time += (ulong)(evt.timeSinceLastFrame * 1000);
+            m_Bus.Send(new TimeUpdateMessage(m_Time));
+
+            ((MessageBus)m_Bus).ProcessMessages();
+
+            m_InputController.Capture();
+
+            IMotion currentMovement = m_Path.GetCurrentMotion(m_Time);
+            Vector motion = currentMovement.GetCurrentPosition(m_Time);
+            //motion.X += 50;
+            var rotation = new Primitives.Angle(currentMovement.GetVelocity(m_Time));
+            rotation.ReduceAngle();
+
+            Quaternion quat = new Quaternion(new Radian(rotation.Value), new Vector3(0, -1, 0));
+
+            m_TriangleNode.Position = new Vector3(motion.X, 0.0, motion.Y);
+            m_TriangleNode.Orientation = quat;
+
+            return true;
+        }
 
         public void StartRendering()
         {
             m_Root.StartRendering();
+        }
+
+        public void Dispose()
+        {
+            m_InputController.Dispose();
         }
     }
 }

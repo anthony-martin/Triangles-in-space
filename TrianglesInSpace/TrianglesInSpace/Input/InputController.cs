@@ -48,6 +48,11 @@ namespace TrianglesInSpace.Input
 
         }
 
+        public void Capture()
+        {
+            m_Mouse.Capture();
+        }
+
         private void OnTimeUpdate(TimeUpdateMessage message)
         {
             m_Time = message.Time;

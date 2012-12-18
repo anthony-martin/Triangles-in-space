@@ -34,6 +34,7 @@ namespace TrianglesInSpace.Messaging
             m_MessageSerialiser.Register(typeof(SetPathToTarget));
             m_MessageSerialiser.Register(typeof(PathMessage));
             m_MessageSerialiser.Register(typeof(RequestPathMessage));
+            m_MessageSerialiser.Register(typeof(TimeUpdateMessage));
             m_MessageSender = messageSender;
             m_MessageReceiver = messageReceiver;
 
