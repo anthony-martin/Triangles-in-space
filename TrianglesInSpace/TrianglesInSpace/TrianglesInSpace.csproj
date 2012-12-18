@@ -76,12 +76,15 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Input\InputController.cs" />
     <Compile Include="Messages\NUnit\PathMessageTests.cs" />
     <Compile Include="Messages\NUnit\RequestPathMessageTests.cs" />
     <Compile Include="Messages\NUnit\SetPathToTargetTests.cs" />
+    <Compile Include="Messages\NUnit\TimeUpdateMessageTests.cs" />
     <Compile Include="Messages\PathMessage.cs" />
     <Compile Include="Messages\RequestPathMessage.cs" />
     <Compile Include="Messages\SetPathToTarget.cs" />
+    <Compile Include="Messages\TimeUpdateMessage.cs" />
     <Compile Include="Messaging\FieldContractResolver.cs" />
     <Compile Include="Messaging\IBus.cs" />
     <Compile Include="Messaging\IMessage.cs" />
@@ -106,6 +109,7 @@
     <Compile Include="Primitives\TurnDirection.cs" />
     <Compile Include="Primitives\NUnit\AngleTests.cs" />
     <Compile Include="Primitives\Vector.cs" />
+    <Compile Include="Rendering\Renderer.cs" />
     <Compile Include="Rendering\ShapeCreator.cs" />
     <Compile Include="TestSpecification.cs" />
     <Compile Include="TrianglesInSpace.cs" />
