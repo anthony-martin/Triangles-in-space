@@ -39,7 +39,7 @@ namespace TrianglesInSpace.Input
             m_Mouse = (MOIS.Mouse)m_InputManager.CreateInputObject(MOIS.Type.OISMouse, true);
             m_Mouse.MousePressed += MousePressed;
             var state = m_Mouse.MouseState;
-            state.height = 600;
+            state.height = 800;
             state.width = 800;
 
             m_Disposer  = new Disposer();
@@ -67,7 +67,7 @@ namespace TrianglesInSpace.Input
                 Vector3 cameraPosition = m_Camera.Position;
                 Vector3 cornerPosition = cameraPosition - new Vector3(windowWidth / 2, 0, windowHeight / 2);
                 cornerPosition.y = 0;
-                var mouseOffset = new Vector3(windowHeight * (1.0 - (double)mouseEvent.state.Y.abs / 600.0),
+                var mouseOffset = new Vector3(windowHeight * (1.0 - (double)mouseEvent.state.Y.abs / 800.0),
                                               0,
                                               windowWidth * (double)mouseEvent.state.X.abs / 800.0);
                 var desiredPosition = cornerPosition + mouseOffset;

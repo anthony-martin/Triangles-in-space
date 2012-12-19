@@ -79,7 +79,7 @@ namespace TrianglesInSpace.Rendering
         {
             RenderSystem renderSystem = m_Root.GetRenderSystemByName("Direct3D9 Rendering Subsystem");
             renderSystem.SetConfigOption("Full Screen", "No");
-            renderSystem.SetConfigOption("Video Mode", "800 x 600 @ 32-bit colour");
+            renderSystem.SetConfigOption("Video Mode", "800 x 800 @ 32-bit colour");
             renderSystem.SetConfigOption("FSAA", "16");
             m_Root.RenderSystem = renderSystem;
         }
@@ -107,7 +107,7 @@ namespace TrianglesInSpace.Rendering
 
             Viewport viewport = m_RenderWindow.AddViewport(m_Camera);
             viewport.BackgroundColour = ColourValue.Black;
-            m_Camera.AspectRatio = (double)viewport.ActualWidth / (double)viewport.ActualHeight;
+            m_Camera.AspectRatio = viewport.ActualWidth / viewport.ActualHeight;
 
             m_SceneManager.AmbientLight = new ColourValue(1, 1, 1);
 
