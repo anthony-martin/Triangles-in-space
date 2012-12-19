@@ -6,5 +6,6 @@ namespace TrianglesInSpace.Messaging
     {
         Action Subscribe<T>(Action<T> handler);
         void Send(IMessage message);
+        void SendLocal(IMessage message);
     }
 }

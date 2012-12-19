@@ -1,14 +1,6 @@
 ﻿using System;
-using Mogre;
-using MOIS;
-using TrianglesInSpace.Messages;
 using TrianglesInSpace.Messaging;
-using TrianglesInSpace.Motion;
-using TrianglesInSpace.Primitives;
 using ZeroMQ;
-using Angle = TrianglesInSpace.Primitives.Angle;
-using Math = System.Math;
-using Vector3 = Mogre.Vector3;
 using TrianglesInSpace.Rendering;
 
 namespace TrianglesInSpace

@@ -124,6 +124,7 @@ namespace TrianglesInSpace.Rendering
             m_Camera.NearClipDistance = 5;
             m_Camera.FarClipDistance = 2501;
             m_Camera.LookAt(Vector3.ZERO);
+
         }
 
         private void CreateTriangleNode()
@@ -159,7 +160,7 @@ namespace TrianglesInSpace.Rendering
         private bool OnRenderingCompleted(FrameEvent evt)
         {
             m_Time += (ulong)(evt.timeSinceLastFrame * 1000);
-            m_Bus.Send(new TimeUpdateMessage(m_Time));
+            m_Bus.SendLocal(new TimeUpdateMessage(m_Time));
 
             ((MessageBus)m_Bus).ProcessMessages();
 
