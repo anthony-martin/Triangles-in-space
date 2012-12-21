@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Mogre;
 using TrianglesInSpace.Disposers;
 using TrianglesInSpace.Messages;
 using TrianglesInSpace.Messaging;
@@ -13,9 +12,10 @@ namespace TrianglesInSpace.Motion
     public class Path : IDisposable
     {
         private double m_Acceleration;
-        private List<IMotion> m_Path;
         private IBus m_Bus;
         private Disposer m_Disposer;
+
+        private CombinedMotion m_Motion;
 
         public Path()
         {
@@ -29,24 +29,27 @@ namespace TrianglesInSpace.Motion
             m_Bus.Subscribe<SetPathToTarget>(OnSetPathToTarget).AddTo(m_Disposer);
             m_Bus.Subscribe<RequestPathMessage>(OnPathRequest).AddTo(m_Disposer);
             m_Acceleration = maximumAcceleration;
-            m_Path = new List<IMotion>();
-            m_Path.Add(startingMotion);
+
+            m_Motion = new CombinedMotion(new List<IMotion>
+           {
+               startingMotion
+           });
         }
 
         public void OnPathRequest(RequestPathMessage message)
         {
-            m_Bus.Send(new PathMessage(m_Path));
+            m_Bus.Send(new PathMessage(m_Motion.Path));
         }
 
         public void OnSetPathToTarget(SetPathToTarget message)
         {
-            var Vector = message.WorldPosition;
-            MoveToDestination(Vector, message.Time);
+            var vector = message.WorldPosition;
+            MoveToDestination(vector, message.Time);
         }
 
         public void MoveToDestination(Vector destination, ulong currentTime)
         {
-            var currentMotion = m_Path[0];
+            var currentMotion = m_Motion.GetCurrentMotion(currentTime);
             var initialPosition = currentMotion.GetCurrentPosition(currentTime);
             var initialVelocity = currentMotion.GetVelocity(currentTime);
 
@@ -57,27 +60,12 @@ namespace TrianglesInSpace.Motion
                 throw new InvalidOperationException("The positions do not match up");
             }
 
-            m_Path = new List<IMotion>(newPath);
+            m_Motion = new CombinedMotion( new List<IMotion>(newPath));
         }
 
         public IMotion GetCurrentMotion(ulong currentTime)
         {
-            IMotion pathSegment;
-            int index = m_Path.Count;
-            do
-            {
-                index--;
-                pathSegment = m_Path[index];
-
-            }
-            while (index > 0 && pathSegment.StartTime > currentTime);
-
-            if (index != 0)
-            {
-                m_Path.RemoveRange(0, index);
-            }
-
-            return pathSegment;
+            return m_Motion.GetCurrentMotion(currentTime);
         }
 
 

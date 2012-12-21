@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Globalization;
+using System.Collections.Generic;
 using Mogre;
 using TrianglesInSpace.Input;
 using TrianglesInSpace.Messages;
@@ -19,6 +19,7 @@ namespace TrianglesInSpace.Rendering
         private SceneNode m_TriangleNode;
         private SceneNode m_ClickNode;
         private Light m_Light;
+        private List<SceneNode> m_Nodes; 
 
         private readonly InputController m_InputController;
 
@@ -107,7 +108,7 @@ namespace TrianglesInSpace.Rendering
 
             Viewport viewport = m_RenderWindow.AddViewport(m_Camera);
             viewport.BackgroundColour = ColourValue.Black;
-            m_Camera.AspectRatio = viewport.ActualWidth / viewport.ActualHeight;
+            m_Camera.AspectRatio = (double)viewport.ActualWidth / (double)viewport.ActualHeight;
 
             m_SceneManager.AmbientLight = new ColourValue(1, 1, 1);
 
