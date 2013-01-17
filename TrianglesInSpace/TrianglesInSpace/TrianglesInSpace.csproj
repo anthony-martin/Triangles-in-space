@@ -110,8 +110,10 @@
     <Compile Include="Primitives\TurnDirection.cs" />
     <Compile Include="Primitives\NUnit\AngleTests.cs" />
     <Compile Include="Primitives\Vector.cs" />
+    <Compile Include="Rendering\ClickMarker.cs" />
     <Compile Include="Rendering\NodeWithPosition.cs" />
     <Compile Include="Rendering\Renderer.cs" />
+    <Compile Include="Rendering\Scene.cs" />
     <Compile Include="Rendering\ShapeCreator.cs" />
     <Compile Include="TestSpecification.cs" />
     <Compile Include="TrianglesInSpace.cs" />

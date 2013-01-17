@@ -17,9 +17,8 @@ namespace TrianglesInSpace.Rendering
         private Root m_Root;
         private RenderWindow m_RenderWindow;
         private SceneNode m_TriangleNode;
-        private SceneNode m_ClickNode;
+        private ClickMarker m_ClickMarker;
         private Light m_Light;
-        private List<SceneNode> m_Nodes; 
 
         private readonly InputController m_InputController;
 
@@ -139,8 +138,10 @@ namespace TrianglesInSpace.Rendering
         private void CreateClickStar()
         {
             var clickStar = m_SceneManager.CreateEntity("Star", "star");
-            m_ClickNode = m_SceneManager.RootSceneNode.CreateChildSceneNode("ClickNode");
-            m_ClickNode.AttachObject(clickStar);
+            var node = m_SceneManager.RootSceneNode.CreateChildSceneNode("ClickNode");
+            node.AttachObject(clickStar);
+
+            m_ClickMarker = new ClickMarker(node, m_Bus);
         }
 
         private void LetThereBeLight()

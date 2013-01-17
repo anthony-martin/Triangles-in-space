@@ -5,7 +5,7 @@ namespace TrianglesInSpace.Motion
 {
     public class CombinedMotion
     {
-        private List<IMotion> m_Path;
+        private readonly List<IMotion> m_Path;
         public CombinedMotion(IEnumerable<IMotion> motion)
         {
             m_Path = motion.ToList();
