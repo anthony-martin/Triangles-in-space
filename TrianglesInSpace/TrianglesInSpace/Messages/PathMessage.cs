@@ -7,11 +7,14 @@ namespace TrianglesInSpace.Messages
 {
     public class PathMessage : IMessage
     {
+        public readonly string Name;
         private readonly LinearMotion[] m_LinearMotion;
         private readonly CircularMotion[] m_CircularMotion;
 
-        public PathMessage(IEnumerable<IMotion> motions)
+        public PathMessage(string name, IEnumerable<IMotion> motions)
         {
+            Name = name;
+    
             var linearMotions = new List<LinearMotion>();
             var circularMotions = new List<CircularMotion>();
             foreach (var motion in motions)
@@ -32,12 +35,12 @@ namespace TrianglesInSpace.Messages
             m_CircularMotion = circularMotions.ToArray();
         }
 
-        public IEnumerable<IMotion> Motion
+        public CombinedMotion Motion
         {
             get
             {
                 var motions = m_LinearMotion.Concat<IMotion>(m_CircularMotion);
-                return motions.OrderBy(x => x.StartTime).ToList();
+                return new CombinedMotion(motions.OrderBy(x => x.StartTime).ToList());
             }
         }
     }

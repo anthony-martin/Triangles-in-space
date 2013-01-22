@@ -11,6 +11,7 @@ namespace TrianglesInSpace.Motion
 {
     public class Path : IDisposable
     {
+        private string m_Name;
         private double m_Acceleration;
         private IBus m_Bus;
         private Disposer m_Disposer;
@@ -24,6 +25,7 @@ namespace TrianglesInSpace.Motion
 
         public Path(double maximumAcceleration, IMotion startingMotion, IBus bus)
         {
+            m_Name = "triangle";
             m_Bus = bus;
             m_Disposer = new Disposer();
             m_Bus.Subscribe<SetPathToTarget>(OnSetPathToTarget).AddTo(m_Disposer);
@@ -38,13 +40,14 @@ namespace TrianglesInSpace.Motion
 
         public void OnPathRequest(RequestPathMessage message)
         {
-            m_Bus.Send(new PathMessage(m_Motion.Path));
+            m_Bus.Send(new PathMessage(m_Name, m_Motion.Path));
         }
 
         public void OnSetPathToTarget(SetPathToTarget message)
         {
             var vector = message.WorldPosition;
             MoveToDestination(vector, message.Time);
+            m_Bus.Send(new PathMessage(m_Name, m_Motion.Path));
         }
 
         public void MoveToDestination(Vector destination, ulong currentTime)

@@ -21,7 +21,9 @@ namespace TrianglesInSpace.Messages.NUnit
                 new CircularMotion(1500, 0, new Angle(-Math.PI / 2), new Angle(1), 1, Vector.Zero)
             };
 
-            var original = new PathMessage(motions);
+            const string name = "bobby";
+
+            var original = new PathMessage(name, motions);
 
             var serialiser = new MessageSerialiser();
             serialiser.Register(typeof(PathMessage));
@@ -30,7 +32,8 @@ namespace TrianglesInSpace.Messages.NUnit
 
             var deserialised = (PathMessage)serialiser.Deserialise(text);
 
-            Assert.AreEqual(motions, deserialised.Motion);
+            Assert.AreEqual(name, deserialised.Name);
+            Assert.AreEqual(motions, deserialised.Motion.Path);
         }
     }
 }

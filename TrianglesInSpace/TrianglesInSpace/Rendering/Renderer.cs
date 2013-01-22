@@ -18,6 +18,7 @@ namespace TrianglesInSpace.Rendering
         private RenderWindow m_RenderWindow;
         private SceneNode m_TriangleNode;
         private ClickMarker m_ClickMarker;
+        private Scene m_Scene;
         private Light m_Light;
 
         private readonly InputController m_InputController;
@@ -56,6 +57,7 @@ namespace TrianglesInSpace.Rendering
             m_Root.LoadPlugin("Plugin_OctreeSceneManager");
 
             m_SceneManager = m_Root.CreateSceneManager(SceneType.ST_GENERIC);
+            m_Scene = new Scene(m_Bus, m_SceneManager);
         }
 
 
@@ -129,10 +131,7 @@ namespace TrianglesInSpace.Rendering
 
         private void CreateTriangleNode()
         {
-            var triangle = m_SceneManager.CreateEntity("triangle", "triangle");
-
-            m_TriangleNode = m_SceneManager.RootSceneNode.CreateChildSceneNode("triangle");
-            m_TriangleNode.AttachObject(triangle);
+           m_Scene.Add("triangle", "triangle");
         }
 
         private void CreateClickStar()
@@ -162,22 +161,12 @@ namespace TrianglesInSpace.Rendering
         private bool OnRenderingCompleted(FrameEvent evt)
         {
             m_Time += (ulong)(evt.timeSinceLastFrame * 1000);
-            m_Bus.SendLocal(new TimeUpdateMessage(m_Time));
 
+            m_Bus.SendLocal(new TimeUpdateMessage(m_Time));
+            m_InputController.Capture();
             ((MessageBus)m_Bus).ProcessMessages();
 
-            m_InputController.Capture();
-
-            IMotion currentMovement = m_Path.GetCurrentMotion(m_Time);
-            Vector motion = currentMovement.GetCurrentPosition(m_Time);
-            //motion.X += 50;
-            var rotation = new Primitives.Angle(currentMovement.GetVelocity(m_Time));
-            rotation.ReduceAngle();
-
-            Quaternion quat = new Quaternion(new Radian(rotation.Value), new Vector3(0, -1, 0));
-
-            m_TriangleNode.Position = new Vector3(motion.X, 0.0, motion.Y);
-            m_TriangleNode.Orientation = quat;
+            m_Scene.UpdatePosition(m_Time);
 
             return true;
         }

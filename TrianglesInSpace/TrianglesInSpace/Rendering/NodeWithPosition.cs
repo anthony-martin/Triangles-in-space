@@ -27,5 +27,18 @@ namespace TrianglesInSpace.Rendering
             get { return m_Motion; }
             set { m_Motion = value; }
         }
+
+        public void UpdatePosition(ulong time)
+        {
+            var currenmtMotion = m_Motion.GetCurrentMotion(time);
+            var currentPositon = currenmtMotion.GetCurrentPosition(time);
+            m_SceneNode.Position = new Vector3(currentPositon.X, 0.0, currentPositon.Y);
+
+            var rotation = new Primitives.Angle(currenmtMotion.GetVelocity(time));
+            rotation.ReduceAngle();
+
+            Quaternion quat = new Quaternion(new Radian(rotation.Value), new Vector3(0, -1, 0));
+            m_SceneNode.Orientation = quat;
+        }
     }
 }

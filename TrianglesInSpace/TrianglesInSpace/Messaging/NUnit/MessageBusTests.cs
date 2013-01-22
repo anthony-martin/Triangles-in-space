@@ -31,9 +31,8 @@ namespace TrianglesInSpace.Messaging.NUnit
         [Test]
         public void RemoveCanBeCalledTwiceSafely()
         {
-            bool handled = false;
-            Action<TestMessage> handler = x => { handled = true; };
-            var unsubscribe = m_Bus.Subscribe<TestMessage>(handler);
+            Action<TestMessage> handler = x => { };
+            var unsubscribe = m_Bus.Subscribe(handler);
 
             unsubscribe();
             Assert.DoesNotThrow( () => unsubscribe());
