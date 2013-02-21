@@ -14,6 +14,7 @@ namespace TrianglesInSpace.Messaging
         private readonly MessageSerialiser m_MessageSerialiser;
         private readonly IMessageSender m_MessageSender;
         private readonly IMessageReceiver m_MessageReceiver;
+        private readonly IMessageRegistrationList m_MessageList;
 
         private readonly ConcurrentQueue<IMessage> m_Messages;
 
@@ -24,19 +25,23 @@ namespace TrianglesInSpace.Messaging
         /// </summary>
         /// <param name="messageSender">Shared isntance of the sender</param>
         /// <param name="messageReceiver">Shared instance of the receiver</param>
+        /// /// <param name="messageList">The collection of message types to register for serialisation</param>
         public MessageBus(IMessageSender messageSender,
-                          IMessageReceiver messageReceiver)
+                          IMessageReceiver messageReceiver,
+                          IMessageRegistrationList messageList)
         {
             m_Lock = new object();
             m_Subscribers = new Dictionary<Type, Delegate>();
 
-            m_MessageSerialiser = new MessageSerialiser();
-            m_MessageSerialiser.Register(typeof(SetPathToTarget));
-            m_MessageSerialiser.Register(typeof(PathMessage));
-            m_MessageSerialiser.Register(typeof(RequestPathMessage));
-            m_MessageSerialiser.Register(typeof(TimeUpdateMessage));
+            m_MessageList = messageList;
             m_MessageSender = messageSender;
             m_MessageReceiver = messageReceiver;
+            
+            m_MessageSerialiser = new MessageSerialiser();
+            foreach (var messageType in m_MessageList.Messages)
+            {
+                m_MessageSerialiser.Register(messageType);
+            }
 
             m_Disposer = new Disposer();
 

@@ -3,12 +3,12 @@ using TrianglesInSpace.Primitives;
 
 namespace TrianglesInSpace.Messages
 {
-    public class SetPathToTarget : IMessage
+    public class SetPathToTargetMessage : IMessage
     {
         public readonly Vector WorldPosition = Vector.Zero;
         public readonly ulong Time = 0;
 
-        public SetPathToTarget(Vector worldPosition, ulong time)
+        public SetPathToTargetMessage(Vector worldPosition, ulong time)
         {
             WorldPosition = worldPosition;
             Time = time;

@@ -20,7 +20,7 @@ namespace TrianglesInSpace
                 var context = ZmqContext.Create();
 		        var receiver = new MessageReceiver(context);
                 receiver.Listen();
-                var bus = new MessageBus(new MessageSender(context), receiver);
+                var bus = new MessageBus(new MessageSender(context), receiver, new MessageRegistrationList());
 
                 var renderer = new Renderer(bus);
                 renderer.StartRendering();

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using NSubstitute;
 
@@ -9,14 +10,21 @@ namespace TrianglesInSpace.Messaging.NUnit
         private MessageBus m_Bus;
         private IMessageSender m_Sender;
         private IMessageReceiver m_Receiver;
+        private IMessageRegistrationList m_MessageList;
 
         [SetUp]
         public void CreateBus()
         {
             m_Sender = Substitute.For<IMessageSender>();
             m_Receiver = Substitute.For<IMessageReceiver>();
+            m_MessageList = Substitute.For<IMessageRegistrationList>();
+            m_MessageList.Messages.Returns(new List<Type>
+            {
+                typeof(TestMessage)
+            });
             m_Bus = new MessageBus(m_Sender,
-                                   m_Receiver);
+                                   m_Receiver,
+                                   m_MessageList);
         }
 
 

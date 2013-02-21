@@ -28,7 +28,7 @@ namespace TrianglesInSpace.Motion
             m_Name = "triangle";
             m_Bus = bus;
             m_Disposer = new Disposer();
-            m_Bus.Subscribe<SetPathToTarget>(OnSetPathToTarget).AddTo(m_Disposer);
+            m_Bus.Subscribe<SetPathToTargetMessage>(OnSetPathToTarget).AddTo(m_Disposer);
             m_Bus.Subscribe<RequestPathMessage>(OnPathRequest).AddTo(m_Disposer);
             m_Acceleration = maximumAcceleration;
 
@@ -43,7 +43,7 @@ namespace TrianglesInSpace.Motion
             m_Bus.Send(new PathMessage(m_Name, m_Motion.Path));
         }
 
-        public void OnSetPathToTarget(SetPathToTarget message)
+        public void OnSetPathToTarget(SetPathToTargetMessage message)
         {
             var vector = message.WorldPosition;
             MoveToDestination(vector, message.Time);
