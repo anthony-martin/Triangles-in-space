@@ -13,11 +13,11 @@ namespace TrianglesInSpace.Input
     {
         private readonly Camera m_Camera;
         private readonly IBus m_Bus;
-        private InputManager m_InputManager;
+        private readonly InputManager m_InputManager;
         //private Keyboard m_Keyboard;
-        private Mouse m_Mouse;
+        private readonly Mouse m_Mouse;
 
-        private Disposer m_Disposer;
+        private readonly Disposer m_Disposer;
 
         private ulong m_Time;
 
@@ -97,7 +97,7 @@ namespace TrianglesInSpace.Input
         {
             var worldPosition = FromScreenToWorldPosition(mouseEvent.state.X.abs, mouseEvent.state.Y.abs);
 
-            m_Bus.Send(new SelectObjectAtMessage(worldPosition));
+            m_Bus.Send(new SelectObjectAtMessage(worldPosition, m_Time));
         }
 
         public void Dispose()

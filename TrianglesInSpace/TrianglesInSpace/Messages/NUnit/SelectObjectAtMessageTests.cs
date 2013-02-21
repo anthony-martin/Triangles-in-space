@@ -9,7 +9,7 @@ namespace TrianglesInSpace.Messages.NUnit
         [Test]
         public void RoundTrip()
         {
-            var original = new SelectObjectAtMessage(new Vector(5.3, 7));
+            var original = new SelectObjectAtMessage(new Vector(5.3, 7), 457);
 
             var serialiser = new MessageSerialiser();
             serialiser.Register(typeof(SelectObjectAtMessage));
@@ -18,6 +18,7 @@ namespace TrianglesInSpace.Messages.NUnit
             var deserialised = (SelectObjectAtMessage)serialiser.Deserialise(text);
 
             Assert.AreEqual(original.Position, deserialised.Position);
+            Assert.AreEqual(original.Time, deserialised.Time);
         }
     }
 }

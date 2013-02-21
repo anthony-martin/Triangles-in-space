@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using TrianglesInSpace.Disposers;
-using TrianglesInSpace.Messages;
 
 namespace TrianglesInSpace.Messaging
 {
