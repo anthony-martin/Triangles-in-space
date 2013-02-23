@@ -16,7 +16,7 @@ namespace TrianglesInSpace.Rendering
         private readonly SceneManager m_SceneManager;
         private readonly Disposer m_Disposer ;
 
-        public readonly List<NodeWithPosition> m_SceneNodes;
+        private readonly List<NodeWithPosition> m_SceneNodes;
 
         public Scene(IBus bus, SceneManager sceneManager)
         {
