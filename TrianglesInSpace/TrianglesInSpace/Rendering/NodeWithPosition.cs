@@ -24,15 +24,21 @@ namespace TrianglesInSpace.Rendering
 
         public CombinedMotion Motion
         {
-            get { return m_Motion; }
-            set { m_Motion = value; }
+            get
+            {
+                return m_Motion;
+            }
+            set
+            {
+                m_Motion = value;
+            }
         }
 
         public void UpdatePosition(ulong time)
         {
             var currenmtMotion = m_Motion.GetCurrentMotion(time);
             var currentPositon = currenmtMotion.GetCurrentPosition(time);
-            m_SceneNode.Position = new Vector3(currentPositon.X, 0.0, currentPositon.Y);
+            m_SceneNode.Position = VectorConversions.ToOgreVector(currentPositon);
 
             var rotation = new Primitives.Angle(currenmtMotion.GetVelocity(time));
             rotation.ReduceAngle();

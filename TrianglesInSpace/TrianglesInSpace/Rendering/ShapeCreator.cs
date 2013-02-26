@@ -29,7 +29,7 @@ namespace TrianglesInSpace.Rendering
 
                 using(var mesh = manualObject.ConvertToMesh("triangle"))
                 {
-                    mesh._setBounds(new AxisAlignedBox(1,1,1,-1,-1,-1));
+                    mesh._setBounds(new AxisAlignedBox(10,10,10,-10,-10,-10));
                     mesh.Load();
                 }
             }

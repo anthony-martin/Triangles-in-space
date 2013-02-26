@@ -33,7 +33,7 @@ namespace TrianglesInSpace.Rendering
             var entity = m_SceneManager.CreateEntity(name, shape);
             var node = m_SceneManager.RootSceneNode.CreateChildSceneNode(name);
             node.AttachObject(entity);
-
+            node.ShowBoundingBox = true;
             m_SceneNodes.Add(new NodeWithPosition(node, new CombinedMotion(DefaultMotion())));
         }
 

@@ -5,12 +5,12 @@ namespace TrianglesInSpace.Messages
 {
     public class SelectObjectAtMessage : IMessage
     {
-        public readonly Vector Position;
+        public readonly Vector WorldPosition;
         public readonly ulong Time;
 
-        public SelectObjectAtMessage(Vector position, ulong time)
+        public SelectObjectAtMessage(Vector worldPosition, ulong time)
         {
-            Position = position;
+            WorldPosition = worldPosition;
             Time = time;
         }
     }

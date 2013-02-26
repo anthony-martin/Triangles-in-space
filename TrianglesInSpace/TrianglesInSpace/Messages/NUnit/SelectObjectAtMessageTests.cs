@@ -17,7 +17,7 @@ namespace TrianglesInSpace.Messages.NUnit
 
             var deserialised = (SelectObjectAtMessage)serialiser.Deserialise(text);
 
-            Assert.AreEqual(original.Position, deserialised.Position);
+            Assert.AreEqual(original.WorldPosition, deserialised.WorldPosition);
             Assert.AreEqual(original.Time, deserialised.Time);
         }
     }

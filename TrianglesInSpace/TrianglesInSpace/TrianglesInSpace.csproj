@@ -116,9 +116,11 @@
     <Compile Include="Primitives\Vector.cs" />
     <Compile Include="Rendering\ClickMarker.cs" />
     <Compile Include="Rendering\NodeWithPosition.cs" />
+    <Compile Include="Rendering\NUnit\VectorConvesionTests.cs" />
     <Compile Include="Rendering\Renderer.cs" />
     <Compile Include="Rendering\Scene.cs" />
     <Compile Include="Rendering\ShapeCreator.cs" />
+    <Compile Include="Rendering\VectorConversions.cs" />
     <Compile Include="TestSpecification.cs" />
     <Compile Include="TrianglesInSpace.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -142,6 +144,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

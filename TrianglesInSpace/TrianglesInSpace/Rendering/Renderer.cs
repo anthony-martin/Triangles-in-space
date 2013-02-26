@@ -27,6 +27,7 @@ namespace TrianglesInSpace.Rendering
         private ulong m_Time;
 
         private readonly IBus m_Bus;
+        // needs to be initialised currently to path the object
         private readonly Path m_Path;
 
         public Renderer( IBus bus)

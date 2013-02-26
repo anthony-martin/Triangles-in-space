@@ -18,12 +18,18 @@ namespace TrianglesInSpace.Rendering
             m_Bus = bus;
 
             m_Disposer = new Disposer();
-            m_Bus.Subscribe<SetPathToTargetMessage>(MoveMarker).AddTo(m_Disposer);
+            //m_Bus.Subscribe<SetPathToTargetMessage>(MoveMarker).AddTo(m_Disposer);
+            m_Bus.Subscribe<SelectObjectAtMessage>(MoveMarker).AddTo(m_Disposer);
+        }
+
+        private void MoveMarker(SelectObjectAtMessage message)
+        {
+            m_Marker.Position = VectorConversions.ToOgreVector(message.WorldPosition); 
         }
 
         private void MoveMarker(SetPathToTargetMessage message)
         {
-            m_Marker.Position = new Vector3(message.WorldPosition.X, 0.0, message.WorldPosition.Y);
+            m_Marker.Position = VectorConversions.ToOgreVector(message.WorldPosition);
         }
 
         public void Dispose()
