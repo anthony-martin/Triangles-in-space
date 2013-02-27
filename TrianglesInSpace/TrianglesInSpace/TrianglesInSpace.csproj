@@ -79,11 +79,13 @@
     <Compile Include="Input\InputController.cs" />
     <Compile Include="Messages\NUnit\PathMessageTests.cs" />
     <Compile Include="Messages\NUnit\RequestPathMessageTests.cs" />
+    <Compile Include="Messages\NUnit\SelectedObjectMessageTests.cs" />
     <Compile Include="Messages\NUnit\SelectObjectAtMessageTests.cs" />
     <Compile Include="Messages\NUnit\SetPathToTargetTests.cs" />
     <Compile Include="Messages\NUnit\TimeUpdateMessageTests.cs" />
     <Compile Include="Messages\PathMessage.cs" />
     <Compile Include="Messages\RequestPathMessage.cs" />
+    <Compile Include="Messages\SelectedObjectMessage.cs" />
     <Compile Include="Messages\SelectObjectAtMessage.cs" />
     <Compile Include="Messages\SetPathToTargetMessage.cs" />
     <Compile Include="Messages\TimeUpdateMessage.cs" />
@@ -107,8 +109,10 @@
     <Compile Include="Motion\LinearMotion.cs" />
     <Compile Include="Motion\Nunit\CircularMotionTests.cs" />
     <Compile Include="Motion\Nunit\LinearMotionTests.cs" />
+    <Compile Include="Objects\NUnit\SelectableObjectRepositoryTests.cs" />
     <Compile Include="Motion\Nunit\PathTests.cs" />
     <Compile Include="Motion\Path.cs" />
+    <Compile Include="Objects\SelectableObjectRepository.cs" />
     <Compile Include="Primitives\Angle.cs" />
     <Compile Include="Primitives\NUnit\VectorTests.cs" />
     <Compile Include="Primitives\TurnDirection.cs" />

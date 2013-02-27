@@ -18,7 +18,7 @@ namespace TrianglesInSpace.Rendering
             m_Bus = bus;
 
             m_Disposer = new Disposer();
-            //m_Bus.Subscribe<SetPathToTargetMessage>(MoveMarker).AddTo(m_Disposer);
+            m_Bus.Subscribe<SetPathToTargetMessage>(MoveMarker).AddTo(m_Disposer);
             m_Bus.Subscribe<SelectObjectAtMessage>(MoveMarker).AddTo(m_Disposer);
         }
 
