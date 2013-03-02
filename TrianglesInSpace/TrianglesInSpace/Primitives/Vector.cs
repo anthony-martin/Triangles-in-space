@@ -100,5 +100,10 @@ namespace TrianglesInSpace.Primitives
                 return (X.GetHashCode() * 397) ^ Y.GetHashCode();
             }
         }
+
+        public override string ToString()
+        {
+            return "x = "+ X+", y = "+Y;
+        }
     }
 }
