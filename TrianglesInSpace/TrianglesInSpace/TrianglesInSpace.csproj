@@ -114,6 +114,8 @@
     <Compile Include="Motion\Path.cs" />
     <Compile Include="Objects\SelectableObjectRepository.cs" />
     <Compile Include="Primitives\Angle.cs" />
+    <Compile Include="Primitives\Box.cs" />
+    <Compile Include="Primitives\NUnit\BoxTests.cs" />
     <Compile Include="Primitives\NUnit\VectorTests.cs" />
     <Compile Include="Primitives\TurnDirection.cs" />
     <Compile Include="Primitives\NUnit\AngleTests.cs" />
