@@ -106,12 +106,15 @@
     <Compile Include="Motion\CombinedMotion.cs" />
     <Compile Include="Motion\CoordinateConversions.cs" />
     <Compile Include="Motion\IMotion.cs" />
+    <Compile Include="Motion\IPath.cs" />
     <Compile Include="Motion\LinearMotion.cs" />
     <Compile Include="Motion\Nunit\CircularMotionTests.cs" />
     <Compile Include="Motion\Nunit\LinearMotionTests.cs" />
     <Compile Include="Objects\NUnit\SelectableObjectRepositoryTests.cs" />
     <Compile Include="Motion\Nunit\PathTests.cs" />
     <Compile Include="Motion\Path.cs" />
+    <Compile Include="Objects\NUnit\SelectableObjectTests.cs" />
+    <Compile Include="Objects\SelectableObject.cs" />
     <Compile Include="Objects\SelectableObjectRepository.cs" />
     <Compile Include="Primitives\Angle.cs" />
     <Compile Include="Primitives\Box.cs" />

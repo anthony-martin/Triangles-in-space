@@ -8,20 +8,23 @@ namespace TrianglesInSpace.Objects
     public class SelectableObjectRepository
     {
         private readonly IBus m_Bus;
-        private readonly Dictionary<string, Path> m_Paths;
+        private readonly List<SelectableObject> m_Objects;
 
         public SelectableObjectRepository(IBus bus)
         {
             m_Bus = bus;
 
-            m_Paths = new Dictionary<string, Path>();
+            m_Objects = new List< SelectableObject>();
 
             m_Bus.Subscribe<SelectObjectAtMessage>(OnSelectObject);
         }
 
         private void OnSelectObject(SelectObjectAtMessage message)
         {
-
+            foreach (var selectableObject in m_Objects)
+            {
+                //selectableObject;
+            }
         }
     }
 }

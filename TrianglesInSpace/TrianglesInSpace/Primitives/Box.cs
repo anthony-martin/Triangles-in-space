@@ -1,4 +1,6 @@
-﻿namespace TrianglesInSpace.Primitives
+﻿using System.Diagnostics.Contracts;
+
+namespace TrianglesInSpace.Primitives
 {
     public struct Box
     {
@@ -37,6 +39,7 @@
         /// <summary>
         /// Checks to see if positionOne is within the box around positionTwo
         /// </summary>
+        [Pure]
         public bool Contains(Vector positionOne, Vector positionTwo)
         {
             var relativePosition = positionOne - positionTwo;
@@ -45,7 +48,6 @@
                    && relativePosition.X <= BottomRight.X
                    && relativePosition.Y >= BottomRight.Y
                    && relativePosition.Y <= TopLeft.Y;
-
         }
     }
 }

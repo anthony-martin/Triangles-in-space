@@ -9,10 +9,10 @@ using Math = System.Math;
 
 namespace TrianglesInSpace.Motion
 {
-    public class Path : IDisposable
+    public class Path : IPath, IDisposable
     {
-        private string m_Name;
-        private double m_Acceleration;
+        private readonly string m_Name;
+        private readonly double m_Acceleration;
         private IBus m_Bus;
         private Disposer m_Disposer;
 
