@@ -3,6 +3,8 @@ using NSubstitute;
 using NUnit.Framework;
 using TrianglesInSpace.Messages;
 using TrianglesInSpace.Messaging;
+using TrianglesInSpace.Motion;
+using TrianglesInSpace.Primitives;
 
 namespace TrianglesInSpace.Objects.NUnit
 {
@@ -21,7 +23,27 @@ namespace TrianglesInSpace.Objects.NUnit
         [Test]
         public void SubscribesToSelectObjectAtMessage()
         {
-            m_Bus.Received().Subscribe<SelectObjectAtMessage>(Arg.Any<Action<SelectObjectAtMessage>>());
+            m_Bus.Received().Subscribe(Arg.Any<Action<SelectObjectAtMessage>>());
+        }
+
+        [Test]
+        public void SendsSelectedObjectMessageIfOneObjectIntersects()
+        {
+            var position = new Vector(5,7);
+            var path = Get<IPath>();
+            var motion = Get<IMotion>();
+            const ulong currentTime = 500;
+            motion.GetCurrentPosition(currentTime).Returns(position);
+            path.GetCurrentMotion(currentTime).Returns(motion);
+            var selectableObject = new SelectableObject("fred", path);
+
+            var message = new SelectObjectAtMessage(position, currentTime);
+
+            m_Repository.AddObject(selectableObject);
+
+            m_Repository.OnSelectObject(message);
+
+            m_Bus.Received().Send(Arg.Any<SelectedObjectMessage>());
         }
     }
 }

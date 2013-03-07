@@ -27,8 +27,6 @@ namespace TrianglesInSpace.Rendering
         private ulong m_Time;
 
         private readonly IBus m_Bus;
-        // needs to be initialised currently to path the object
-        private readonly Path m_Path;
 
         public Renderer( IBus bus)
         {
@@ -47,7 +45,6 @@ namespace TrianglesInSpace.Rendering
             m_RenderWindow.GetCustomAttribute("WINDOW", out windowHandle);
             m_InputController = new InputController(windowHandle.ToString(), m_Camera, m_Bus);
 
-            m_Path = new Path(4, new CircularMotion(0, 50, new Primitives.Angle(0), new Primitives.Angle(Math.PI / 10), 20, Vector.Zero), m_Bus);
         }
 
         private void CreateRoot()
