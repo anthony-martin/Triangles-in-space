@@ -1,20 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using TrianglesInSpace.Disposers;
-using TrianglesInSpace.Messages;
-using TrianglesInSpace.Messaging;
 using TrianglesInSpace.Primitives;
 using Angle = TrianglesInSpace.Primitives.Angle;
 using Math = System.Math;
 
 namespace TrianglesInSpace.Motion
 {
-    public class Path : IPath, IDisposable
+    public class Path : IPath
     {
-        private readonly string m_Name;
         private readonly double m_Acceleration;
-        private IBus m_Bus;
-        private Disposer m_Disposer;
 
         private CombinedMotion m_Motion;
 
@@ -23,31 +17,14 @@ namespace TrianglesInSpace.Motion
             m_Acceleration = 0;
         }
 
-        public Path(double maximumAcceleration, IMotion startingMotion, IBus bus)
+        public Path(double maximumAcceleration, IMotion startingMotion)
         {
-            m_Name = "triangle";
-            m_Bus = bus;
-            m_Disposer = new Disposer();
-            m_Bus.Subscribe<SetPathToTargetMessage>(OnSetPathToTarget).AddTo(m_Disposer);
-            m_Bus.Subscribe<RequestPathMessage>(OnPathRequest).AddTo(m_Disposer);
             m_Acceleration = maximumAcceleration;
 
             m_Motion = new CombinedMotion(new List<IMotion>
            {
                startingMotion
            });
-        }
-
-        public void OnPathRequest(RequestPathMessage message)
-        {
-            m_Bus.Send(new PathMessage(m_Name, m_Motion.Path));
-        }
-
-        public void OnSetPathToTarget(SetPathToTargetMessage message)
-        {
-            var vector = message.WorldPosition;
-            MoveToDestination(vector, message.Time);
-            m_Bus.Send(new PathMessage(m_Name, m_Motion.Path));
         }
 
         public void MoveToDestination(Vector destination, ulong currentTime)
@@ -71,6 +48,13 @@ namespace TrianglesInSpace.Motion
             return m_Motion.GetCurrentMotion(currentTime);
         }
 
+        public IEnumerable<IMotion> Motion
+        {
+            get
+            {
+                return new List<IMotion>(m_Motion.Path);
+            }
+        }
 
         public List<IMotion> CreatePathTo(Vector destination, Vector initialVelocity, Vector initialPosition, ulong startTime)
         {
@@ -280,11 +264,6 @@ namespace TrianglesInSpace.Motion
             var turnAngle = start - end;
             var stuff = (turnAngle.Value / turnRate.Value) * -1000.0;
             return (ulong)(Math.Round(stuff));
-        }
-
-        public void Dispose()
-        {
-            m_Disposer.Dispose();
         }
     }
 }

@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using Mogre;
 using TrianglesInSpace.Input;
 using TrianglesInSpace.Messages;
 using TrianglesInSpace.Messaging;
-using TrianglesInSpace.Motion;
-using TrianglesInSpace.Primitives;
-using Math = System.Math;
 
 namespace TrianglesInSpace.Rendering
 {

@@ -1,4 +1,5 @@
-﻿using TrianglesInSpace.Motion;
+﻿using TrianglesInSpace.Messages;
+using TrianglesInSpace.Motion;
 using TrianglesInSpace.Primitives;
 
 namespace TrianglesInSpace.Objects
@@ -21,6 +22,14 @@ namespace TrianglesInSpace.Objects
             get
             {
                 return m_Name;
+            }
+        }
+
+        public IPath Path
+        {
+            get
+            {
+                return m_Path;
             }
         }
 

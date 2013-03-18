@@ -27,7 +27,7 @@ namespace TrianglesInSpace
 
 			    var selectableObjectRepository = new SelectableObjectRepository(bus);
 
-                var path = new Path(4, new CircularMotion(0, 50, new Primitives.Angle(0), new Primitives.Angle(Math.PI / 10), 20, Vector.Zero), bus);
+                var path = new Path(4, new CircularMotion(0, 50, new Angle(0), new Angle(Math.PI / 10), 20, Vector.Zero));
                 var selectableObject = new SelectableObject("triangle", path);
                 selectableObjectRepository.AddObject(selectableObject);
 

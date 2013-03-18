@@ -1,14 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using TrianglesInSpace.Disposers;
 using TrianglesInSpace.Messages;
 using TrianglesInSpace.Messaging;
+using TrianglesInSpace.Primitives;
 
 namespace TrianglesInSpace.Objects
 {
-    public class SelectableObjectRepository
+    public class SelectableObjectRepository : IDisposable
     {
         private readonly IBus m_Bus;
         private readonly List<SelectableObject> m_Objects;
+        private IList<SelectableObject> m_SelctedObject; 
+        private readonly Disposer m_Disposer;
 
         public SelectableObjectRepository(IBus bus)
         {
@@ -16,7 +21,11 @@ namespace TrianglesInSpace.Objects
 
             m_Objects = new List< SelectableObject>();
 
-            m_Bus.Subscribe<SelectObjectAtMessage>(OnSelectObject);
+            m_Disposer = new Disposer();
+
+            m_Bus.Subscribe<SelectObjectAtMessage>(OnSelectObject).AddTo(m_Disposer);
+            m_Bus.Subscribe<RequestPathMessage>(OnPathRequest).AddTo(m_Disposer);
+            m_Bus.Subscribe<SetPathToTargetMessage>(OnSetPath).AddTo(m_Disposer);
         }
 
         public void AddObject(SelectableObject newObject)
@@ -24,25 +33,54 @@ namespace TrianglesInSpace.Objects
             m_Objects.Add(newObject);
         }
 
-        public void OnSelectObject(SelectObjectAtMessage message)
+        public void OnPathRequest(RequestPathMessage message)
         {
-            var selected = new List<SelectableObject>();
-            int count = 0;
             foreach (var selectableObject in m_Objects)
             {
-                if(selectableObject.IntersectsPoint(message.WorldPosition, message.Time))
+                if (selectableObject.Name == message.Name)
                 {
-                    selected.Add(selectableObject);
-                    count++;
+                    m_Bus.Send(new PathMessage(selectableObject.Name,
+                                               selectableObject.Path.Motion));
                 }
             }
+        }
 
-            if(count == 1)
+        private void OnSetPath(SetPathToTargetMessage message)
+        {
+            foreach (var selectableObject in m_SelctedObject)
             {
-                m_Bus.Send(new SelectedObjectMessage(selected.First().Name));
+                selectableObject.Path.MoveToDestination(message.WorldPosition, message.Time);
+                m_Bus.Send(new PathMessage(selectableObject.Name,
+                                               selectableObject.Path.Motion));
             }
-            
+        }
 
+        public IList<SelectableObject> GetObjectAt(Vector worldPosition, ulong time)
+        {
+            var selected = new List<SelectableObject>();
+            foreach (var selectableObject in m_Objects)
+            {
+                if (selectableObject.IntersectsPoint(worldPosition, time))
+                {
+                    selected.Add(selectableObject);
+                }
+            }
+            return selected;
+        }
+
+        public void OnSelectObject(SelectObjectAtMessage message)
+        {
+            m_SelctedObject = GetObjectAt(message.WorldPosition, message.Time);
+
+            if (m_SelctedObject.Count == 1)
+            {
+                m_Bus.Send(new SelectedObjectMessage(m_SelctedObject.First().Name));
+            }
+        }
+
+        public void Dispose()
+        {
+            m_Disposer.Dispose();
         }
     }
 }

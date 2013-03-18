@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using TrianglesInSpace.Messaging;
-using TrianglesInSpace.Motion;
-using TrianglesInSpace.Primitives;
 
 namespace TrianglesInSpace.Messages.NUnit
 {
@@ -12,8 +8,8 @@ namespace TrianglesInSpace.Messages.NUnit
         [Test]
         public void MessageRoundTrip()
         {
-
-            var original = new RequestPathMessage();
+            const string name = "harry";
+            var original = new RequestPathMessage(name);
 
             var serialiser = new MessageSerialiser();
             serialiser.Register(typeof(RequestPathMessage));
@@ -23,6 +19,7 @@ namespace TrianglesInSpace.Messages.NUnit
             var deserialised = (RequestPathMessage)serialiser.Deserialise(text);
 
             Assert.NotNull(deserialised);
+            Assert.AreEqual(name, deserialised.Name);
         }
     }
 }

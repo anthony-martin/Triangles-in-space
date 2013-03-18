@@ -69,5 +69,13 @@ namespace TrianglesInSpace.Objects.NUnit
             Assert.True(intersects);
         }
 
+        [Test]
+        public void PathReturnsSameInstanceObjectWasCreatedWith()
+        {
+            IPath path = Get<IPath>();
+            var selectableObject = new SelectableObject("wizard", path);
+
+            Assert.AreEqual(path, selectableObject.Path);
+        }
     }
 }
