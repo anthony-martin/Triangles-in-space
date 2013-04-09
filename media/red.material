@@ -1,0 +1,13 @@
+material triangle/red
+{
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        colour_op_ex source1 src_manual src_current 1 0 0
+      }
+    }
+  }
+}

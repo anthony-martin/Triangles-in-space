@@ -26,6 +26,7 @@ namespace TrianglesInSpace.Rendering
             m_Disposer = new Disposer();
 
             m_Bus.Subscribe<PathMessage>(UpdateMotion).AddTo(m_Disposer);
+            m_Bus.Subscribe<SelectedObjectMessage>(OnSelected).AddTo(m_Disposer);
         }
 
         public void Add(string name, string shape)
@@ -33,8 +34,23 @@ namespace TrianglesInSpace.Rendering
             var entity = m_SceneManager.CreateEntity(name, shape);
             var node = m_SceneManager.RootSceneNode.CreateChildSceneNode(name);
             node.AttachObject(entity);
-            
+
+            using(var material = MaterialManager.Singleton.GetByName("triangle/white"))
+            {
+                entity.SetMaterial(material);
+            }
+
             m_SceneNodes.Add(new NodeWithPosition(node, new CombinedMotion(DefaultMotion())));
+        }
+
+        public void OnSelected(SelectedObjectMessage message)
+        {
+            var entity = m_SceneManager.GetEntity(message.SelectedName);
+
+            using (var material = MaterialManager.Singleton.GetByName("triangle/red"))
+            {
+                entity.SetMaterial(material);
+            }
         }
 
         private IEnumerable<IMotion> DefaultMotion()

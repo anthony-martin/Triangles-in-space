@@ -13,6 +13,7 @@ namespace TrianglesInSpace.Messaging
                 return new List<Type>
                 {
                     typeof(SelectObjectAtMessage),
+                    typeof(SelectedObjectMessage),
                     typeof(SetPathToTargetMessage),
                     typeof(PathMessage),
                     typeof(RequestPathMessage),
