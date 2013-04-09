@@ -45,7 +45,7 @@ namespace TrianglesInSpace.Objects
             }
         }
 
-        private void OnSetPath(SetPathToTargetMessage message)
+        public void OnSetPath(SetPathToTargetMessage message)
         {
             foreach (var selectableObject in m_SelctedObject)
             {
