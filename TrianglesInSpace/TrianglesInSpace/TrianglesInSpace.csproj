@@ -80,6 +80,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Input\InputController.cs" />
+    <Compile Include="Ioc\TriangleModule.cs" />
     <Compile Include="Messages\NUnit\PathMessageTests.cs" />
     <Compile Include="Messages\NUnit\RequestPathMessageTests.cs" />
     <Compile Include="Messages\NUnit\SelectedObjectMessageTests.cs" />
@@ -95,8 +96,10 @@
     <Compile Include="Messaging\FieldContractResolver.cs" />
     <Compile Include="Messaging\IBus.cs" />
     <Compile Include="Messaging\IMessage.cs" />
+    <Compile Include="Messaging\IMessageContext.cs" />
     <Compile Include="Messaging\IMessageRegistrationList.cs" />
     <Compile Include="Messaging\MessageBus.cs" />
+    <Compile Include="Messaging\MessageContext.cs" />
     <Compile Include="Messaging\MessageReceiver.cs" />
     <Compile Include="Messaging\MessageRegistrationList.cs" />
     <Compile Include="Messaging\MessageSerialiser.cs" />

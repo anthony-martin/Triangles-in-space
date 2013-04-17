@@ -13,20 +13,21 @@ namespace TrianglesInSpace.Messaging
     }
     public class MessageReceiver : IMessageReceiver, IDisposable
     {
-        private readonly ZmqContext m_Context;
+        private readonly IMessageContext m_Context;
         private Action<string> m_MessageHandlers;
         private ZmqSocket m_SubscribeSocket;
         private readonly object m_Lock;
 
         private readonly Thread m_MessageThread;
 
-        public MessageReceiver(ZmqContext context)
+        public MessageReceiver(IMessageContext context)
         {
             m_Context = context;
 
             m_Lock = new object();
 
             m_MessageThread = new Thread(SubscribeAndWait);
+            m_MessageThread.Start();
         }
 
         public Action AddListener(Action<string> onMessageReceived)

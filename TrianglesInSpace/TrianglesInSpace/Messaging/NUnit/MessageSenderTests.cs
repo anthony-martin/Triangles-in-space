@@ -1,23 +1,16 @@
 ﻿using NUnit.Framework;
-using ZeroMQ;
+using NSubstitute;
 
 namespace TrianglesInSpace.Messaging.NUnit
 {
     internal class MessageSenderTests : TestSpecification
     {
-        private ZmqContext m_Context;
+        private IMessageContext m_Context;
 
         [TestFixtureSetUp]
         public void CreateContext()
         {
-            m_Context = ZmqContext.Create();
-        }
-
-
-        [TestFixtureTearDown]
-        public void DiposeContext()
-        {
-            m_Context.Dispose();
+            m_Context = Substitute.For<IMessageContext>();
         }
 
         [Test]

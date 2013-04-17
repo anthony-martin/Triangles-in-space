@@ -13,13 +13,13 @@ namespace TrianglesInSpace.Messaging
 
     public class MessageSender : IMessageSender
     {
-        private readonly ZmqContext m_Context;
+        private readonly IMessageContext m_Context;
         private ZmqSocket m_PublishSocket;
         private ConcurrentQueue<string> m_MessageBuffer;  
 
         private readonly Thread m_MessageThread;
 
-        public MessageSender(ZmqContext context)
+        public MessageSender(IMessageContext context)
         {
             m_Context = context;
             m_MessageBuffer = new ConcurrentQueue<string>();
