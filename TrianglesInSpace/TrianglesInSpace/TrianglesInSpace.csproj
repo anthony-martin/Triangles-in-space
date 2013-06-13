@@ -81,6 +81,8 @@
     </Compile>
     <Compile Include="Input\InputController.cs" />
     <Compile Include="Ioc\TriangleModule.cs" />
+    <Compile Include="Messages\DeselectedObjectMessage.cs" />
+    <Compile Include="Messages\NUnit\DeselectObjectMessageTests.cs" />
     <Compile Include="Messages\NUnit\PathMessageTests.cs" />
     <Compile Include="Messages\NUnit\RequestPathMessageTests.cs" />
     <Compile Include="Messages\NUnit\SelectedObjectMessageTests.cs" />

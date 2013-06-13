@@ -70,12 +70,31 @@ namespace TrianglesInSpace.Objects
 
         public void OnSelectObject(SelectObjectAtMessage message)
         {
-            m_SelctedObject = GetObjectAt(message.WorldPosition, message.Time);
-
-            if (m_SelctedObject.Count == 1)
+            IList<SelectableObject> selectedObjects = GetObjectAt(message.WorldPosition, message.Time);
+            IList<SelectableObject> newlySelectedObjects;
+            IList<SelectableObject> deselectedObjects;
+            if (m_SelctedObject != null)
             {
-                m_Bus.Send(new SelectedObjectMessage(m_SelctedObject.First().Name));
+                newlySelectedObjects = selectedObjects.Where(x => !m_SelctedObject.Contains(x)).ToList();
+                deselectedObjects = m_SelctedObject.Where(x => !selectedObjects.Contains(x)).ToList();
             }
+            else
+            {
+                newlySelectedObjects = selectedObjects;
+                deselectedObjects = new List<SelectableObject>();
+            }
+            m_SelctedObject = selectedObjects;
+
+            if (newlySelectedObjects.Any())
+            {
+                m_Bus.Send(new SelectedObjectMessage(newlySelectedObjects.First().Name));
+            }
+
+            if (deselectedObjects.Any())
+            {
+                m_Bus.Send(new DeselectedObjectMessage(deselectedObjects.First().Name));
+            }
+            
         }
 
         public void Dispose()

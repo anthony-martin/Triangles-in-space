@@ -14,6 +14,7 @@ namespace TrianglesInSpace.Messaging
                 {
                     typeof(SelectObjectAtMessage),
                     typeof(SelectedObjectMessage),
+                    typeof(DeselectedObjectMessage),
                     typeof(SetPathToTargetMessage),
                     typeof(PathMessage),
                     typeof(RequestPathMessage),
