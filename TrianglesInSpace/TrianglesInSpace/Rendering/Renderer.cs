@@ -35,7 +35,7 @@ namespace TrianglesInSpace.Rendering
             InitializeResources();
             CreateScene();
             CreateFrameListeners();
-
+            var overlays = new OverlayScene();
             int windowHandle;
             m_RenderWindow.GetCustomAttribute("WINDOW", out windowHandle);
             m_InputController = new InputController(windowHandle.ToString(), m_Camera, m_Bus, m_Clock);
