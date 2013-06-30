@@ -5,6 +5,7 @@ using TrianglesInSpace.Disposers;
 using TrianglesInSpace.Messages;
 using TrianglesInSpace.Messaging;
 using TrianglesInSpace.Primitives;
+using TrianglesInSpace.Time;
 using Vector3 = Mogre.Vector3;
 
 namespace TrianglesInSpace.Input
@@ -13,18 +14,18 @@ namespace TrianglesInSpace.Input
     {
         private readonly Camera m_Camera;
         private readonly IBus m_Bus;
+        private readonly IClock m_Clock;
         private readonly InputManager m_InputManager;
         //private Keyboard m_Keyboard;
         private readonly Mouse m_Mouse;
 
         private readonly Disposer m_Disposer;
 
-        private ulong m_Time;
-
-        public InputController(string windowHandle, Camera camera, IBus bus)
+        public InputController(string windowHandle, Camera camera, IBus bus, IClock clock)
         {
             m_Camera = camera;
             m_Bus = bus;
+            m_Clock = clock;
 
             ParamList pl = new ParamList();
             pl.Insert("WINDOW", windowHandle);
@@ -43,19 +44,11 @@ namespace TrianglesInSpace.Input
             state.width = 800;
 
             m_Disposer  = new Disposer();
-
-            m_Bus.Subscribe<TimeUpdateMessage>(OnTimeUpdate).AddTo(m_Disposer);
-
         }
 
         public void Capture()
         {
             m_Mouse.Capture();
-        }
-
-        private void OnTimeUpdate(TimeUpdateMessage message)
-        {
-            m_Time = message.Time;
         }
 
         private bool MousePressed(MouseEvent mouseEvent, MouseButtonID id)
@@ -90,14 +83,14 @@ namespace TrianglesInSpace.Input
         {
             var worldPosition = FromScreenToWorldPosition(mouseEvent.state.X.abs, mouseEvent.state.Y.abs);
 
-            m_Bus.Send(new SetPathToTargetMessage(worldPosition, m_Time));
+            m_Bus.Send(new SetPathToTargetMessage(worldPosition, m_Clock.Time));
         }
 
         private void SelectObject(MouseEvent mouseEvent)
         {
             var worldPosition = FromScreenToWorldPosition(mouseEvent.state.X.abs, mouseEvent.state.Y.abs);
 
-            m_Bus.Send(new SelectObjectAtMessage(worldPosition, m_Time));
+            m_Bus.Send(new SelectObjectAtMessage(worldPosition, m_Clock.Time));
         }
 
         public void Dispose()

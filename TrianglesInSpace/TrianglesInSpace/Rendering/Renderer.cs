@@ -3,6 +3,7 @@ using Mogre;
 using TrianglesInSpace.Input;
 using TrianglesInSpace.Messages;
 using TrianglesInSpace.Messaging;
+using TrianglesInSpace.Time;
 
 namespace TrianglesInSpace.Rendering
 {
@@ -19,15 +20,13 @@ namespace TrianglesInSpace.Rendering
 
         private readonly InputController m_InputController;
 
-
-        private ulong m_Time;
-
         private readonly IBus m_Bus;
+        private readonly IClock m_Clock;
 
-        public Renderer( IBus bus)
+        public Renderer( IBus bus, IClock clock)
         {
             m_Bus = bus;
-            m_Time = 0;
+            m_Clock = clock;
 
             CreateRoot();
             DefineResources();
@@ -39,7 +38,7 @@ namespace TrianglesInSpace.Rendering
 
             int windowHandle;
             m_RenderWindow.GetCustomAttribute("WINDOW", out windowHandle);
-            m_InputController = new InputController(windowHandle.ToString(), m_Camera, m_Bus);
+            m_InputController = new InputController(windowHandle.ToString(), m_Camera, m_Bus, m_Clock);
 
         }
 
@@ -154,13 +153,12 @@ namespace TrianglesInSpace.Rendering
 
         private bool OnRenderingCompleted(FrameEvent evt)
         {
-            m_Time += (ulong)(evt.timeSinceLastFrame * 1000);
+            m_Clock.UpdateTime(evt.timeSinceLastFrame);
 
-            m_Bus.SendLocal(new TimeUpdateMessage(m_Time));
             m_InputController.Capture();
             ((MessageBus)m_Bus).ProcessMessages();
 
-            m_Scene.UpdatePosition(m_Time);
+            m_Scene.UpdatePosition(m_Clock.Time);
 
             return true;
         }
