@@ -23,12 +23,11 @@ namespace TrianglesInSpace.Objects.NUnit
             m_Repository = new SelectableObjectRepository(m_Bus);
 
             m_Position = new Vector(5, 7);
-            var path = Get<IPath>();
-            var motion = Get<IMotion>();
             m_TestTime = 500;
-            motion.GetCurrentPosition(m_TestTime).Returns(m_Position);
-            path.GetCurrentMotion(m_TestTime).Returns(motion);
-            m_SelectableObject = new SelectableObject("fred", path);
+
+            m_SelectableObject = CreateSelectableObjectAt(m_Position);
+
+            m_Repository.AddObject(m_SelectableObject);
         }
 
         [Test]
@@ -53,8 +52,6 @@ namespace TrianglesInSpace.Objects.NUnit
         {
             var message = new SelectObjectAtMessage(m_Position, m_TestTime);
 
-            m_Repository.AddObject(m_SelectableObject);
-
             m_Repository.OnSelectObject(message);
 
             m_Bus.Received().Send(Arg.Any<SelectedObjectMessage>());
@@ -63,8 +60,6 @@ namespace TrianglesInSpace.Objects.NUnit
         [Test]
         public void PathRequestSendsPathForNamedObject()
         {
-            m_Repository.AddObject(m_SelectableObject);
-
             m_Repository.OnPathRequest(new RequestPathMessage(m_SelectableObject.Name));
 
             m_Bus.Received().Send(Arg.Any<PathMessage>());
@@ -73,8 +68,6 @@ namespace TrianglesInSpace.Objects.NUnit
         [Test]
         public void PathRequestDoesNotSendForOtherObjects()
         {
-            m_Repository.AddObject(m_SelectableObject);
-
             m_Repository.OnPathRequest(new RequestPathMessage("Completely random string"));
 
             m_Bus.DidNotReceive().Send(Arg.Any<PathMessage>());
@@ -82,8 +75,6 @@ namespace TrianglesInSpace.Objects.NUnit
 
         public void SetPathToTargetOnlyWorksForSelectedObjects()
         {
-            m_Repository.AddObject(m_SelectableObject);
-
             m_Repository.OnSetPath(new SetPathToTargetMessage(m_Position, m_TestTime));
 
             m_Bus.DidNotReceive().Send(Arg.Any<PathMessage>());
@@ -94,13 +85,41 @@ namespace TrianglesInSpace.Objects.NUnit
         {
             var message = new SelectObjectAtMessage(m_Position, m_TestTime);
 
-            m_Repository.AddObject(m_SelectableObject);
-
             m_Repository.OnSelectObject(message);
 
             m_Repository.OnSetPath(new SetPathToTargetMessage(m_Position, m_TestTime));
 
             m_Bus.Received().Send(Arg.Any<PathMessage>());
+        }
+
+
+        [Test]
+        public void ClearsOldSelectedObject()
+        {
+            var message = new SelectObjectAtMessage(m_Position, m_TestTime);
+
+            var newPosition = new Vector(50, 5);
+
+            var secondObject = CreateSelectableObjectAt(newPosition);
+            m_Repository.AddObject(secondObject);
+            m_Repository.OnSelectObject(message);
+
+            m_Bus.DidNotReceive().Send(Arg.Any<DeselectedObjectMessage>());
+
+            m_Repository.OnSelectObject(new SelectObjectAtMessage(newPosition, m_TestTime));
+
+            m_Bus.Received().Send(Arg.Any<DeselectedObjectMessage>());
+        }
+
+        
+        private SelectableObject CreateSelectableObjectAt(Vector position)
+        {
+            var path = Get<IPath>();
+            var motion = Get<IMotion>();
+
+            motion.GetCurrentPosition(m_TestTime).Returns(position);
+            path.GetCurrentMotion(m_TestTime).Returns(motion);
+            return new SelectableObject("fred", path);
         }
     }
 }

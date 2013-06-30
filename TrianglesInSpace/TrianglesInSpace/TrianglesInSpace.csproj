@@ -139,6 +139,9 @@
     <Compile Include="Rendering\ShapeCreator.cs" />
     <Compile Include="Rendering\VectorConversions.cs" />
     <Compile Include="TestSpecification.cs" />
+    <Compile Include="Time\IClock.cs" />
+    <Compile Include="Time\NUnit\SynchronizedClocktests.cs" />
+    <Compile Include="Time\SynchronizedClock.cs" />
     <Compile Include="TrianglesInSpace.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
