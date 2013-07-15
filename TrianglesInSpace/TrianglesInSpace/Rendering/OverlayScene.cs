@@ -1,5 +1,7 @@
 ﻿using System;
 using Mogre;
+using TrianglesInSpace.Primitives;
+using Box = TrianglesInSpace.Primitives.Box;
 
 namespace TrianglesInSpace.Rendering
 {
@@ -10,10 +12,14 @@ namespace TrianglesInSpace.Rendering
 
     public class OverlayScene
     {
-        public OverlayScene()
-        {
-            OverlayContainer container = (OverlayContainer)OverlayManager.Singleton.CreateOverlayElement("Panel", "PanelName");
+        private Vector m_ScreenSize;
+        private Overlay m_Overlay;
+        private OverlayContainer m_Container;
 
+        public OverlayScene(Vector screenSize)
+        {
+            m_ScreenSize = screenSize;
+            
             //note we need to load a font if we want to use a font
             var font = FontManager.Singleton.Create("Arial", ResourceGroupManager.DEFAULT_RESOURCE_GROUP_NAME);
             font.SetParameter("type", "truetype");
@@ -21,27 +27,35 @@ namespace TrianglesInSpace.Rendering
             font.SetParameter("size", "16");
             font.SetParameter("resolution", "96");
             font.Load();
+            m_Container = (OverlayContainer)OverlayManager.Singleton.CreateOverlayElement("Panel", "PanelName");
 
             //note positions and sizes are in relative screen space
-            container.SetPosition(0.5, 0.5);
-            container.SetDimensions(0.1, 0.1);
-            container.MaterialName = "triangle/red";
+            m_Container.SetPosition(0.35, 0.3);
+            m_Container.SetDimensions(0.3, 0.5);
+            m_Container.MaterialName = "triangle/red";
 
 
-            TextAreaOverlayElement text = (TextAreaOverlayElement)OverlayManager.Singleton.CreateOverlayElement("TextArea", "host");
-            text.MetricsMode = GuiMetricsMode.GMM_PIXELS;
-            text.Caption = "hello world";
-            text.SetPosition(0,0);
-            text.SetDimensions(50,20);
-            text.CharHeight = 26;
-            text.FontName = "Arial";
-            text.ColourBottom = new ColourValue(0.3f, 0.5f, 0.3f);
-            text.ColourTop = new ColourValue(0.5f, 0.7f, 0.5f);
-            var overlay = OverlayManager.Singleton.Create("bob");
-            container.AddChild(text);
-            overlay.Add2D(container);
+            m_Overlay = OverlayManager.Singleton.Create("bob");
+            
+            m_Overlay.Add2D(m_Container);
 
-            overlay.Show();
+            m_Overlay.Show();
+        }
+
+        public void AddButton( string text, Vector positon, Vector dimensions )
+        {
+            // unique name or bang
+            TextAreaOverlayElement button = (TextAreaOverlayElement)OverlayManager.Singleton.CreateOverlayElement("TextArea", text);
+            button.MetricsMode = GuiMetricsMode.GMM_PIXELS;
+            button.Caption = text;
+            button.SetPosition(positon.X, positon.Y);
+            button.SetDimensions(dimensions.X, dimensions.Y);
+            button.CharHeight = 26;
+            button.FontName = "Arial";
+            button.ColourBottom = new ColourValue(0.3f, 0.5f, 0.3f);
+            button.ColourTop = new ColourValue(0.5f, 0.7f, 0.5f);
+
+            m_Container.AddChild(button);
         }
     }
 }

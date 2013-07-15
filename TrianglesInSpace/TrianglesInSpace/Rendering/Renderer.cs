@@ -1,8 +1,8 @@
 ﻿using System;
 using Mogre;
 using TrianglesInSpace.Input;
-using TrianglesInSpace.Messages;
 using TrianglesInSpace.Messaging;
+using TrianglesInSpace.Primitives;
 using TrianglesInSpace.Time;
 
 namespace TrianglesInSpace.Rendering
@@ -35,7 +35,9 @@ namespace TrianglesInSpace.Rendering
             InitializeResources();
             CreateScene();
             CreateFrameListeners();
-            var overlays = new OverlayScene();
+            var overlays = new OverlayScene(new Vector(800, 800));
+            overlays.AddButton("hello", Vector.Zero, new Vector(50,20));
+            overlays.AddButton("world", new Vector(0, 20), new Vector(50, 20));
             int windowHandle;
             m_RenderWindow.GetCustomAttribute("WINDOW", out windowHandle);
             m_InputController = new InputController(windowHandle.ToString(), m_Camera, m_Bus, m_Clock);
