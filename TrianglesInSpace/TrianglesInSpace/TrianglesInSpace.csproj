@@ -39,16 +39,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\clrzmq.3.0.0-beta2\lib\net40\clrzmq.dll</HintPath>
     </Reference>
-    <Reference Include="Miyagi, Version=1.3.0.24438, Culture=neutral, PublicKeyToken=44c6d7006c8aa432, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\OgreBins\Miyagi.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Miyagi.Backend.Mogre, Version=1.0.4948.24439, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\OgreBins\Miyagi.Backend.Mogre.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Mogre, Version=1.7.1.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Debug\Mogre.dll</HintPath>
