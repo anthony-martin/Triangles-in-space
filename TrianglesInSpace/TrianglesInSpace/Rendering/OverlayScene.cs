@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Drawing;
+using System.Windows.Forms;
 using Mogre;
 using TrianglesInSpace.Primitives;
 using Box = TrianglesInSpace.Primitives.Box;
@@ -44,18 +46,8 @@ namespace TrianglesInSpace.Rendering
 
         public void AddButton( string text, Vector positon, Vector dimensions )
         {
-            // unique name or bang
-            TextAreaOverlayElement button = (TextAreaOverlayElement)OverlayManager.Singleton.CreateOverlayElement("TextArea", text);
-            button.MetricsMode = GuiMetricsMode.GMM_PIXELS;
-            button.Caption = text;
-            button.SetPosition(positon.X, positon.Y);
-            button.SetDimensions(dimensions.X, dimensions.Y);
-            button.CharHeight = 26;
-            button.FontName = "Arial";
-            button.ColourBottom = new ColourValue(0.3f, 0.5f, 0.3f);
-            button.ColourTop = new ColourValue(0.5f, 0.7f, 0.5f);
-
-            m_Container.AddChild(button);
+            var button = new Button();
+            button.Size = new Size();
         }
     }
 }

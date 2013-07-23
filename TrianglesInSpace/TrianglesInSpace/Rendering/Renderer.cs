@@ -7,6 +7,10 @@ using TrianglesInSpace.Time;
 
 namespace TrianglesInSpace.Rendering
 {
+    public interface IRendered
+    {
+        
+    }
     public class Renderer : IDisposable
     {
         private Camera m_Camera;
@@ -31,13 +35,15 @@ namespace TrianglesInSpace.Rendering
             CreateRoot();
             DefineResources();
             CreateRenderSystem();
-            CreateRenderWindow();
+            InitialiseRoot();
+            
+            CreateRenderWindow("");
             InitializeResources();
             CreateScene();
             CreateFrameListeners();
-            var overlays = new OverlayScene(new Vector(800, 800));
-            overlays.AddButton("hello", Vector.Zero, new Vector(50,20));
-            overlays.AddButton("world", new Vector(0, 20), new Vector(50, 20));
+           // var overlays = new OverlayScene(new Vector(800, 800));
+           // overlays.AddButton("hello", Vector.Zero, new Vector(50,20));
+           // overlays.AddButton("world", new Vector(0, 20), new Vector(50, 20));
             int windowHandle;
             m_RenderWindow.GetCustomAttribute("WINDOW", out windowHandle);
             m_InputController = new InputController(windowHandle.ToString(), m_Camera, m_Bus, m_Clock);
@@ -92,25 +98,36 @@ namespace TrianglesInSpace.Rendering
             creator.CreateStar();
         }
         
-        private void CreateRenderWindow()
+        private void InitialiseRoot()
         {
-            m_RenderWindow = m_Root.Initialise(true, "Main Ogre Window");
+            m_Root.Initialise(false, "Main Ogre Window");
         }
 
 
         private void CreateScene()
         {
-            CreateCamera();
-
-            Viewport viewport = m_RenderWindow.AddViewport(m_Camera);
-            viewport.BackgroundColour = ColourValue.Black;
-            m_Camera.AspectRatio = (double)viewport.ActualWidth / (double)viewport.ActualHeight;
-
+            
+           
             m_SceneManager.AmbientLight = new ColourValue(1, 1, 1);
 
             CreateTriangleNode();
             CreateClickStar();
             LetThereBeLight();
+        }
+
+        public void CreateRenderWindow(string handle)
+        {
+            var form = new Form1();
+            CreateCamera();
+
+            NameValuePairList misc = new NameValuePairList();
+            misc["externalWindowHandle"] = form.Handle.ToString();
+            m_RenderWindow = m_Root.CreateRenderWindow("Main RenderWindow", 800, 600, false, misc);
+
+            Viewport viewport = m_RenderWindow.AddViewport(m_Camera);
+            viewport.BackgroundColour = ColourValue.Black;
+            m_Camera.AspectRatio = (double)viewport.ActualWidth / (double)viewport.ActualHeight;
+            form.Show();
         }
 
         private void CreateCamera()
@@ -121,6 +138,7 @@ namespace TrianglesInSpace.Rendering
             m_Camera.NearClipDistance = 5;
             m_Camera.FarClipDistance = 2501;
             m_Camera.LookAt(Vector3.ZERO);
+            m_Camera.AutoAspectRatio = true;
 
         }
 

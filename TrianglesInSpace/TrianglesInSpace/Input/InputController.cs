@@ -40,8 +40,8 @@ namespace TrianglesInSpace.Input
             m_Mouse = (MOIS.Mouse)m_InputManager.CreateInputObject(MOIS.Type.OISMouse, true);
             m_Mouse.MousePressed += MousePressed;
             var state = m_Mouse.MouseState;
-            state.height = 800;
-            state.width = 800;
+            state.height = m_Camera.Viewport.ActualHeight;
+            state.width = m_Camera.Viewport.ActualWidth;
 
             m_Disposer  = new Disposer();
         }
