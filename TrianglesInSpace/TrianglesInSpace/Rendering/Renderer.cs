@@ -4,28 +4,33 @@ using TrianglesInSpace.Input;
 using TrianglesInSpace.Messaging;
 using TrianglesInSpace.Primitives;
 using TrianglesInSpace.Time;
+using System.Windows.Interop;
+using System.Runtime.InteropServices;
 
 namespace TrianglesInSpace.Rendering
 {
-    public interface IRendered
+    public interface IRenderer
     {
-        
+        void CreateRenderWindow(string handle);
+        void StartRendering();
     }
-    public class Renderer : IDisposable
+    public class Renderer : HwndHost, IDisposable, IRenderer, IKeyboardInputSink
     {
         private Camera m_Camera;
         private SceneManager m_SceneManager;
         private Root m_Root;
         private RenderWindow m_RenderWindow;
-        private SceneNode m_TriangleNode;
+        //private SceneNode m_TriangleNode;
         private ClickMarker m_ClickMarker;
         private Scene m_Scene;
         private Light m_Light;
 
-        private readonly InputController m_InputController;
+        //private InputController m_InputController;
 
         private readonly IBus m_Bus;
         private readonly IClock m_Clock;
+
+        private bool m_Active = true;
 
         public Renderer( IBus bus, IClock clock)
         {
@@ -36,18 +41,7 @@ namespace TrianglesInSpace.Rendering
             DefineResources();
             CreateRenderSystem();
             InitialiseRoot();
-            
-            CreateRenderWindow("");
-            InitializeResources();
-            CreateScene();
-            CreateFrameListeners();
-           // var overlays = new OverlayScene(new Vector(800, 800));
-           // overlays.AddButton("hello", Vector.Zero, new Vector(50,20));
-           // overlays.AddButton("world", new Vector(0, 20), new Vector(50, 20));
-            int windowHandle;
-            m_RenderWindow.GetCustomAttribute("WINDOW", out windowHandle);
-            m_InputController = new InputController(windowHandle.ToString(), m_Camera, m_Bus, m_Clock);
-
+           
         }
 
         private void CreateRoot()
@@ -115,19 +109,67 @@ namespace TrianglesInSpace.Rendering
             LetThereBeLight();
         }
 
+        private const UInt32 WM_KEYDOWN = 0x0100;
+        private const UInt32 WM_KEYFIRST = 0x0100;
+        private const UInt32 WM_KEYLAST = 0x0108;
+        private const UInt32 WM_KEYUP = 0x0101;
+        private const UInt32 WM_LBUTTONDBLCLK = 0x0203;
+        private const UInt32 WM_LBUTTONDOWN = 0x0201;
+        private const UInt32 WM_LBUTTONUP = 0x0202;
+
+        protected override IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+        {
+            if (msg == 70 || msg == 7 || msg == 8 || msg == 641 || msg == 132 || msg == 32 || msg == 512 || msg == 642)
+            {
+                handled = false;
+                return IntPtr.Zero;
+            }
+            if (msg == WindowsConstants.WM_MOUSEACTIVATE)
+            {
+                SetFocus(hwnd);
+            }
+
+            
+            return IntPtr.Zero;
+        }
+
+        [DllImport("user32", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
+        internal static extern IntPtr SetFocus(IntPtr hwnd);
+
+        protected override  HandleRef BuildWindowCore(HandleRef hwndParent)
+        {
+
+            NameValuePairList misc = new NameValuePairList();
+            misc["parentWindowHandle"] = hwndParent.Handle.ToString();
+            m_RenderWindow = m_Root.CreateRenderWindow("Main RenderWindow", 800, 600, false, misc);
+            CreateCamera();
+            Viewport viewport = m_RenderWindow.AddViewport(m_Camera);
+            viewport.BackgroundColour = ColourValue.Black;
+            m_Camera.AspectRatio = (double)viewport.ActualWidth / (double)viewport.ActualHeight;
+
+            int windowHandle;
+            m_RenderWindow.GetCustomAttribute("WINDOW", out windowHandle);
+
+            return new HandleRef(this, new IntPtr(windowHandle));
+        }
+
+        protected override void DestroyWindowCore(HandleRef hwnd)
+        {
+            m_Active = false;
+        }
+
         public void CreateRenderWindow(string handle)
         {
-            var form = new Form1();
+           // var form = new Form1();
             CreateCamera();
 
             NameValuePairList misc = new NameValuePairList();
-            misc["externalWindowHandle"] = form.Handle.ToString();
+            misc["externalWindowHandle"] = handle;
             m_RenderWindow = m_Root.CreateRenderWindow("Main RenderWindow", 800, 600, false, misc);
 
             Viewport viewport = m_RenderWindow.AddViewport(m_Camera);
             viewport.BackgroundColour = ColourValue.Black;
             m_Camera.AspectRatio = (double)viewport.ActualWidth / (double)viewport.ActualHeight;
-            form.Show();
         }
 
         private void CreateCamera()
@@ -175,22 +217,33 @@ namespace TrianglesInSpace.Rendering
         {
             m_Clock.UpdateTime(evt.timeSinceLastFrame);
 
-            m_InputController.Capture();
+            //m_InputController.Capture();
             ((MessageBus)m_Bus).ProcessMessages();
 
             m_Scene.UpdatePosition(m_Clock.Time);
 
-            return true;
+            return m_Active;
         }
 
         public void StartRendering()
         {
+            InitializeResources();
+            CreateScene();
+            CreateFrameListeners();
+            // var overlays = new OverlayScene(new Vector(800, 800));
+            // overlays.AddButton("hello", Vector.Zero, new Vector(50,20));
+            // overlays.AddButton("world", new Vector(0, 20), new Vector(50, 20));
+            int windowHandle;
+            m_RenderWindow.GetCustomAttribute("WINDOW", out windowHandle);
+            SetFocus(new IntPtr(windowHandle));
+            //m_InputController = new InputController(windowHandle.ToString(), m_Camera, m_Bus, m_Clock);
+
             m_Root.StartRendering();
         }
 
         public void Dispose()
         {
-            m_InputController.Dispose();
+            //m_InputController.Dispose();
         }
     }
 }

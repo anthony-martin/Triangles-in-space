@@ -2,6 +2,7 @@
 using Ninject.Modules;
 using TrianglesInSpace.Messaging;
 using TrianglesInSpace.Time;
+using TrianglesInSpace.Rendering;
 
 namespace TrianglesInSpace.Ioc
 {
@@ -21,6 +22,7 @@ namespace TrianglesInSpace.Ioc
             Bind<IMessageRegistrationList>().To<MessageRegistrationList>();
             Bind<IMessageContext>().To<MessageContext>().InSingletonScope();
             Bind<IClock>().To<SynchronizedClock>().InSingletonScope();
+            Bind<IRenderer>().To<Renderer>().InSingletonScope();
         }
 
 

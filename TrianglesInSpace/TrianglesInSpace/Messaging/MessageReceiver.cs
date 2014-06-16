@@ -65,7 +65,7 @@ namespace TrianglesInSpace.Messaging
 
             m_SubscribeSocket.SubscribeAll();
             m_SubscribeSocket.Connect("epgm://239.1.1.1:9500");
-            m_SubscribeSocket.Bind("tcp://*:9501");
+            //m_SubscribeSocket.Bind("tcp://*:9501");
             m_SubscribeSocket.Connect("inproc://Local");
         }
 
@@ -74,7 +74,14 @@ namespace TrianglesInSpace.Messaging
             string message = string.Empty;
             while (message != "quit")
             {
-                message = Receive();
+                try
+                {
+                    message = Receive();
+                }
+                catch
+                {
+                    return;
+                }
                 Action<string> messageHandlers;
                 lock (m_Lock)
                 {
@@ -91,11 +98,11 @@ namespace TrianglesInSpace.Messaging
 
         public void Dispose()
         {
+            m_MessageThread.Abort();
             if (m_SubscribeSocket != null)
             {
                 m_SubscribeSocket.Dispose();
             }
-            //m_MessageThread.Abort();
         }
     }
 }

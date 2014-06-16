@@ -7,6 +7,7 @@ using TrianglesInSpace.Objects;
 using TrianglesInSpace.Primitives;
 using ZeroMQ;
 using TrianglesInSpace.Rendering;
+using TrianglesInSpace.Wpf;
 
 namespace TrianglesInSpace
 {
@@ -29,16 +30,21 @@ namespace TrianglesInSpace
                 //receiver.Listen();
                 //var bus = new MessageBus(new MessageSender(context), receiver, new MessageRegistrationList());
 
-
-
 			    var selectableObjectRepository = kernel.Get<SelectableObjectRepository>();
 
                 var path = new Path(4, new CircularMotion(0, 50, new Angle(0), new Angle(Math.PI / 10), 20, Vector.Zero));
                 var selectableObject = new SelectableObject("triangle", path);
                 selectableObjectRepository.AddObject(selectableObject);
 
-                var renderer = kernel.Get<Renderer>();
-                renderer.StartRendering();
+                //var renderer = kernel.Get<Renderer>();
+                //var form = kernel.Get<Form1>();
+                //form.GO();
+                //renderer.StartRendering();
+
+                var form = kernel.Get<GameFormWpf>();
+                form.GO();
+
+                kernel.Dispose();
 			}
 			catch (OperationCanceledException) { }
 		}
