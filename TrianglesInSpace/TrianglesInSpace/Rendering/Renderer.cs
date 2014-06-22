@@ -25,7 +25,7 @@ namespace TrianglesInSpace.Rendering
         private Scene m_Scene;
         private Light m_Light;
 
-        //private InputController m_InputController;
+        private InputController m_InputController;
 
         private readonly IBus m_Bus;
         private readonly IClock m_Clock;
@@ -119,17 +119,10 @@ namespace TrianglesInSpace.Rendering
 
         protected override IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
-            if (msg == 70 || msg == 7 || msg == 8 || msg == 641 || msg == 132 || msg == 32 || msg == 512 || msg == 642)
+            if (m_InputController != null)
             {
-                handled = false;
-                return IntPtr.Zero;
+                return m_InputController.WndProc(hwnd, msg, wParam, lParam, ref handled);
             }
-            if (msg == WindowsConstants.WM_MOUSEACTIVATE)
-            {
-                SetFocus(hwnd);
-            }
-
-            
             return IntPtr.Zero;
         }
 
@@ -236,14 +229,14 @@ namespace TrianglesInSpace.Rendering
             int windowHandle;
             m_RenderWindow.GetCustomAttribute("WINDOW", out windowHandle);
             SetFocus(new IntPtr(windowHandle));
-            //m_InputController = new InputController(windowHandle.ToString(), m_Camera, m_Bus, m_Clock);
+            m_InputController = new InputController(windowHandle.ToString(), m_Camera, m_Bus, m_Clock);
 
             m_Root.StartRendering();
         }
 
         public void Dispose()
         {
-            //m_InputController.Dispose();
+            m_InputController.Dispose();
         }
     }
 }
