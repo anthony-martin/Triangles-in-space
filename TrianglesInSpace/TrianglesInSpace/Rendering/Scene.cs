@@ -28,6 +28,12 @@ namespace TrianglesInSpace.Rendering
             m_Bus.Subscribe<PathMessage>(UpdateMotion).AddTo(m_Disposer);
             m_Bus.Subscribe<SelectedObjectMessage>(OnSelected).AddTo(m_Disposer);
             m_Bus.Subscribe<DeselectedObjectMessage>(OnDeselected).AddTo(m_Disposer);
+            m_Bus.Subscribe<AddObjectMessage>(OnAdd).AddTo(m_Disposer);
+        }
+
+        private void OnAdd(AddObjectMessage message)
+        {
+            Add(message.Name, message.Shape);
         }
 
         public void Add(string name, string shape)

@@ -31,14 +31,19 @@ namespace TrianglesInSpace.Wpf
             InitializeComponent();
         }
 
-        public GameFormWpf(IRenderer renderer)
+        public GameFormWpf(IRenderer renderer, IMainFormModel model)
         {
             m_Renderer = renderer;
+            DataContext = model;
+
             InitializeComponent();
 
             var host = m_Renderer as HwndHost;
             m_GameWindow.Child = host;
             host.MessageHook += onMessage;
+
+            
+
             //host.KeyDown += m_GameWindow_KeyDown;
            // m_Main
         }
@@ -64,6 +69,10 @@ namespace TrianglesInSpace.Wpf
         private void m_GameWindow_KeyDown(object sender, KeyEventArgs e)
         {
             //throw new NullReferenceException();
+        }
+
+        private void OnClick(object sender, RoutedEventArgs e)
+        {
         }
     }
 }

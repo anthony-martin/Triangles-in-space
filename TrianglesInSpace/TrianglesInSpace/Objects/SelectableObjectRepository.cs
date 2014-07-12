@@ -5,6 +5,7 @@ using TrianglesInSpace.Disposers;
 using TrianglesInSpace.Messages;
 using TrianglesInSpace.Messaging;
 using TrianglesInSpace.Primitives;
+using TrianglesInSpace.Motion;
 
 namespace TrianglesInSpace.Objects
 {
@@ -26,6 +27,14 @@ namespace TrianglesInSpace.Objects
             m_Bus.Subscribe<SelectObjectAtMessage>(OnSelectObject).AddTo(m_Disposer);
             m_Bus.Subscribe<RequestPathMessage>(OnPathRequest).AddTo(m_Disposer);
             m_Bus.Subscribe<SetPathToTargetMessage>(OnSetPath).AddTo(m_Disposer);
+            m_Bus.Subscribe<AddObjectMessage>(OnAdd).AddTo(m_Disposer);
+        }
+
+        private void OnAdd(AddObjectMessage message)
+        {
+            var path = new Path(4, new CircularMotion(0, 50, new Angle(0), new Angle(Math.PI / 10), 20, Vector.Zero));
+            var selectableObject = new SelectableObject(message.Name, path);
+            m_Objects.Add(selectableObject);
         }
 
         public void AddObject(SelectableObject newObject)

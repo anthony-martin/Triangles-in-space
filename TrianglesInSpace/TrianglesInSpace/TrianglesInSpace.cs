@@ -32,10 +32,6 @@ namespace TrianglesInSpace
 
 			    var selectableObjectRepository = kernel.Get<SelectableObjectRepository>();
 
-                var path = new Path(4, new CircularMotion(0, 50, new Angle(0), new Angle(Math.PI / 10), 20, Vector.Zero));
-                var selectableObject = new SelectableObject("triangle", path);
-                selectableObjectRepository.AddObject(selectableObject);
-
                 //var renderer = kernel.Get<Renderer>();
                 //var form = kernel.Get<Form1>();
                 //form.GO();

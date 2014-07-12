@@ -179,7 +179,7 @@ namespace TrianglesInSpace.Rendering
 
         private void CreateTriangleNode()
         {
-           m_Scene.Add("triangle", "triangle");
+           //m_Scene.Add("triangle", "triangle");
         }
 
         private void CreateClickStar()

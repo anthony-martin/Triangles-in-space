@@ -3,6 +3,7 @@ using Ninject.Modules;
 using TrianglesInSpace.Messaging;
 using TrianglesInSpace.Time;
 using TrianglesInSpace.Rendering;
+using TrianglesInSpace.Wpf;
 
 namespace TrianglesInSpace.Ioc
 {
@@ -23,6 +24,7 @@ namespace TrianglesInSpace.Ioc
             Bind<IMessageContext>().To<MessageContext>().InSingletonScope();
             Bind<IClock>().To<SynchronizedClock>().InSingletonScope();
             Bind<IRenderer>().To<Renderer>().InSingletonScope();
+            Bind<IMainFormModel>().To<MainFormModel>().InTransientScope();
         }
 
 

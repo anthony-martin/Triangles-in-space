@@ -90,6 +90,8 @@
     <Compile Include="Input\InputController.cs" />
     <Compile Include="Input\WindowsConstants.cs" />
     <Compile Include="Ioc\TriangleModule.cs" />
+    <Compile Include="Messages\AddObjectMessage.cs" />
+    <Compile Include="Messages\ChangeInputModeMessage.cs" />
     <Compile Include="Messages\DeselectedObjectMessage.cs" />
     <Compile Include="Messages\NUnit\DeselectObjectMessageTests.cs" />
     <Compile Include="Messages\NUnit\PathMessageTests.cs" />
@@ -135,6 +137,7 @@
     <Compile Include="Objects\SelectableObjectRepository.cs" />
     <Compile Include="Primitives\Angle.cs" />
     <Compile Include="Primitives\Box.cs" />
+    <Compile Include="Primitives\InputMode.cs" />
     <Compile Include="Primitives\NUnit\BoxTests.cs" />
     <Compile Include="Primitives\NUnit\VectorTests.cs" />
     <Compile Include="Primitives\TurnDirection.cs" />
@@ -157,6 +160,8 @@
     <Compile Include="Wpf\GameFormWpf.xaml.cs">
       <DependentUpon>GameFormWpf.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Wpf\MainFormModel.cs" />
+    <Compile Include="Wpf\RelayCommand.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

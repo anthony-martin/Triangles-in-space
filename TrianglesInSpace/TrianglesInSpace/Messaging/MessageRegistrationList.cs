@@ -19,6 +19,8 @@ namespace TrianglesInSpace.Messaging
                     typeof(PathMessage),
                     typeof(RequestPathMessage),
                     typeof(TimeUpdateMessage),
+                    typeof(AddObjectMessage),
+                    typeof(ChangeInputModeMessage),
                 };
             }
         }

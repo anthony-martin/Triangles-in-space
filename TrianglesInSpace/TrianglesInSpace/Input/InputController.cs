@@ -12,16 +12,17 @@ using System.Runtime.InteropServices;
 
 namespace TrianglesInSpace.Input
 {
+
     public class InputController : IDisposable
     {
         private readonly Camera m_Camera;
         private readonly IBus m_Bus;
         private readonly IClock m_Clock;
-        //private readonly InputManager m_InputManager;
-        //private Keyboard m_Keyboard;
-        //private readonly Mouse m_Mouse;
 
         private readonly Disposer m_Disposer;
+
+        private InputMode m_Mode = InputMode.Standard;
+        private int count = 0;
 
         public InputController(string windowHandle, Camera camera, IBus bus, IClock clock)
         {
@@ -36,21 +37,18 @@ namespace TrianglesInSpace.Input
             pl.Insert("w32_keyboard", "DISCL_FOREGROUND");
             pl.Insert("w32_keyboard", "DISCL_NONEXCLUSIVE");
 
-            //m_InputManager = MOIS.InputManager.CreateInputSystem(pl);
-
-            //m_Keyboard = (MOIS.Keyboard)m_InputManager.CreateInputObject(MOIS.Type.OISKeyboard, false);
-            //m_Mouse = (MOIS.Mouse)m_InputManager.CreateInputObject(MOIS.Type.OISMouse, true);
-            //m_Mouse.MousePressed += MousePressed;
-            //var state = m_Mouse.MouseState;
-            //state.height = m_Camera.Viewport.ActualHeight;
-            //state.width = m_Camera.Viewport.ActualWidth;
-
             m_Disposer  = new Disposer();
+
+            bus.Subscribe<ChangeInputModeMessage>(OnModeChanged).AddTo(m_Disposer);
+        }
+
+        private void OnModeChanged(ChangeInputModeMessage message)
+        {
+            m_Mode = message.Mode;
         }
 
         public void Capture()
         {
-            //m_Mouse.Capture();
         }
 
         [DllImport("user32", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
@@ -71,6 +69,25 @@ namespace TrianglesInSpace.Input
 
         public IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
+            switch(m_Mode)
+            {
+                case InputMode.Placement:
+                {
+                    PlacementMode(hwnd, msg, wParam, lParam, ref handled);
+                    break;
+                }
+                default:
+                {
+                    StandardMode(hwnd, msg, wParam, lParam, ref handled);
+                    break;
+                }
+            }
+
+            return IntPtr.Zero;
+        }
+
+        private IntPtr StandardMode(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+        {
             if (msg == WindowsConstants.WM_MOUSEACTIVATE)
             {
                 SetFocus(hwnd);
@@ -78,10 +95,8 @@ namespace TrianglesInSpace.Input
             }
             if (msg == WindowsConstants.WM_RBUTTONDOWN)
             {
-                IntPtr xy = lParam;
-                int x = unchecked((short)(long)xy);
-                int y = unchecked((short)((long)xy >> 16));
-                //NavigateToTarget(mouseEvent);
+                m_Bus.Send(new SetPathToTargetMessage(FromWinScreenToWorldPosition(hwnd, lParam), m_Clock.Time));
+                handled = true;
             }
             if (msg == WindowsConstants.WM_LBUTTONDOWN)
             {
@@ -95,17 +110,26 @@ namespace TrianglesInSpace.Input
             return IntPtr.Zero;
         }
 
-        private bool MousePressed(MouseEvent mouseEvent, MouseButtonID id)
+        private IntPtr PlacementMode(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
-            if (mouseEvent.state.ButtonDown(MouseButtonID.MB_Right))
+            if (msg == WindowsConstants.WM_RBUTTONDOWN)
             {
-                NavigateToTarget(mouseEvent);
+                m_Mode = InputMode.Standard;
+                handled = true;
             }
-            if (mouseEvent.state.ButtonDown(MouseButtonID.MB_Left))
+            if (msg == WindowsConstants.WM_LBUTTONDOWN)
             {
-                SelectObject(mouseEvent);
+                //SelectObject(mouseEvent);
+                //x and y are in screen coordinates need to convert those to scene coordinates.
+                //should be a case of converting to relative positions -1, 1 or 0,1 then using camera values
+                //m_Bus.Send(new SelectObjectAtMessage(FromWinScreenToWorldPosition(hwnd, lParam), m_Clock.Time));
+                m_Bus.Send(new AddObjectMessage(count.ToString()));
+                m_Mode = InputMode.Standard;
+                count++;
+
+                handled = true;
             }
-            return true;
+            return IntPtr.Zero;
         }
 
         private Vector FromWinScreenToWorldPosition(IntPtr hwnd, IntPtr param)
@@ -162,20 +186,6 @@ namespace TrianglesInSpace.Input
             var desiredPosition = cornerPosition + mouseOffset;
 
             return new Vector(desiredPosition.x, desiredPosition.z);
-        }
-
-        private void NavigateToTarget(MouseEvent mouseEvent)
-        {
-            var worldPosition = FromScreenToWorldPosition(mouseEvent.state.X.abs, mouseEvent.state.Y.abs);
-
-            m_Bus.Send(new SetPathToTargetMessage(worldPosition, m_Clock.Time));
-        }
-
-        private void SelectObject(MouseEvent mouseEvent)
-        {
-            var worldPosition = FromScreenToWorldPosition(mouseEvent.state.X.abs, mouseEvent.state.Y.abs);
-
-            m_Bus.Send(new SelectObjectAtMessage(worldPosition, m_Clock.Time));
         }
 
         public void Dispose()

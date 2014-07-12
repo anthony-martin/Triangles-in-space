@@ -22,10 +22,12 @@
                 KeyDown="m_GameWindow_KeyDown">
         </Border>
 
-        <TextBox Grid.Row="0"
+        <Button Grid.Row="0"
                  Grid.Column="1"
                  Width="200"
-                 Height="75"/>
+                 Height="75"
+                 Content="Add Ship"
+                 Command="{Binding Path=OnAdd}"/>
 
     </Grid>
 </Window>
