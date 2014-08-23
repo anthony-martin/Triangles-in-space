@@ -4,6 +4,8 @@ using TrianglesInSpace.Messaging;
 using TrianglesInSpace.Time;
 using TrianglesInSpace.Rendering;
 using TrianglesInSpace.Wpf;
+using TrianglesInSpace.Objects;
+using TrianglesInSpace.World;
 
 namespace TrianglesInSpace.Ioc
 {
@@ -25,6 +27,9 @@ namespace TrianglesInSpace.Ioc
             Bind<IClock>().To<SynchronizedClock>().InSingletonScope();
             Bind<IRenderer>().To<Renderer>().InSingletonScope();
             Bind<IMainFormModel>().To<MainFormModel>().InTransientScope();
+            Bind<IPlayerId>().To<PlayerId>().InSingletonScope();
+
+            Bind<IFieldDisplay>().To<FieldDisplay>().InSingletonScope();
         }
 
 

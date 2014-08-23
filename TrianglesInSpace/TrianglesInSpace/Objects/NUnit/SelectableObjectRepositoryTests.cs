@@ -15,12 +15,14 @@ namespace TrianglesInSpace.Objects.NUnit
         private SelectableObject m_SelectableObject;
         private Vector m_Position;
         private ulong m_TestTime;
+        private IPlayerId m_Id;
 
         [SetUp]
         public void SetUp()
         {
             m_Bus = Substitute.For<IBus>();
-            m_Repository = new SelectableObjectRepository(m_Bus);
+            m_Id = new PlayerId();
+            m_Repository = new SelectableObjectRepository(m_Bus, m_Id);
 
             m_Position = new Vector(5, 7);
             m_TestTime = 500;

@@ -15,10 +15,13 @@ namespace TrianglesInSpace.Objects
         private readonly List<SelectableObject> m_Objects;
         private IList<SelectableObject> m_SelctedObject; 
         private readonly Disposer m_Disposer;
+        private readonly IPlayerId m_Id;
 
-        public SelectableObjectRepository(IBus bus)
+        public SelectableObjectRepository(IBus bus,
+                                          IPlayerId id)
         {
             m_Bus = bus;
+            m_Id = id;
 
             m_Objects = new List< SelectableObject>();
 
@@ -27,13 +30,12 @@ namespace TrianglesInSpace.Objects
             m_Bus.Subscribe<SelectObjectAtMessage>(OnSelectObject).AddTo(m_Disposer);
             m_Bus.Subscribe<RequestPathMessage>(OnPathRequest).AddTo(m_Disposer);
             m_Bus.Subscribe<SetPathToTargetMessage>(OnSetPath).AddTo(m_Disposer);
-            m_Bus.Subscribe<AddObjectMessage>(OnAdd).AddTo(m_Disposer);
         }
 
         private void OnAdd(AddObjectMessage message)
         {
             var path = new Path(4, new CircularMotion(0, 50, new Angle(0), new Angle(Math.PI / 10), 20, Vector.Zero));
-            var selectableObject = new SelectableObject(message.Name, path);
+            var selectableObject = new SelectableObject(m_Id.Id ,message.Name, path);
             m_Objects.Add(selectableObject);
         }
 
@@ -96,7 +98,7 @@ namespace TrianglesInSpace.Objects
 
             if (newlySelectedObjects.Any())
             {
-                m_Bus.Send(new SelectedObjectMessage(newlySelectedObjects.First().Name));
+                m_Bus.Send(new SelectedObjectMessage(newlySelectedObjects.First().Name, newlySelectedObjects.First().Owner == m_Id.Id));
             }
 
             if (deselectedObjects.Any())

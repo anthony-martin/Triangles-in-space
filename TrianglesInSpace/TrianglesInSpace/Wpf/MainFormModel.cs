@@ -9,6 +9,8 @@ using TrianglesInSpace.Messaging;
 using TrianglesInSpace.Messages;
 using TrianglesInSpace.Primitives;
 using InputMode = TrianglesInSpace.Primitives.InputMode;
+using TrianglesInSpace.Objects;
+using TrianglesInSpace.World;
 
 namespace TrianglesInSpace.Wpf
 {
@@ -19,13 +21,25 @@ namespace TrianglesInSpace.Wpf
     {
         private readonly ICommand m_Add ;
         private readonly IBus m_Bus;
+        private IPlayerId m_Id;
+
+        private Guid m_PlayerOneId = Guid.NewGuid();
+        private Guid m_PlayerTwoId = Guid.NewGuid();
+        private readonly ICommand m_PlayerOne;
+        private readonly ICommand m_PlayerTwo;
 
         private int count = 0;
 
-        public MainFormModel(IBus bus)
+        public MainFormModel(IBus bus, 
+                             IPlayerId id,
+                             IFieldDisplay field)
         {
             m_Bus = bus;
+            m_Id = id;
+            m_Id.Id = m_PlayerOneId;
             m_Add = new RelayCommand(OnAddVessel, null);
+            m_PlayerOne = new RelayCommand(SetPlayerOne, null);
+            m_PlayerTwo = new RelayCommand(SetPlayerTwo, null);
         }
 
         public ICommand OnAdd
@@ -34,7 +48,6 @@ namespace TrianglesInSpace.Wpf
             {
                 return m_Add;
             }
-
         }
 
         private void OnAddVessel()
@@ -44,6 +57,32 @@ namespace TrianglesInSpace.Wpf
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public ICommand OnPlayerOne
+        {
+            get
+            {
+                return m_PlayerOne;
+            }
+        }
+
+        private void SetPlayerOne()
+        {
+            m_Id.Id = m_PlayerOneId;
+        }
+
+        public ICommand OnPlayerTwo
+        {
+            get
+            {
+                return m_PlayerTwo;
+            }
+        }
+
+        private void SetPlayerTwo()
+        {
+            m_Id.Id = m_PlayerTwoId;
+        }
 
         // Create the OnPropertyChanged method to raise the event 
         protected void OnPropertyChanged(string name)

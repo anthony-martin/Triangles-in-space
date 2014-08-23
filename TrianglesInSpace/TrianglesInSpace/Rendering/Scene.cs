@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Mogre;
 using TrianglesInSpace.Disposers;
 using TrianglesInSpace.Messages;
@@ -28,7 +29,6 @@ namespace TrianglesInSpace.Rendering
             m_Bus.Subscribe<PathMessage>(UpdateMotion).AddTo(m_Disposer);
             m_Bus.Subscribe<SelectedObjectMessage>(OnSelected).AddTo(m_Disposer);
             m_Bus.Subscribe<DeselectedObjectMessage>(OnDeselected).AddTo(m_Disposer);
-            m_Bus.Subscribe<AddObjectMessage>(OnAdd).AddTo(m_Disposer);
         }
 
         private void OnAdd(AddObjectMessage message)
@@ -52,21 +52,17 @@ namespace TrianglesInSpace.Rendering
 
         public void OnSelected(SelectedObjectMessage message)
         {
-            var entity = m_SceneManager.GetEntity(message.SelectedName);
-
-            using (var material = MaterialManager.Singleton.GetByName("triangle/red"))
+            foreach (var node in m_SceneNodes.Where(x => x.Name == message.SelectedName))
             {
-                entity.SetMaterial(material);
+                node.OnSelected(m_SceneManager, message.Owned);
             }
         }
 
         public void OnDeselected(DeselectedObjectMessage message)
         {
-            var entity = m_SceneManager.GetEntity(message.DeselectedName);
-
-            using (var material = MaterialManager.Singleton.GetByName("triangle/white"))
+            foreach (var node in m_SceneNodes.Where(x => x.Name == message.DeselectedName))
             {
-                entity.SetMaterial(material);
+                node.OnDeselected(m_SceneManager);
             }
         }
 

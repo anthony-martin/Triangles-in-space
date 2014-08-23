@@ -129,10 +129,12 @@
     <Compile Include="Motion\LinearMotion.cs" />
     <Compile Include="Motion\Nunit\CircularMotionTests.cs" />
     <Compile Include="Motion\Nunit\LinearMotionTests.cs" />
+    <Compile Include="Objects\IPlayerId.cs" />
     <Compile Include="Objects\NUnit\SelectableObjectRepositoryTests.cs" />
     <Compile Include="Motion\Nunit\PathTests.cs" />
     <Compile Include="Motion\Path.cs" />
     <Compile Include="Objects\NUnit\SelectableObjectTests.cs" />
+    <Compile Include="Objects\PlayerId.cs" />
     <Compile Include="Objects\SelectableObject.cs" />
     <Compile Include="Objects\SelectableObjectRepository.cs" />
     <Compile Include="Primitives\Angle.cs" />
@@ -157,6 +159,7 @@
     <Compile Include="Time\SynchronizedClock.cs" />
     <Compile Include="TrianglesInSpace.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="World\FieldDisplay.cs" />
     <Compile Include="Wpf\GameFormWpf.xaml.cs">
       <DependentUpon>GameFormWpf.xaml</DependentUpon>
     </Compile>
@@ -192,6 +195,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="World\NUnit\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

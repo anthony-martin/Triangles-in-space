@@ -9,6 +9,7 @@ using TrianglesInSpace.Time;
 using Vector3 = Mogre.Vector3;
 using System.Windows.Interop;
 using System.Runtime.InteropServices;
+using TrianglesInSpace.Objects;
 
 namespace TrianglesInSpace.Input
 {
@@ -19,16 +20,22 @@ namespace TrianglesInSpace.Input
         private readonly IBus m_Bus;
         private readonly IClock m_Clock;
 
+        private readonly IPlayerId m_PlayerId;
         private readonly Disposer m_Disposer;
 
         private InputMode m_Mode = InputMode.Standard;
         private int count = 0;
 
-        public InputController(string windowHandle, Camera camera, IBus bus, IClock clock)
+        public InputController(string windowHandle, 
+                               Camera camera, 
+                               IBus bus, 
+                               IClock clock,
+                               IPlayerId id)
         {
             m_Camera = camera;
             m_Bus = bus;
             m_Clock = clock;
+            m_PlayerId = id;
 
             ParamList pl = new ParamList();
             pl.Insert("WINDOW", windowHandle);
@@ -95,7 +102,7 @@ namespace TrianglesInSpace.Input
             }
             if (msg == WindowsConstants.WM_RBUTTONDOWN)
             {
-                m_Bus.Send(new SetPathToTargetMessage(FromWinScreenToWorldPosition(hwnd, lParam), m_Clock.Time));
+                m_Bus.SendLocal(new SetPathToTargetMessage(FromWinScreenToWorldPosition(hwnd, lParam), m_Clock.Time));
                 handled = true;
             }
             if (msg == WindowsConstants.WM_LBUTTONDOWN)
@@ -103,7 +110,7 @@ namespace TrianglesInSpace.Input
                 //SelectObject(mouseEvent);
                 //x and y are in screen coordinates need to convert those to scene coordinates.
                 //should be a case of converting to relative positions -1, 1 or 0,1 then using camera values
-                m_Bus.Send(new SelectObjectAtMessage(FromWinScreenToWorldPosition(hwnd, lParam), m_Clock.Time));
+                m_Bus.SendLocal(new SelectObjectAtMessage(FromWinScreenToWorldPosition(hwnd, lParam), m_Clock.Time));
                 handled = true;
             }
 
@@ -123,7 +130,7 @@ namespace TrianglesInSpace.Input
                 //x and y are in screen coordinates need to convert those to scene coordinates.
                 //should be a case of converting to relative positions -1, 1 or 0,1 then using camera values
                 //m_Bus.Send(new SelectObjectAtMessage(FromWinScreenToWorldPosition(hwnd, lParam), m_Clock.Time));
-                m_Bus.Send(new AddObjectMessage(count.ToString()));
+                m_Bus.Send(new AddObjectMessage(m_PlayerId.Id, count.ToString()));
                 m_Mode = InputMode.Standard;
                 count++;
 

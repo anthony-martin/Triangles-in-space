@@ -6,6 +6,7 @@ using TrianglesInSpace.Primitives;
 using TrianglesInSpace.Time;
 using System.Windows.Interop;
 using System.Runtime.InteropServices;
+using TrianglesInSpace.Objects;
 
 namespace TrianglesInSpace.Rendering
 {
@@ -13,6 +14,7 @@ namespace TrianglesInSpace.Rendering
     {
         void CreateRenderWindow(string handle);
         void StartRendering();
+        Scene Scene {get;}
     }
     public class Renderer : HwndHost, IDisposable, IRenderer, IKeyboardInputSink
     {
@@ -29,19 +31,30 @@ namespace TrianglesInSpace.Rendering
 
         private readonly IBus m_Bus;
         private readonly IClock m_Clock;
+        private IPlayerId m_PlayerId;
 
         private bool m_Active = true;
 
-        public Renderer( IBus bus, IClock clock)
+        public Renderer( IBus bus, IClock clock, IPlayerId playerId)
         {
             m_Bus = bus;
             m_Clock = clock;
+
+            m_PlayerId = playerId;
 
             CreateRoot();
             DefineResources();
             CreateRenderSystem();
             InitialiseRoot();
            
+        }
+
+        public Scene Scene 
+        { 
+            get
+            {
+                return m_Scene;
+            }
         }
 
         private void CreateRoot()
@@ -229,7 +242,7 @@ namespace TrianglesInSpace.Rendering
             int windowHandle;
             m_RenderWindow.GetCustomAttribute("WINDOW", out windowHandle);
             SetFocus(new IntPtr(windowHandle));
-            m_InputController = new InputController(windowHandle.ToString(), m_Camera, m_Bus, m_Clock);
+            m_InputController = new InputController(windowHandle.ToString(), m_Camera, m_Bus, m_Clock, m_PlayerId);
 
             m_Root.StartRendering();
         }

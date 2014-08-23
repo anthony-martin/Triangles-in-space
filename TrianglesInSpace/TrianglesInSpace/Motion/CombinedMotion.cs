@@ -23,10 +23,10 @@ namespace TrianglesInSpace.Motion
             }
             while (index > 0 && pathSegment.StartTime > currentTime);
 
-            if (index != 0)
-            {
-                m_Path.RemoveRange(0, index);
-            }
+            //if (index != 0)
+            //{
+            //    m_Path.RemoveRange(0, index);
+            //}
 
             return pathSegment;
         }
