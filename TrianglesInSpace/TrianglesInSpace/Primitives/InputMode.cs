@@ -9,7 +9,8 @@ namespace TrianglesInSpace.Primitives
     public enum InputMode
     {
         Standard,
-        Placement
+        Placement,
+        Attack
 
     }
 }

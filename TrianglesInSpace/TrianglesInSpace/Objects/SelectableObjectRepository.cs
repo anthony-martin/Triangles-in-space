@@ -9,7 +9,11 @@ using TrianglesInSpace.Motion;
 
 namespace TrianglesInSpace.Objects
 {
-    public class SelectableObjectRepository : IDisposable
+    public interface ISelectableObjectRepository
+    {
+        void AddObject(SelectableObject newObject);
+    }
+    public class SelectableObjectRepository : IDisposable, ISelectableObjectRepository
     {
         private readonly IBus m_Bus;
         private readonly List<SelectableObject> m_Objects;

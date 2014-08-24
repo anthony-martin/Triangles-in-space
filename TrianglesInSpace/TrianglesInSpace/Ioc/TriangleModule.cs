@@ -27,8 +27,9 @@ namespace TrianglesInSpace.Ioc
             Bind<IClock>().To<SynchronizedClock>().InSingletonScope();
             Bind<IRenderer>().To<Renderer>().InSingletonScope();
             Bind<IMainFormModel>().To<MainFormModel>().InTransientScope();
-            Bind<IPlayerId>().To<PlayerId>().InSingletonScope();
 
+            Bind<IPlayerId>().To<PlayerId>().InSingletonScope();
+            Bind<ISelectableObjectRepository>().To<SelectableObjectRepository>().InSingletonScope();
             Bind<IFieldDisplay>().To<FieldDisplay>().InSingletonScope();
         }
 

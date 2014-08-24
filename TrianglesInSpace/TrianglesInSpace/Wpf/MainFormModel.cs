@@ -28,6 +28,8 @@ namespace TrianglesInSpace.Wpf
         private readonly ICommand m_PlayerOne;
         private readonly ICommand m_PlayerTwo;
 
+        private readonly ICommand m_Attack;
+
         private int count = 0;
 
         public MainFormModel(IBus bus, 
@@ -40,6 +42,8 @@ namespace TrianglesInSpace.Wpf
             m_Add = new RelayCommand(OnAddVessel, null);
             m_PlayerOne = new RelayCommand(SetPlayerOne, null);
             m_PlayerTwo = new RelayCommand(SetPlayerTwo, null);
+
+            m_Attack = new RelayCommand(OnAttackMode, null);
         }
 
         public ICommand OnAdd
@@ -53,6 +57,20 @@ namespace TrianglesInSpace.Wpf
         private void OnAddVessel()
         {
             m_Bus.Send(new ChangeInputModeMessage(InputMode.Placement));
+            //count++;
+        }
+
+        public ICommand OnAttack
+        {
+            get
+            {
+                return m_Attack;
+            }
+        }
+
+        private void OnAttackMode()
+        {
+            m_Bus.Send(new ChangeInputModeMessage(InputMode.Attack));
             //count++;
         }
 

@@ -152,6 +152,7 @@
     <Compile Include="Rendering\Renderer.cs" />
     <Compile Include="Rendering\Scene.cs" />
     <Compile Include="Rendering\ShapeCreator.cs" />
+    <Compile Include="Rendering\TargetedVesselRenderer.cs" />
     <Compile Include="Rendering\VectorConversions.cs" />
     <Compile Include="TestSpecification.cs" />
     <Compile Include="Time\IClock.cs" />

@@ -12,10 +12,23 @@ namespace TrianglesInSpace.Rendering
         private List<SceneNode> m_SelectedNodes;
         private bool m_Selected = false;
 
+        private readonly string m_PathId;
+
 
         public NodeWithPosition(SceneNode sceneNode, CombinedMotion startingMotion)
         {
             m_SceneNode = sceneNode;
+            m_PathId = m_SceneNode.Name;
+            m_Motion = startingMotion;
+
+            m_SelectedNodes = new List<SceneNode>();
+            m_SelectedNodes.Add(sceneNode);
+        }
+
+        public NodeWithPosition(SceneNode sceneNode, string pathid, CombinedMotion startingMotion)
+        {
+            m_SceneNode = sceneNode;
+            m_PathId = pathid;
             m_Motion = startingMotion;
 
             m_SelectedNodes = new List<SceneNode>();
@@ -27,6 +40,14 @@ namespace TrianglesInSpace.Rendering
             get
             {
                 return m_SceneNode.Name;
+            }
+        }
+
+        public string PathId
+        {
+            get
+            {
+                return m_PathId;
             }
         }
 

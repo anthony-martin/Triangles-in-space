@@ -13,6 +13,7 @@ namespace TrianglesInSpace.Rendering
 
         public void CreateUnitTrianlge()
         {
+
             using (var manualObject = m_SceneManager.CreateManualObject("Triangle"))
             {
                 manualObject.Begin("blue");
@@ -27,9 +28,9 @@ namespace TrianglesInSpace.Rendering
 
                 manualObject.End();
 
-                using(var mesh = manualObject.ConvertToMesh("triangle"))
+                using (var mesh = manualObject.ConvertToMesh("triangle"))
                 {
-                    mesh._setBounds(new AxisAlignedBox(10,10,10,-10,-10,-10));
+                    mesh._setBounds(new AxisAlignedBox(10, 10, 10, -10, -10, -10));
                     mesh.Load();
                 }
             }
@@ -99,5 +100,28 @@ namespace TrianglesInSpace.Rendering
                 }
             }
         }
+
+        public void CreateSquare()
+        {
+            Vector3 normal = new Vector3(0, 1, 0);
+
+            using (var mesh = MeshManager.Singleton.CreatePlane("square", 
+                                                                ResourceGroupManager.DEFAULT_RESOURCE_GROUP_NAME, 
+                                                                new Plane(normal, 0), 
+                                                                20, 
+                                                                20, 
+                                                                1, 
+                                                                1, 
+                                                                true, 
+                                                                1, 
+                                                                1, 
+                                                                1, 
+                                                                Vector3.UNIT_X))
+            {
+                mesh.Load();
+            }
+
+        }
+
     }
 }

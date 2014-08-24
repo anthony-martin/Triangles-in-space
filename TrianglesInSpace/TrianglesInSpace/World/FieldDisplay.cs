@@ -22,12 +22,12 @@ namespace TrianglesInSpace.World
         private readonly IBus m_Bus;
 
         private readonly Disposer m_Disposer;
-        private SelectableObjectRepository m_SelectableRepo;
+        private ISelectableObjectRepository m_SelectableRepo;
         private IRenderer m_Renderer;
         private Scene m_Scene;
 
         public FieldDisplay(IBus bus,
-                            SelectableObjectRepository selectableRepo,
+                            ISelectableObjectRepository selectableRepo,
                             IRenderer renderer,
                             IPlayerId id)
         {
@@ -48,6 +48,7 @@ namespace TrianglesInSpace.World
 
             m_SelectableRepo.AddObject(selectableObject);
             m_Renderer.Scene.Add(message.Name, message.Shape);
+            m_Renderer.Scene.Add(message.Name + "target", message.Name, "square", "target_highlight");
         }
 
         public IPlayerId m_Id { get; set; }

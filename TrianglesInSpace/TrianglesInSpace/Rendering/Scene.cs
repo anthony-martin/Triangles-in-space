@@ -50,6 +50,20 @@ namespace TrianglesInSpace.Rendering
             m_SceneNodes.Add(new NodeWithPosition(node, new CombinedMotion(DefaultMotion())));
         }
 
+        public void Add(string name, string pathId, string shape, string materialName = "triangle/white")
+        {
+            var entity = m_SceneManager.CreateEntity(name, shape);
+            var node = m_SceneManager.RootSceneNode.CreateChildSceneNode(name);
+            node.AttachObject(entity);
+
+            using (var material = MaterialManager.Singleton.GetByName(materialName))
+            {
+                entity.SetMaterial(material);
+            }
+
+            m_SceneNodes.Add(new NodeWithPosition(node, pathId, new CombinedMotion(DefaultMotion())));
+        }
+
         public void OnSelected(SelectedObjectMessage message)
         {
             foreach (var node in m_SceneNodes.Where(x => x.Name == message.SelectedName))
@@ -76,8 +90,13 @@ namespace TrianglesInSpace.Rendering
 
         private void UpdateMotion(PathMessage message)
         {
-            NodeWithPosition node = m_SceneNodes.Find(x => x.Name == message.Name);
-            node.Motion = message.Motion;
+            foreach( var node in m_SceneNodes)
+            {
+                if (node.PathId == message.Name)
+                {
+                    node.Motion = message.Motion;
+                }
+            }
         }
 
         public void UpdatePosition(ulong time)

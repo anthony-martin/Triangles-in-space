@@ -103,6 +103,7 @@ namespace TrianglesInSpace.Rendering
             var creator = new ShapeCreator(m_SceneManager);
             creator.CreateUnitTrianlge();
             creator.CreateStar();
+            creator.CreateSquare();
         }
         
         private void InitialiseRoot()
