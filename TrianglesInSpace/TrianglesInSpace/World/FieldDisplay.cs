@@ -29,7 +29,8 @@ namespace TrianglesInSpace.World
         public FieldDisplay(IBus bus,
                             ISelectableObjectRepository selectableRepo,
                             IRenderer renderer,
-                            IPlayerId id)
+                            IPlayerId id,
+                            ITargetedVesselRenderer _)
         {
             m_Bus = bus;
             m_Renderer = renderer;
@@ -48,7 +49,6 @@ namespace TrianglesInSpace.World
 
             m_SelectableRepo.AddObject(selectableObject);
             m_Renderer.Scene.Add(message.Name, message.Shape);
-            m_Renderer.Scene.Add(message.Name + "target", message.Name, "square", "target_highlight");
         }
 
         public IPlayerId m_Id { get; set; }

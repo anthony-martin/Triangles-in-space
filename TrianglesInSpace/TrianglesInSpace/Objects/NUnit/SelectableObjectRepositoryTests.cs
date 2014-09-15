@@ -5,6 +5,7 @@ using TrianglesInSpace.Messages;
 using TrianglesInSpace.Messaging;
 using TrianglesInSpace.Motion;
 using TrianglesInSpace.Primitives;
+using TrianglesInSpace.Vessels;
 
 namespace TrianglesInSpace.Objects.NUnit
 {
@@ -16,13 +17,16 @@ namespace TrianglesInSpace.Objects.NUnit
         private Vector m_Position;
         private ulong m_TestTime;
         private IPlayerId m_Id;
+        private IVesselRepository m_VesselRepo;
 
         [SetUp]
         public void SetUp()
         {
             m_Bus = Substitute.For<IBus>();
             m_Id = new PlayerId();
-            m_Repository = new SelectableObjectRepository(m_Bus, m_Id);
+            m_VesselRepo = Substitute.For<IVesselRepository>();
+
+            m_Repository = new SelectableObjectRepository(m_Bus, m_Id, m_VesselRepo);
 
             m_Position = new Vector(5, 7);
             m_TestTime = 500;

@@ -6,6 +6,7 @@ using TrianglesInSpace.Rendering;
 using TrianglesInSpace.Wpf;
 using TrianglesInSpace.Objects;
 using TrianglesInSpace.World;
+using TrianglesInSpace.Vessels;
 
 namespace TrianglesInSpace.Ioc
 {
@@ -31,6 +32,9 @@ namespace TrianglesInSpace.Ioc
             Bind<IPlayerId>().To<PlayerId>().InSingletonScope();
             Bind<ISelectableObjectRepository>().To<SelectableObjectRepository>().InSingletonScope();
             Bind<IFieldDisplay>().To<FieldDisplay>().InSingletonScope();
+            Bind<ITargetedVesselRenderer>().To<TargetedVesselRenderer>().InSingletonScope();
+
+            Bind<IVesselRepository>().To<VesselRepository>().InSingletonScope();
         }
 
 

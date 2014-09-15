@@ -1,12 +1,14 @@
-﻿using Mogre;
+﻿using System;
+using Mogre;
 using TrianglesInSpace.Motion;
 using System.Collections.Generic;
 
 namespace TrianglesInSpace.Rendering
 {
-    public class NodeWithPosition
+    public class NodeWithPosition : IDisposable 
     {
         private readonly SceneNode m_SceneNode;
+        private readonly SceneManager m_Manager;
         private CombinedMotion m_Motion;
 
         private List<SceneNode> m_SelectedNodes;
@@ -14,22 +16,26 @@ namespace TrianglesInSpace.Rendering
 
         private readonly string m_PathId;
 
-
-        public NodeWithPosition(SceneNode sceneNode, CombinedMotion startingMotion)
+        //todo add the scene manager to the constructor or get rid of it's usage here completely prefferable the later
+        public NodeWithPosition(SceneNode sceneNode, CombinedMotion startingMotion, SceneManager manager)
         {
             m_SceneNode = sceneNode;
             m_PathId = m_SceneNode.Name;
             m_Motion = startingMotion;
 
+            m_Manager = manager;
+
             m_SelectedNodes = new List<SceneNode>();
             m_SelectedNodes.Add(sceneNode);
         }
 
-        public NodeWithPosition(SceneNode sceneNode, string pathid, CombinedMotion startingMotion)
+        public NodeWithPosition(SceneNode sceneNode, string pathid, CombinedMotion startingMotion, SceneManager manager)
         {
             m_SceneNode = sceneNode;
             m_PathId = pathid;
             m_Motion = startingMotion;
+
+            m_Manager = manager;
 
             m_SelectedNodes = new List<SceneNode>();
             m_SelectedNodes.Add(sceneNode);
@@ -82,9 +88,9 @@ namespace TrianglesInSpace.Rendering
             }
         }
 
-        public void OnSelected(SceneManager manager, bool owned)
+        public void OnSelected( bool owned)
         {
-            var entity = manager.GetEntity(m_SceneNode.Name);
+            var entity = m_Manager.GetEntity(m_SceneNode.Name);
 
             string materialName;
 
@@ -109,8 +115,8 @@ namespace TrianglesInSpace.Rendering
                     for(int i = 0; i < 10; i++)
                     {
                         string markerName = m_SceneNode.Name+"markerName"+ i;
-                        var pathMarker = manager.CreateEntity(markerName, "triangle");
-                        var node = manager.RootSceneNode.CreateChildSceneNode(markerName);
+                        var pathMarker = m_Manager.CreateEntity(markerName, "triangle");
+                        var node = m_Manager.RootSceneNode.CreateChildSceneNode(markerName);
                         node.AttachObject(pathMarker);
                     
                         node.SetScale(0.5,0.5,0.5);
@@ -122,27 +128,38 @@ namespace TrianglesInSpace.Rendering
             }
         }
 
-        public void OnDeselected(SceneManager manager)
+        public void OnDeselected()
         {
-            var entity = manager.GetEntity(m_SceneNode.Name);
-
-            using (var material = MaterialManager.Singleton.GetByName("triangle/white"))
-            {
-                entity.SetMaterial(material);
-            }
             if (m_Selected)
             {
+                var entity = m_Manager.GetEntity(m_SceneNode.Name);
+
+                using (var material = MaterialManager.Singleton.GetByName("triangle/white"))
+                {
+                    entity.SetMaterial(material);
+                }
+            
                 m_Selected = false;
                 m_SelectedNodes.RemoveAt(0);
                 foreach(var node in m_SelectedNodes)
                 {
-                    manager.DestroyEntity(node.Name);
+                    m_Manager.DestroyEntity(node.Name);
                     node.RemoveAndDestroyAllChildren();
-                    manager.RootSceneNode.RemoveAndDestroyChild(node.Name);
+                    m_Manager.RootSceneNode.RemoveAndDestroyChild(node.Name);
                 }
                 m_SelectedNodes.Clear();
                 m_SelectedNodes.Add(m_SceneNode);
             }
+        }
+
+        public void Dispose()
+        {
+            OnDeselected();
+
+            m_Manager.DestroyEntity(m_SceneNode.Name);
+            m_Manager.RootSceneNode.RemoveChild(m_SceneNode);
+            m_SceneNode.RemoveAndDestroyAllChildren();
+            m_Manager.DestroySceneNode(m_SceneNode);
         }
     }
 }

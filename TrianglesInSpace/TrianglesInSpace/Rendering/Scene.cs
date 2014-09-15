@@ -47,7 +47,18 @@ namespace TrianglesInSpace.Rendering
                 entity.SetMaterial(material);
             }
 
-            m_SceneNodes.Add(new NodeWithPosition(node, new CombinedMotion(DefaultMotion())));
+            m_SceneNodes.Add(new NodeWithPosition(node, new CombinedMotion(DefaultMotion()), m_SceneManager));
+        }
+
+        public void Remove(string name)
+        {
+            List<NodeWithPosition> toRemove = new List<NodeWithPosition>();
+            foreach(var node in m_SceneNodes.Where(x => x.Name == name))
+            {
+                node.Dispose();
+                toRemove.Add(node);
+            }
+            toRemove.ForEach(x => m_SceneNodes.Remove(x));
         }
 
         public void Add(string name, string pathId, string shape, string materialName = "triangle/white")
@@ -61,14 +72,14 @@ namespace TrianglesInSpace.Rendering
                 entity.SetMaterial(material);
             }
 
-            m_SceneNodes.Add(new NodeWithPosition(node, pathId, new CombinedMotion(DefaultMotion())));
+            m_SceneNodes.Add(new NodeWithPosition(node, pathId, new CombinedMotion(DefaultMotion()), m_SceneManager));
         }
 
         public void OnSelected(SelectedObjectMessage message)
         {
             foreach (var node in m_SceneNodes.Where(x => x.Name == message.SelectedName))
             {
-                node.OnSelected(m_SceneManager, message.Owned);
+                node.OnSelected( message.Owned);
             }
         }
 
@@ -76,7 +87,7 @@ namespace TrianglesInSpace.Rendering
         {
             foreach (var node in m_SceneNodes.Where(x => x.Name == message.DeselectedName))
             {
-                node.OnDeselected(m_SceneManager);
+                node.OnDeselected();
             }
         }
 

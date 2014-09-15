@@ -21,6 +21,7 @@ namespace TrianglesInSpace.Messaging
                     typeof(TimeUpdateMessage),
                     typeof(AddObjectMessage),
                     typeof(ChangeInputModeMessage),
+                    typeof(AttackTargetMessage),
                 };
             }
         }

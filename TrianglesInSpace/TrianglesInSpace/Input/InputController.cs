@@ -83,6 +83,12 @@ namespace TrianglesInSpace.Input
                     PlacementMode(hwnd, msg, wParam, lParam, ref handled);
                     break;
                 }
+                case InputMode.Attack:
+                {
+                    AttackMode(hwnd, msg, wParam, lParam, ref handled);
+                    break;
+                }
+
                 default:
                 {
                     StandardMode(hwnd, msg, wParam, lParam, ref handled);
@@ -133,6 +139,31 @@ namespace TrianglesInSpace.Input
                 m_Bus.Send(new AddObjectMessage(m_PlayerId.Id, count.ToString()));
                 m_Mode = InputMode.Standard;
                 count++;
+
+                handled = true;
+            }
+            return IntPtr.Zero;
+        }
+
+        private IntPtr AttackMode(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+        {
+            if (msg == WindowsConstants.WM_MOUSEMOVE)
+            {
+                m_Bus.SendLocal(new HighlightTargetMessage(FromWinScreenToWorldPosition(hwnd, lParam), m_Clock.Time));
+            }
+            if (msg == WindowsConstants.WM_RBUTTONDOWN)
+            {
+                m_Mode = InputMode.Standard;
+                handled = true;
+            }
+            if (msg == WindowsConstants.WM_LBUTTONDOWN)
+            {
+                //SelectObject(mouseEvent);
+                //x and y are in screen coordinates need to convert those to scene coordinates.
+                //should be a case of converting to relative positions -1, 1 or 0,1 then using camera values
+                //m_Bus.Send(new SelectObjectAtMessage(FromWinScreenToWorldPosition(hwnd, lParam), m_Clock.Time));
+                m_Bus.Send(new AttackTargetMessage(FromWinScreenToWorldPosition(hwnd, lParam), m_Clock.Time));
+                m_Mode = InputMode.Standard;
 
                 handled = true;
             }

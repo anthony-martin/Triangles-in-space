@@ -6,12 +6,14 @@ using TrianglesInSpace.Messages;
 using TrianglesInSpace.Messaging;
 using TrianglesInSpace.Primitives;
 using TrianglesInSpace.Motion;
+using TrianglesInSpace.Vessels;
 
 namespace TrianglesInSpace.Objects
 {
     public interface ISelectableObjectRepository
     {
         void AddObject(SelectableObject newObject);
+        IList<SelectableObject> GetObjectAt(Vector worldPosition, ulong time);
     }
     public class SelectableObjectRepository : IDisposable, ISelectableObjectRepository
     {
@@ -20,12 +22,17 @@ namespace TrianglesInSpace.Objects
         private IList<SelectableObject> m_SelctedObject; 
         private readonly Disposer m_Disposer;
         private readonly IPlayerId m_Id;
+        private readonly IVesselRepository m_VesselRepository;
+
 
         public SelectableObjectRepository(IBus bus,
-                                          IPlayerId id)
+                                          IPlayerId id,
+                                          IVesselRepository vesselRepository)
         {
             m_Bus = bus;
             m_Id = id;
+
+            m_VesselRepository = vesselRepository;
 
             m_Objects = new List< SelectableObject>();
 
@@ -41,6 +48,8 @@ namespace TrianglesInSpace.Objects
             var path = new Path(4, new CircularMotion(0, 50, new Angle(0), new Angle(Math.PI / 10), 20, Vector.Zero));
             var selectableObject = new SelectableObject(m_Id.Id ,message.Name, path);
             m_Objects.Add(selectableObject);
+
+            m_VesselRepository.Add(new Vessel(selectableObject));
         }
 
         public void AddObject(SelectableObject newObject)

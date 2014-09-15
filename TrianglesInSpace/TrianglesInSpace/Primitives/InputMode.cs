@@ -11,6 +11,5 @@ namespace TrianglesInSpace.Primitives
         Standard,
         Placement,
         Attack
-
     }
 }
