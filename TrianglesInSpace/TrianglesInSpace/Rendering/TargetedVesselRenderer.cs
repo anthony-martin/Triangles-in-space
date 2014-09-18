@@ -31,6 +31,9 @@ namespace TrianglesInSpace.Rendering
 
         private string m_CurrentSelection;
 
+        private List<Attack> m_Attacks;
+
+
         public TargetedVesselRenderer(IBus bus,
                                       ISelectableObjectRepository targets,
                                       IRenderer renderer,
@@ -45,9 +48,12 @@ namespace TrianglesInSpace.Rendering
             m_Id = id;
             m_VesselRepository = vesselRepository;
 
+            m_Attacks = new List<Attack>();
+
             m_Bus.Subscribe<HighlightTargetMessage>(OnHighlight).AddTo(m_Disposer);
             m_Bus.Subscribe<AttackTargetMessage>(OnAttack).AddTo(m_Disposer);
             m_Bus.Subscribe<SelectedObjectMessage>(OnSelection).AddTo(m_Disposer);
+            m_Bus.Subscribe<TimeUpdateMessage>(OnTick).AddTo(m_Disposer);
         }
 
         private void OnHighlight(HighlightTargetMessage message)
@@ -99,11 +105,89 @@ namespace TrianglesInSpace.Rendering
                     var weapons =  vessel.AvailableWeapons(facingWeapons, vesselToTarget.Length);
                     // post firing.
                     // send???
+                    m_Attacks.Add(new Attack(message.Time, m_CurrentTarget, vesselPositon));
+
+                    m_Renderer.Scene.Add("Attack"+ message.Time, m_CurrentTarget, "square", "target_highlight");
+                    m_Bus.Send(new RequestPathMessage(m_CurrentTarget));
                 }
 
                 m_CurrentTarget = null;
 
                 
+            }
+        }
+
+        private class Attack
+        {
+            //private List<IWeaponSystem> m_Weapons;
+            private ulong m_FiringTime;
+            private string m_Target;
+            private Vector m_FiringPosition;
+            public Attack(ulong firingTime, string target, Vector firingPosition)
+            {
+                m_FiringTime = firingTime;
+                m_Target = target;
+                m_FiringPosition = firingPosition;
+            }
+
+            public ulong FiringTime
+            {
+                get
+                {
+                    return m_FiringTime;
+                }
+            }
+
+            public string Target
+            {
+                get
+                {
+                    return m_Target;
+                }
+            }
+
+            public Vector FiringPosition
+            {
+                get
+                {
+                    return m_FiringPosition;
+                }
+            }
+        }
+
+        public void OnTick(TimeUpdateMessage message)
+        {
+            var remove = new List<Attack>();
+
+            foreach(var attack in m_Attacks)
+            {
+                var target = m_VesselRepository.GetByName(attack.Target);
+                if (target != null)
+                {
+                    Vector targetPosition = target.GetPosition(message.Time);
+
+                    var distance = (targetPosition - attack.FiringPosition).Length;
+
+                    var travelTime = distance  / BaseConstants.WeaponSpeed   * 1000;
+
+                    double elapsedTime = (double)( message.Time - attack.FiringTime);
+
+                    if( travelTime <= elapsedTime)
+                    {
+                        // we hit explode things here
+                        m_Renderer.Scene.Remove("Attack" + attack.FiringTime);
+                        remove.Add(attack);
+                    }
+                }
+                else
+                {
+                    remove.Add(attack);
+                }
+            }
+
+            foreach (var attack in remove)
+            {
+                m_Attacks.Remove(attack);
             }
         }
 

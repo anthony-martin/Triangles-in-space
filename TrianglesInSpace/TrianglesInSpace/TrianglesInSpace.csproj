@@ -141,6 +141,7 @@
     <Compile Include="Objects\SelectableObject.cs" />
     <Compile Include="Objects\SelectableObjectRepository.cs" />
     <Compile Include="Primitives\Angle.cs" />
+    <Compile Include="Primitives\BaseConstants.cs" />
     <Compile Include="Primitives\Box.cs" />
     <Compile Include="Primitives\Facing.cs" />
     <Compile Include="Primitives\InputMode.cs" />

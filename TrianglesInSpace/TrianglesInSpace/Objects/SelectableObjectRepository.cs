@@ -45,7 +45,7 @@ namespace TrianglesInSpace.Objects
 
         private void OnAdd(AddObjectMessage message)
         {
-            var path = new Path(4, new CircularMotion(0, 50, new Angle(0), new Angle(Math.PI / 10), 20, Vector.Zero));
+            var path = new Path(4, new CircularMotion(0, 50, new Angle(0), new Angle(Math.PI / 10), BaseConstants.EscortSpeed, Vector.Zero));
             var selectableObject = new SelectableObject(m_Id.Id ,message.Name, path);
             m_Objects.Add(selectableObject);
 
@@ -55,6 +55,7 @@ namespace TrianglesInSpace.Objects
         public void AddObject(SelectableObject newObject)
         {
             m_Objects.Add(newObject);
+            m_VesselRepository.Add(new Vessel(newObject));
         }
 
         public void OnPathRequest(RequestPathMessage message)

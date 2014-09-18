@@ -66,6 +66,10 @@ namespace TrianglesInSpace.Time
                 m_NextSync = m_NextSync + m_SyncRate;
                 m_Bus.Send(new TimeUpdateMessage(m_Time));
             }
+            else
+            {
+                m_Bus.SendLocal(new TimeUpdateMessage(m_Time));
+            }
         }
 
         public void Dispose()
