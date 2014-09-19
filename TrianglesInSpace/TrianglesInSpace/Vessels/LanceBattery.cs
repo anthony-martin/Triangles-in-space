@@ -7,13 +7,23 @@ using TrianglesInSpace.Primitives;
 
 namespace TrianglesInSpace.Vessels
 {
-    public class LanceBattery
+    public class LanceBattery : IWeaponSystem
     {
-        private double m_Range;
-        private Facing m_Direction;
 
-        //private void m_Strength;
+        public Facing FireArc
+        {
+            get 
+            {
+                return Facing.Bow | Facing.Port | Facing.Starboard;
+            }
+        }
 
-
+        public double Range
+        {
+            get 
+            { 
+                return BaseConstants.UnitRange; 
+            }
+        }
     }
 }

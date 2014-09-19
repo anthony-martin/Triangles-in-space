@@ -44,7 +44,7 @@ namespace TrianglesInSpace.World
 
         private void OnAdd(AddObjectMessage message)
         {
-            var path = new Path(4, new CircularMotion(0, 50, new Angle(0), new Angle(Math.PI / 10), 20, Vector.Zero));
+            var path = new Path(BaseConstants.EscortAcceleration, new CircularMotion(0, 50, new Angle(0), new Angle(Math.PI / 10), 20, Vector.Zero));
             var selectableObject = new SelectableObject(m_Id.Id, message.Name, path);
 
             m_SelectableRepo.AddObject(selectableObject);

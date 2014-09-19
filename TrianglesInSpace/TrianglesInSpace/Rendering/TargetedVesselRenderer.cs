@@ -105,10 +105,13 @@ namespace TrianglesInSpace.Rendering
                     var weapons =  vessel.AvailableWeapons(facingWeapons, vesselToTarget.Length);
                     // post firing.
                     // send???
-                    m_Attacks.Add(new Attack(message.Time, m_CurrentTarget, vesselPositon));
+                    if (weapons.Any())
+                    {
+                        m_Attacks.Add(new Attack(message.Time, m_CurrentTarget, vesselPositon));
 
-                    m_Renderer.Scene.Add("Attack"+ message.Time, m_CurrentTarget, "square", "target_highlight");
-                    m_Bus.Send(new RequestPathMessage(m_CurrentTarget));
+                        m_Renderer.Scene.Add("Attack" + message.Time, m_CurrentTarget, "square", "target_highlight");
+                        m_Bus.Send(new RequestPathMessage(m_CurrentTarget));
+                    }
                 }
 
                 m_CurrentTarget = null;

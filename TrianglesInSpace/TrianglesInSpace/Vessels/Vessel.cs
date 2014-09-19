@@ -29,7 +29,10 @@ namespace TrianglesInSpace.Vessels
         public Vessel(SelectableObject position)
         {
             m_Position = position;
-            m_Weapons = new List<IWeaponSystem>();
+            m_Weapons = new List<IWeaponSystem>
+                {
+                    new LanceBattery(),
+                };
         }
 
         public string Name
