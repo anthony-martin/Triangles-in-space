@@ -1,3 +1,0 @@
-Art Assets are not in source control as the ones currently being used are place holders.
-
-To run the application the contents of the OgreBins folder needs to be copied into the folder with the executable.
